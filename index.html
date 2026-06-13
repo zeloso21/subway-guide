@@ -507,7 +507,16 @@ function toggleRoute() {
 }
 </script>
 
-<!-- 카카오 지도 SDK — appkey를 YOUR_KAKAO_JS_KEY로 교체 -->
-<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=5f52a6cdf28d24897956e5bb497aac7b&libraries=services&autoload=false" onload="initKakao()"></script>
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=5f52a6cdf28d24897956e5bb497aac7b&libraries=services&autoload=false"></script>
+<script>
+  try {
+    kakao.maps.load(function() {
+      initKakao();
+    });
+  } catch(e) {
+    document.getElementById('map').innerHTML =
+      '<div style="padding:20px;color:red;font-size:13px">지도 로드 오류: ' + e.message + '</div>';
+  }
+</script>
 </body>
 </html>
