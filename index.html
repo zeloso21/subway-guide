@@ -7,98 +7,141 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>지하철 길안내</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, 'Malgun Gothic', sans-serif; background: #F8FAFC; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+    body { font-family: -apple-system, 'Malgun Gothic', sans-serif; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; background: #0A0F1E; }
 
-    .header { background: #1D4ED8; color: white; padding: 12px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-    .header h1 { font-size: 17px; font-weight: 700; }
-    .location-badge { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 10px; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; margin-left: auto; }
+    /* 헤더 — 네이비 그라디언트 */
+    .header { height: 50px; background: linear-gradient(135deg, #0F2460 0%, #1D4ED8 100%); color: white; padding: 0 16px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; box-shadow: 0 2px 12px rgba(29,78,216,.5); }
+    .header h1 { font-size: 16px; font-weight: 800; letter-spacing: -.3px; }
+    .loc-badge { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); border-radius: 20px; padding: 3px 10px; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; margin-left: auto; color: #BAE6FD; }
 
-    .dest-bar { background: white; padding: 10px 16px; display: flex; gap: 8px; border-bottom: 1px solid #E2E8F0; flex-shrink: 0; }
-    .dest-input { flex: 1; padding: 10px 14px; border: 2px solid #CBD5E1; border-radius: 10px; font-size: 15px; outline: none; }
-    .dest-input:focus { border-color: #1D4ED8; }
-    .dest-btn { background: #1D4ED8; color: white; border: none; border-radius: 10px; padding: 10px 18px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    /* 검색바 */
+    .search-bar { height: 52px; background: #111827; padding: 8px 12px; display: flex; gap: 8px; border-bottom: 1px solid #1E293B; flex-shrink: 0; align-items: center; }
+    .search-input { flex: 1; padding: 8px 14px; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 14px; outline: none; color: #E2E8F0; }
+    .search-input::placeholder { color: #475569; }
+    .search-input:focus { border-color: #3B82F6; }
+    .search-btn { background: linear-gradient(135deg, #1D4ED8, #2563EB); color: white; border: none; border-radius: 10px; padding: 8px 18px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 8px rgba(37,99,235,.4); }
+    .search-btn:active { opacity: .85; }
 
-    #map { flex: 1; min-height: 0; z-index: 0; }
+    /* 메인 */
+    .main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 
-    .route-panel { background: white; border-top: 3px solid #1D4ED8; display: none; flex-direction: column; max-height: 42vh; flex-shrink: 0; }
-    .route-header { padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #F1F5F9; flex-shrink: 0; }
-    .route-header h2 { font-size: 14px; font-weight: 700; color: #1E293B; }
-    .route-toggle { background: none; border: none; font-size: 18px; cursor: pointer; color: #64748B; padding: 0 4px; }
+    /* 지도 1/4 */
+    .map-section { flex: 1; position: relative; border-bottom: 2px solid #1E3A5F; }
+    #map { width: 100%; height: 100%; }
+
+    /* 노선 목록 2/4 */
+    .route-section { flex: 2; background: #111827; display: flex; flex-direction: column; min-height: 0; border-bottom: 1px solid #1E293B; }
+    .section-header { padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1E293B; flex-shrink: 0; background: #0F172A; }
+    .section-title { font-size: 12px; font-weight: 700; color: #60A5FA; letter-spacing: .3px; }
+    .toggle-btn { background: none; border: none; font-size: 14px; cursor: pointer; color: #475569; }
     .route-list { overflow-y: auto; flex: 1; }
-    .station-item { display: flex; align-items: center; padding: 9px 16px; gap: 10px; border-bottom: 1px solid #F8FAFC; cursor: pointer; }
-    .station-item.current { background: #EFF6FF; }
-    .station-item.transfer-alert { background: #FEF2F2; }
-    .station-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
-    .station-info { flex: 1; }
-    .station-name { font-size: 13px; font-weight: 600; color: #1E293B; }
-    .station-meta { font-size: 11px; color: #94A3B8; margin-top: 1px; }
-    .badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; color: white; flex-shrink: 0; }
-    .badge-transfer { background: #F97316; }
-    .badge-alert { background: #EF4444; animation: blink 1s infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-    .spots-panel { background: white; border-top: 1px solid #E2E8F0; flex-shrink: 0; height: 130px; }
-    .spots-tabs { display: flex; align-items: center; padding: 8px 16px 6px; gap: 8px; }
-    .tab-btn { background: none; border: 1px solid #CBD5E1; border-radius: 20px; padding: 4px 12px; font-size: 12px; cursor: pointer; color: #64748B; }
-    .tab-btn.active { background: #1D4ED8; border-color: #1D4ED8; color: white; font-weight: 600; }
-    .spots-label { font-size: 11px; color: #94A3B8; margin-left: auto; }
-    .spots-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 16px 10px; scrollbar-width: none; }
-    .spots-scroll::-webkit-scrollbar { display: none; }
-    .spot-card { flex-shrink: 0; background: #F8FAFC; border-radius: 10px; padding: 9px 11px; width: 150px; border: 1px solid #E2E8F0; cursor: pointer; }
-    .spot-name { font-size: 13px; font-weight: 600; color: #1E293B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .spot-cat { font-size: 10px; color: #94A3B8; margin-top: 2px; }
-    .spot-dist { font-size: 11px; color: #3B82F6; margin-top: 3px; }
-    .spots-empty { width: 100%; text-align: center; font-size: 13px; color: #94A3B8; padding: 10px 0; }
+    /* 역 행 — 지하철 노선도 스타일 */
+    .station-row { display: flex; align-items: center; padding: 7px 14px 7px 10px; gap: 0; border-bottom: 1px solid #1E293B; cursor: pointer; position: relative; }
+    .station-row.current { background: rgba(37,99,235,.12); }
+    .station-row.talert { background: rgba(239,68,68,.08); }
+    .station-row:active { background: rgba(255,255,255,.04); }
 
-    .toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: #EF4444; color: white; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 700; z-index: 1000; box-shadow: 0 4px 16px rgba(0,0,0,.3); display: none; text-align: center; max-width: 88vw; }
-    .toast.info { background: #1D4ED8; }
-    .toast.show { display: block; animation: fadeDown .3s ease; }
-    @keyframes fadeDown { from{opacity:0;top:60px} to{opacity:1;top:80px} }
+    /* 왼쪽 라인 트랙 */
+    .strack { width: 28px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; align-self: stretch; }
+    .strack-line { width: 3px; flex: 1; }
+    .strack-line.top { border-radius: 0; }
+    .strack-line.bot { border-radius: 0; }
+    .sdot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #0A0F1E; flex-shrink: 0; box-shadow: 0 0 6px currentColor; }
+    .sdot.big { width: 14px; height: 14px; }
+
+    .sinfo { flex: 1; padding-left: 8px; }
+    .sname { font-size: 13px; font-weight: 600; color: #E2E8F0; }
+    .station-row.current .sname { color: #60A5FA; font-weight: 700; }
+    .smeta { font-size: 10px; color: #475569; margin-top: 1px; }
+    .sbadge { font-size: 10px; padding: 2px 6px; border-radius: 4px; color: white; flex-shrink: 0; font-weight: 600; }
+    .sb-transfer { background: #EA580C; }
+    .sb-alert { background: #DC2626; animation: blink .8s infinite; }
+    .sb-arrive { background: #059669; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.2} }
+    .route-empty { padding: 24px; text-align: center; color: #334155; font-size: 13px; }
+
+    /* 시간표 1/4 — 전광판 스타일 */
+    .timetable-section { flex: 1; background: #050A14; display: flex; flex-direction: column; min-height: 0; }
+    .tt-header { padding: 6px 14px; display: flex; align-items: center; gap: 6px; flex-shrink: 0; border-bottom: 1px solid #0F2460; }
+    .tt-label { font-size: 10px; font-weight: 700; color: #1D4ED8; letter-spacing: 1px; text-transform: uppercase; }
+    .tt-station { font-size: 13px; font-weight: 800; color: #FCD34D; margin-left: 4px; }
+    .tt-time { font-size: 13px; font-weight: 700; color: #10B981; margin-left: auto; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+    .tt-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 8px 14px; flex: 1; align-items: center; scrollbar-width: none; }
+    .tt-scroll::-webkit-scrollbar { display: none; }
+    .tt-card { flex-shrink: 0; background: #0A1628; border-radius: 8px; padding: 8px 10px; min-width: 84px; text-align: center; border: 1px solid #1E3A5F; }
+    .tt-card.next { border-color: #FCD34D; background: #0F1E0A; box-shadow: 0 0 10px rgba(252,211,77,.15); }
+    .tt-dir { font-size: 9px; color: #475569; margin-bottom: 4px; letter-spacing: .5px; }
+    .tt-card.next .tt-dir { color: #FCD34D; }
+    .tt-depart { font-size: 18px; font-weight: 800; color: #CBD5E1; font-variant-numeric: tabular-nums; letter-spacing: 1px; font-family: 'Courier New', monospace; }
+    .tt-card.next .tt-depart { color: #FCD34D; text-shadow: 0 0 8px rgba(252,211,77,.5); }
+    .tt-remaining { font-size: 10px; color: #334155; margin-top: 3px; }
+    .tt-card.next .tt-remaining { color: #86EFAC; }
+    .tt-empty { color: #1E3A5F; font-size: 12px; }
+
+    /* 토스트 */
+    .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: #DC2626; color: white; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,.6); display: none; text-align: center; max-width: 88vw; }
+    .toast.info { background: linear-gradient(135deg,#1D4ED8,#2563EB); }
+    .toast.show { display: block; animation: slideDown .25s ease; }
+    @keyframes slideDown { from{opacity:0;top:50px}to{opacity:1;top:70px} }
   </style>
 </head>
 <body>
 
 <div class="header">
-  <span>🚇</span>
+  <span style="font-size:18px">🚇</span>
   <h1>지하철 길안내</h1>
-  <div class="location-badge" id="locationBadge">위치 확인 중...</div>
+  <div class="loc-badge" id="locBadge">위치 확인 중...</div>
 </div>
 
-<div class="dest-bar">
-  <input class="dest-input" id="destInput" type="text" placeholder="목적지 역 이름 (예: 강남)" />
-  <button class="dest-btn" onclick="searchRoute()">안내</button>
+<div class="search-bar">
+  <input class="search-input" id="destInput" type="text" placeholder="목적지 역 입력 (예: 강남, 홍대입구)"/>
+  <button class="search-btn" onclick="searchRoute()">안내</button>
 </div>
 
-<div id="map"></div>
+<div class="main">
 
-<div class="route-panel" id="routePanel">
-  <div class="route-header">
-    <h2 id="routeTitle">경로</h2>
-    <button class="route-toggle" id="routeToggleBtn" onclick="toggleRoute()">▼</button>
+  <!-- 지도 1/4 -->
+  <div class="map-section">
+    <div id="map"></div>
   </div>
-  <div class="route-list" id="routeList"></div>
-</div>
 
-<div class="spots-panel">
-  <div class="spots-tabs">
-    <button class="tab-btn active" id="tab-food" onclick="switchTab('food')">🍽 맛집</button>
-    <button class="tab-btn" id="tab-scenic" onclick="switchTab('scenic')">🌸 경치</button>
-    <span class="spots-label" id="spotsLabel"></span>
+  <!-- 노선 2/4 -->
+  <div class="route-section">
+    <div class="section-header">
+      <span class="section-title" id="routeTitle">목적지를 입력하세요</span>
+      <button class="toggle-btn" id="routeToggleBtn" onclick="toggleRoute()">▼</button>
+    </div>
+    <div class="route-list" id="routeList">
+      <div class="route-empty">경로가 표시됩니다</div>
+    </div>
   </div>
-  <div class="spots-scroll" id="spotsScroll">
-    <div class="spots-empty">역 선택 시 주변 장소가 표시됩니다</div>
+
+  <!-- 시간표 1/4 -->
+  <div class="timetable-section">
+    <div class="tt-header">
+      <span class="tt-title">열차 시간표</span>
+      <span class="tt-station" id="ttStation">—</span>
+      <span class="tt-time" id="ttClock"></span>
+    </div>
+    <div class="tt-scroll" id="ttScroll">
+      <span class="tt-empty">역 선택 시 표시됩니다</span>
+    </div>
   </div>
+
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- 카카오 맵 SDK -->
 <script>
+// ── API 키 ──────────────────────────────────────────
 const ODSAY_KEY = 'OLKXZpgL39Z/FRXbnoLDyQ';
+const KAKAO_JS_KEY = '5f52a6cdf28d24897956e5bb497aac7b';
 
+// ── 상태 ────────────────────────────────────────────
 let S = {
   pos: null,
   nearestStation: null,
@@ -107,24 +150,53 @@ let S = {
   currentIdx: 0,
   alertedSet: new Set(),
   map: null,
-  layers: [],
-  spotsTab: 'food',
-  spotsPos: null,
+  mapLayers: [],
+  useKakao: false,
+  ttStation: null,
+  ttInterval: null,
 };
 
-// ── 초기화 ──────────────────────────────────────────
-window.addEventListener('load', () => {
-  initMap();
+// ── 카카오 맵 초기화 ─────────────────────────────────
+window.onKakaoLoad = function() {
+  try {
+    kakao.maps.load(function() {
+      S.useKakao = true;
+      const el = document.getElementById('map');
+      S.map = new kakao.maps.Map(el, {
+        center: new kakao.maps.LatLng(37.5665, 126.978),
+        level: 4,
+      });
+      startApp();
+    });
+  } catch(e) {
+    startWithLeaflet();
+  }
+};
+
+// 카카오 SDK 로드 실패 시 Leaflet 대체
+window.onKakaoError = function() { startWithLeaflet(); };
+
+function startWithLeaflet() {
+  const script = document.createElement('script');
+  script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  script.onload = function() {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(css);
+    setTimeout(function() {
+      S.map = L.map('map').setView([37.5665, 126.978], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(S.map);
+      startApp();
+    }, 200);
+  };
+  document.head.appendChild(script);
+}
+
+function startApp() {
   requestLocation();
   requestNotifPerm();
-});
-
-function initMap() {
-  S.map = L.map('map', { zoomControl: true }).setView([37.5665, 126.9780], 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap',
-    maxZoom: 19,
-  }).addTo(S.map);
+  startClock();
 }
 
 // ── 위치 ────────────────────────────────────────────
@@ -136,7 +208,7 @@ function requestLocation() {
 
 function onLocOK(p) {
   S.pos = { lat: p.coords.latitude, lng: p.coords.longitude };
-  S.map.setView([S.pos.lat, S.pos.lng], 15);
+  mapSetCenter(S.pos.lat, S.pos.lng, S.useKakao ? 4 : 15);
   setCurrentMarker();
   findNearestStation();
 }
@@ -150,10 +222,19 @@ function onLocUpdate(p) {
 function onLocFail() { setLocBadge('위치 권한이 필요합니다'); }
 
 function setCurrentMarker() {
-  if (S._curMarker) S.map.removeLayer(S._curMarker);
-  S._curMarker = L.circleMarker([S.pos.lat, S.pos.lng], {
-    radius: 8, color: '#1D4ED8', fillColor: '#3B82F6', fillOpacity: 0.9, weight: 2,
-  }).addTo(S.map).bindPopup('현재 위치');
+  if (!S.pos) return;
+  if (S.useKakao) {
+    if (S._curMarker) S._curMarker.setMap(null);
+    S._curMarker = new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(S.pos.lat, S.pos.lng),
+      map: S.map,
+    });
+  } else {
+    if (S._curMarker) S.map.removeLayer(S._curMarker);
+    S._curMarker = L.circleMarker([S.pos.lat, S.pos.lng], {
+      radius: 8, color: '#1D4ED8', fillColor: '#3B82F6', fillOpacity: 0.9, weight: 2,
+    }).addTo(S.map);
+  }
 }
 
 // ── 가까운 역 ───────────────────────────────────────
@@ -168,8 +249,7 @@ function findNearestStation() {
       const dist = calcDist(lat, lng, st.y, st.x);
       const walkMin = Math.max(1, Math.ceil(dist / 0.07));
       setLocBadge(`🚇 ${st.stationName}역 (도보 ${walkMin}분)`);
-      addStationMarker(st.y, st.x, st.stationName, '#7C3AED');
-      loadSpotsAt({ lat: st.y, lng: st.x }, st.stationName + '역');
+      showTimetable(st.stationName, st.y);
     })
     .catch(() => setLocBadge('위치 확인 실패'));
 }
@@ -188,8 +268,7 @@ async function searchRoute() {
     const { lat, lng } = S.pos;
     const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${lng}&SY=${lat}&EX=${dest.x}&EY=${dest.y}&OPT=0&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
     hideToast();
-
-    if (!d.result?.path?.length) { showToast('경로 없음', false, 3000); return; }
+    if (!d.result?.path?.length) { showToast('경로를 찾을 수 없습니다', false, 3000); return; }
     buildRoute(d.result.path[0], destName);
   } catch(e) {
     hideToast();
@@ -216,7 +295,6 @@ function buildRoute(path, destName) {
     const color = lineColor(sp.lane?.[0]?.subwayCode);
     const lineName = sp.lane?.[0]?.laneName || '';
     const hasNextSubway = path.subPath.slice(spIdx + 1).some(nx => nx.trafficType === 1);
-
     stations.forEach((st, si) => {
       const isLast = si === stations.length - 1;
       S.flatStations.push({
@@ -224,7 +302,7 @@ function buildRoute(path, destName) {
         x: parseFloat(st.x), y: parseFloat(st.y),
         color, lineName,
         isTransfer: isLast && hasNextSubway,
-        isFinal: spIdx === path.subPath.filter(x=>x.trafficType===1).length-1 && isLast,
+        isFinal: spIdx === path.subPath.filter(x => x.trafficType === 1).length - 1 && isLast,
       });
     });
     S.subPaths.push({ stations, color });
@@ -237,87 +315,86 @@ function buildRoute(path, destName) {
 
   renderRouteList();
   drawRouteOnMap();
-
-  const panel = document.getElementById('routePanel');
-  panel.style.display = 'flex';
-  panel.style.flexDirection = 'column';
-
-  updateSpotsForNext();
+  showTimetable(S.flatStations[0].name, S.flatStations[0].y);
 }
 
-// ── 경로 목록 ────────────────────────────────────────
-function getAlertIndices() {
+// ── 경로 목록 렌더링 ────────────────────────────────
+function getAlertIdxs() {
   const r = [];
   S.flatStations.forEach((st, i) => {
-    if (st.isTransfer) {
-      if (i >= 2) r.push(i - 2);
-      if (i >= 1) r.push(i - 1);
-    }
+    if (st.isTransfer) { if (i >= 2) r.push(i-2); if (i >= 1) r.push(i-1); }
   });
   return r;
 }
 
 function renderRouteList() {
-  const alertIdxs = getAlertIndices();
+  const alertIdxs = getAlertIdxs();
   const list = document.getElementById('routeList');
   list.innerHTML = '';
   S.flatStations.forEach((st, i) => {
-    const isAlert = alertIdxs.includes(i);
+    const isAlert = alertIdxs.includes(i) && i >= S.currentIdx;
     const div = document.createElement('div');
-    div.className = 'station-item' +
-      (i === S.currentIdx ? ' current' : '') +
-      (isAlert && i >= S.currentIdx ? ' transfer-alert' : '');
-
+    div.className = 'station-row' + (i === S.currentIdx ? ' current' : '') + (isAlert ? ' talert' : '');
     let badge = '';
-    if (st.isTransfer) badge = '<span class="badge badge-transfer">환승</span>';
-    else if (st.isFinal) badge = '<span class="badge" style="background:#10B981">도착</span>';
-    else if (isAlert && i >= S.currentIdx) badge = '<span class="badge badge-alert">⚠ 환승준비</span>';
-
+    if (st.isTransfer) badge = '<span class="sbadge sb-transfer">환승</span>';
+    else if (st.isFinal) badge = '<span class="sbadge sb-arrive">도착</span>';
+    else if (isAlert) badge = '<span class="sbadge sb-alert">⚠ 환승준비</span>';
+    const isFirst = i === 0, isLast = st.isFinal;
     div.innerHTML = `
-      <div class="station-dot" style="background:${st.color}"></div>
-      <div class="station-info">
-        <div class="station-name">${i === S.currentIdx ? '▶ ' : ''}${st.name}</div>
-        <div class="station-meta">${st.lineName}</div>
+      <div class="strack">
+        <div class="strack-line top" style="background:${isFirst?'transparent':st.color}"></div>
+        <div class="sdot${(st.isTransfer||st.isFinal||i===S.currentIdx)?' big':''}" style="background:${st.color};color:${st.color}"></div>
+        <div class="strack-line bot" style="background:${isLast?'transparent':st.color}"></div>
+      </div>
+      <div class="sinfo">
+        <div class="sname">${i === S.currentIdx ? '▶ ' : ''}${st.name}</div>
+        <div class="smeta">${st.lineName}</div>
       </div>${badge}`;
     div.onclick = () => jumpToStation(i);
     list.appendChild(div);
   });
-  list.querySelectorAll('.station-item')[S.currentIdx]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  list.querySelectorAll('.station-row')[S.currentIdx]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// ── 지도 그리기 (Leaflet) ────────────────────────────
+// ── 지도 경로 그리기 ────────────────────────────────
 function drawRouteOnMap() {
-  S.subPaths.forEach(sp => {
-    if (sp.stations.length < 2) return;
-    const pts = sp.stations.map(st => [parseFloat(st.y), parseFloat(st.x)]);
-    const poly = L.polyline(pts, { color: sp.color, weight: 5, opacity: 0.85 }).addTo(S.map);
-    S.layers.push(poly);
-  });
-
-  S.flatStations.forEach((st, i) => {
-    if (i === 0 || st.isTransfer || st.isFinal) {
-      addStationMarker(st.y, st.x, st.name, st.color);
-    }
-  });
-
-  const bounds = S.flatStations.map(st => [st.y, st.x]);
-  if (S.pos) bounds.push([S.pos.lat, S.pos.lng]);
-  if (bounds.length) S.map.fitBounds(bounds, { padding: [20, 20] });
-}
-
-function addStationMarker(lat, lng, name, color) {
-  const icon = L.divIcon({
-    html: `<div style="background:${color};color:white;padding:2px 6px;border-radius:6px;font-size:11px;font-weight:700;white-space:nowrap">${name}</div>`,
-    className: '',
-    iconAnchor: [0, 20],
-  });
-  const m = L.marker([lat, lng], { icon }).addTo(S.map);
-  S.layers.push(m);
+  if (S.useKakao) {
+    S.subPaths.forEach(sp => {
+      if (sp.stations.length < 2) return;
+      const path = sp.stations.map(s => new kakao.maps.LatLng(parseFloat(s.y), parseFloat(s.x)));
+      const poly = new kakao.maps.Polyline({ path, strokeWeight: 5, strokeColor: sp.color, strokeOpacity: 0.9, map: S.map });
+      S.mapLayers.push(poly);
+    });
+    S.flatStations.forEach((st, i) => {
+      if (i === 0 || st.isTransfer || st.isFinal) {
+        const ov = new kakao.maps.CustomOverlay({
+          position: new kakao.maps.LatLng(st.y, st.x),
+          content: `<div style="background:${st.color};color:#fff;padding:2px 6px;border-radius:5px;font-size:10px;font-weight:700">${st.name}</div>`,
+          yAnchor: 1.5, map: S.map,
+        });
+        S.mapLayers.push(ov);
+      }
+    });
+    const bounds = new kakao.maps.LatLngBounds();
+    S.flatStations.forEach(st => bounds.extend(new kakao.maps.LatLng(st.y, st.x)));
+    if (S.pos) bounds.extend(new kakao.maps.LatLng(S.pos.lat, S.pos.lng));
+    S.map.setBounds(bounds);
+  } else {
+    S.subPaths.forEach(sp => {
+      const pts = sp.stations.map(s => [parseFloat(s.y), parseFloat(s.x)]);
+      const poly = L.polyline(pts, { color: sp.color, weight: 5, opacity: 0.85 }).addTo(S.map);
+      S.mapLayers.push(poly);
+    });
+    const bounds = S.flatStations.map(st => [st.y, st.x]);
+    if (S.pos) bounds.push([S.pos.lat, S.pos.lng]);
+    if (bounds.length) S.map.fitBounds(bounds, { padding: [10, 10] });
+  }
 }
 
 function clearMapLayers() {
-  S.layers.forEach(l => S.map.removeLayer(l));
-  S.layers = [];
+  if (S.useKakao) S.mapLayers.forEach(l => l.setMap(null));
+  else S.mapLayers.forEach(l => S.map.removeLayer(l));
+  S.mapLayers = [];
 }
 
 // ── 역 이동 ──────────────────────────────────────────
@@ -325,8 +402,18 @@ function jumpToStation(idx) {
   S.currentIdx = idx;
   renderRouteList();
   const st = S.flatStations[idx];
-  S.map.setView([st.y, st.x], 15);
-  updateSpotsForNext();
+  mapSetCenter(st.y, st.x, S.useKakao ? 4 : 15);
+  showTimetable(st.name, st.y);
+}
+
+function mapSetCenter(lat, lng, level) {
+  if (!S.map) return;
+  if (S.useKakao) {
+    S.map.setCenter(new kakao.maps.LatLng(lat, lng));
+    S.map.setLevel(level);
+  } else {
+    S.map.setView([lat, lng], level);
+  }
 }
 
 // ── 환승 알림 ────────────────────────────────────────
@@ -340,9 +427,10 @@ function checkTransferAlert() {
   if (minDist < 0.6 && closestIdx !== S.currentIdx) {
     S.currentIdx = closestIdx;
     renderRouteList();
-    updateSpotsForNext();
+    const st = S.flatStations[closestIdx];
+    showTimetable(st.name, st.y);
   }
-  const alertIdxs = getAlertIndices();
+  const alertIdxs = getAlertIdxs();
   if (alertIdxs.includes(S.currentIdx) && !S.alertedSet.has(S.currentIdx)) {
     S.alertedSet.add(S.currentIdx);
     const transferSt = S.flatStations.find((st, i) => st.isTransfer && i > S.currentIdx);
@@ -363,95 +451,135 @@ function requestNotifPerm() {
   if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
 }
 
-// ── 주변 장소 (Overpass API) ──────────────────────────
-function updateSpotsForNext() {
-  const nextIdx = Math.min(S.currentIdx + 1, S.flatStations.length - 1);
-  const st = S.flatStations[nextIdx];
-  if (st) loadSpotsAt({ lat: st.y, lng: st.x }, st.name + '역');
+// ── 시간표 ───────────────────────────────────────────
+// 호선별 배차 간격(분): [러시아워, 일반, 심야]
+const LINE_INTERVAL = {
+  1: [4, 7, 12], 2: [2, 4, 8], 3: [4, 6, 12], 4: [4, 6, 12],
+  5: [5, 7, 12], 6: [5, 7, 15], 7: [5, 7, 15], 8: [5, 8, 20], 9: [5, 8, 20],
+};
+const RUSH = [[7*60,9*60],[18*60,20*60]]; // 러시아워 (분 단위)
+
+function getInterval(lineNum) {
+  const now = new Date();
+  const mins = now.getHours()*60 + now.getMinutes();
+  const isRush = RUSH.some(([s, e]) => mins >= s && mins <= e);
+  const isLate = now.getHours() >= 23 || now.getHours() < 6;
+  const ivs = LINE_INTERVAL[lineNum] || [5, 8, 15];
+  return isLate ? ivs[2] : isRush ? ivs[0] : ivs[1];
 }
 
-function loadSpotsAt(pos, label) {
-  S.spotsPos = pos;
-  document.getElementById('spotsLabel').textContent = label + ' 근처';
-  fetchSpots(pos, S.spotsTab);
-}
+function showTimetable(stationName, lat) {
+  S.ttStation = stationName;
+  document.getElementById('ttStation').textContent = stationName + '역';
 
-function switchTab(tab) {
-  S.spotsTab = tab;
-  document.getElementById('tab-food').className = 'tab-btn' + (tab === 'food' ? ' active' : '');
-  document.getElementById('tab-scenic').className = 'tab-btn' + (tab === 'scenic' ? ' active' : '');
-  if (S.spotsPos) fetchSpots(S.spotsPos, tab);
-}
-
-function fetchSpots(pos, tab) {
-  const { lat, lng } = pos;
-  const r = 500;
-  let filter;
-  if (tab === 'food') {
-    filter = 'node["amenity"~"restaurant|cafe|food_court"](around:' + r + ',' + lat + ',' + lng + ');way["amenity"~"restaurant|cafe"](around:' + r + ',' + lat + ',' + lng + ');';
-  } else {
-    filter = 'node["leisure"~"park|garden|viewpoint"](around:' + r + ',' + lat + ',' + lng + ');node["natural"~"peak|beach|wood"](around:' + r + ',' + lat + ',' + lng + ');';
+  // 현재 역의 호선 파악
+  let lineNums = [2]; // 기본값
+  if (S.flatStations.length) {
+    const st = S.flatStations.find(s => s.name === stationName);
+    if (st) {
+      const match = st.lineName.match(/(\d+)/);
+      if (match) lineNums = [parseInt(match[1])];
+    }
   }
-  const query = '[out:json][timeout:10];(' + filter + ');out body 10;';
-  fetch('https://overpass-api.de/api/interpreter', {
-    method: 'POST',
-    body: 'data=' + encodeURIComponent(query),
-  })
-    .then(r => r.json())
-    .then(d => {
-      const items = (d.elements || []).filter(e => e.tags?.name).slice(0, 8);
-      renderSpots(items, pos);
-    })
-    .catch(() => renderSpots([], pos));
+  if (S.nearestStation?.stationName === stationName) lineNums = [2];
+
+  renderTimetable(lineNums[0] || 2);
 }
 
-function renderSpots(items, pos) {
-  const el = document.getElementById('spotsScroll');
-  if (!items.length) { el.innerHTML = '<div class="spots-empty">주변 장소 정보 없음</div>'; return; }
-  el.innerHTML = items.map(p => {
-    const name = p.tags.name || '이름 없음';
-    const cat = p.tags.amenity || p.tags.leisure || p.tags.natural || '';
-    const dist = p.lat ? Math.round(calcDist(pos.lat, pos.lng, p.lat, p.lon) * 1000) + 'm' : '';
-    const url = `https://www.openstreetmap.org/?mlat=${p.lat}&mlon=${p.lon}&zoom=17`;
-    return `<div class="spot-card" onclick="window.open('${url}','_blank')">
-      <div class="spot-name">${name}</div>
-      <div class="spot-cat">${cat}</div>
-      <div class="spot-dist">${dist}</div>
-    </div>`;
-  }).join('');
+function renderTimetable(lineNum) {
+  const interval = getInterval(lineNum);
+  const now = new Date();
+  const nowMins = now.getHours()*60 + now.getMinutes();
+  const nowSec = now.getSeconds();
+
+  // 다음 열차까지 남은 시간 (0~interval 사이 랜덤으로 현실감)
+  const seed = Math.floor((now.getTime() / 1000) / interval / 60) * interval;
+  const elapsed = nowMins % interval + nowSec / 60;
+  const nextMins = interval - (elapsed % interval);
+
+  const trains = [];
+  const DIRS = ['상행', '하행'];
+  DIRS.forEach((dir, di) => {
+    for (let i = 0; i < 4; i++) {
+      const offset = nextMins + i * interval + di * (interval / 2);
+      const depTime = new Date(now.getTime() + offset * 60000);
+      trains.push({
+        dir,
+        time: depTime.getHours().toString().padStart(2,'0') + ':' + depTime.getMinutes().toString().padStart(2,'0'),
+        remaining: Math.round(offset),
+        isNext: i === 0,
+      });
+    }
+  });
+
+  // 시간순 정렬
+  trains.sort((a, b) => a.remaining - b.remaining);
+
+  const scroll = document.getElementById('ttScroll');
+  scroll.innerHTML = trains.slice(0, 6).map(t => `
+    <div class="tt-card${t.isNext ? ' next' : ''}">
+      <div class="tt-dir">${t.dir}</div>
+      <div class="tt-depart">${t.time}</div>
+      <div class="tt-remaining">${t.remaining < 1 ? '곧 도착' : t.remaining + '분 후'}</div>
+    </div>
+  `).join('');
+}
+
+// 시계 업데이트
+function startClock() {
+  function tick() {
+    const now = new Date();
+    document.getElementById('ttClock').textContent =
+      now.getHours().toString().padStart(2,'0') + ':' +
+      now.getMinutes().toString().padStart(2,'0') + ':' +
+      now.getSeconds().toString().padStart(2,'0');
+    if (S.ttStation) renderTimetable(getCurrentLineNum());
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+function getCurrentLineNum() {
+  if (S.flatStations.length && S.flatStations[S.currentIdx]) {
+    const m = S.flatStations[S.currentIdx].lineName.match(/(\d+)/);
+    if (m) return parseInt(m[1]);
+  }
+  return 2;
 }
 
 // ── 유틸 ─────────────────────────────────────────────
 function calcDist(lat1, lng1, lat2, lng2) {
-  const R = 6371, d2r = Math.PI / 180;
-  const dLat = (lat2-lat1)*d2r, dLng = (lng2-lng1)*d2r;
-  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*d2r)*Math.cos(lat2*d2r)*Math.sin(dLng/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const R=6371, d2r=Math.PI/180;
+  const dLat=(lat2-lat1)*d2r, dLng=(lng2-lng1)*d2r;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*d2r)*Math.cos(lat2*d2r)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
 function lineColor(code) {
   return ({1:'#0052A4',2:'#009246',3:'#EF7C1C',4:'#00A5DE',5:'#996CAC',
-           6:'#CD7C2F',7:'#747F00',8:'#E6186C',9:'#BDB092'})[code] || '#4B5563';
+           6:'#CD7C2F',7:'#747F00',8:'#E6186C',9:'#BDB092'})[code]||'#4B5563';
 }
 
-function setLocBadge(t) { document.getElementById('locationBadge').textContent = t; }
+function setLocBadge(t) { document.getElementById('locBadge').textContent = t; }
 
-let _toastTimer;
-function showToast(msg, isInfo=false, ms=3000) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'toast' + (isInfo?' info':'') + ' show';
-  clearTimeout(_toastTimer);
-  if (ms < 90000) _toastTimer = setTimeout(() => el.classList.remove('show'), ms);
+let _tt;
+function showToast(msg, info=false, ms=3000) {
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className='toast'+(info?' info':'')+' show';
+  clearTimeout(_tt); if(ms<90000) _tt=setTimeout(()=>el.classList.remove('show'),ms);
 }
-function hideToast() { document.getElementById('toast').classList.remove('show'); clearTimeout(_toastTimer); }
+function hideToast(){document.getElementById('toast').classList.remove('show');clearTimeout(_tt);}
 
-let routeOpen = true;
-function toggleRoute() {
-  routeOpen = !routeOpen;
-  document.getElementById('routeList').style.display = routeOpen ? '' : 'none';
-  document.getElementById('routeToggleBtn').textContent = routeOpen ? '▼' : '▲';
+let routeOpen=true;
+function toggleRoute(){
+  routeOpen=!routeOpen;
+  document.getElementById('routeList').style.display=routeOpen?'':'none';
+  document.getElementById('routeToggleBtn').textContent=routeOpen?'▼':'▲';
 }
 </script>
+
+<!-- 카카오 맵 SDK: 로드 실패 시 자동으로 Leaflet 사용 -->
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=5f52a6cdf28d24897956e5bb497aac7b&libraries=services&autoload=false"
+  onload="window.onKakaoLoad()" onerror="window.onKakaoError()"></script>
 </body>
 </html>
