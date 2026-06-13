@@ -27,12 +27,19 @@
     /* 메인 */
     .main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 
-    /* 지도 1/4 */
+    /* 지도 — 기본은 전체화면 */
     .map-section { flex: 1; position: relative; border-bottom: 2px solid #1E3A5F; }
     #map { width: 100%; height: 100%; }
 
-    /* 노선 목록 2/4 */
-    .route-section { flex: 2; background: #111827; display: flex; flex-direction: column; min-height: 0; border-bottom: 1px solid #1E293B; }
+    /* 분할 모드 전 — 노선/시간표 숨김 */
+    .route-section { display: none; flex: 2; background: #111827; flex-direction: column; min-height: 0; border-bottom: 1px solid #1E293B; }
+    .timetable-section { display: none; flex: 1; background: #050A14; flex-direction: column; min-height: 0; }
+
+    /* 분할 모드 진입 시 */
+    .main.split .map-section { flex: 1; }
+    .main.split .route-section { display: flex; flex: 2; }
+    .main.split .timetable-section { display: flex; flex: 1; }
+
     .section-header { padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1E293B; flex-shrink: 0; background: #0F172A; }
     .section-title { font-size: 12px; font-weight: 700; color: #60A5FA; letter-spacing: .3px; }
     .toggle-btn { background: none; border: none; font-size: 14px; cursor: pointer; color: #475569; }
@@ -64,7 +71,6 @@
     .route-empty { padding: 24px; text-align: center; color: #334155; font-size: 13px; }
 
     /* 시간표 1/4 — 전광판 스타일 */
-    .timetable-section { flex: 1; background: #050A14; display: flex; flex-direction: column; min-height: 0; }
     .tt-header { padding: 6px 14px; display: flex; align-items: center; gap: 6px; flex-shrink: 0; border-bottom: 1px solid #0F2460; }
     .tt-label { font-size: 10px; font-weight: 700; color: #1D4ED8; letter-spacing: 1px; text-transform: uppercase; }
     .tt-station { font-size: 13px; font-weight: 800; color: #FCD34D; margin-left: 4px; }
@@ -80,6 +86,10 @@
     .tt-remaining { font-size: 10px; color: #334155; margin-top: 3px; }
     .tt-card.next .tt-remaining { color: #86EFAC; }
     .tt-empty { color: #1E3A5F; font-size: 12px; }
+
+    /* Leaflet 역 라벨 */
+    .station-label { background: #1D4ED8 !important; color: #fff !important; border: none !important; font-size: 10px !important; font-weight: 700 !important; padding: 2px 6px !important; border-radius: 4px !important; white-space: nowrap !important; }
+    .station-label::before { display: none !important; }
 
     /* 토스트 */
     .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: #DC2626; color: white; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,.6); display: none; text-align: center; max-width: 88vw; }
@@ -153,6 +163,7 @@ let S = {
   mapLayers: [],
   useKakao: false,
   ttStation: null,
+  ttDirection: '',
   ttInterval: null,
 };
 
@@ -208,7 +219,7 @@ function requestLocation() {
 
 function onLocOK(p) {
   S.pos = { lat: p.coords.latitude, lng: p.coords.longitude };
-  mapSetCenter(S.pos.lat, S.pos.lng, S.useKakao ? 4 : 15);
+  mapSetCenter(S.pos.lat, S.pos.lng, S.useKakao ? 5 : 13);
   setCurrentMarker();
   findNearestStation();
 }
@@ -240,16 +251,21 @@ function setCurrentMarker() {
 // ── 가까운 역 ───────────────────────────────────────
 function findNearestStation() {
   const { lat, lng } = S.pos;
-  fetch(`https://api.odsay.com/v1/api/searchStationByPositionAsMapLine?lang=0&x=${lng}&y=${lat}&apiKey=${encodeURIComponent(ODSAY_KEY)}`)
+  fetch(`https://api.odsay.com/v1/api/searchStationByPosition?lang=0&x=${lng}&y=${lat}&stationClass=1&apiKey=${encodeURIComponent(ODSAY_KEY)}`)
     .then(r => r.json())
     .then(d => {
-      const st = d.result?.station?.[0];
-      if (!st) { setLocBadge('주변 역 없음'); return; }
+      const stations = d.result?.station || [];
+      // 2km 이내 역 필터
+      const nearby = stations.filter(st => calcDist(lat, lng, st.y, st.x) <= 2);
+      if (!nearby.length) { setLocBadge('📍 위치 확인됨 (반경 2km 내 지하철역 없음)'); return; }
+      const st = nearby[0];
       S.nearestStation = st;
       const dist = calcDist(lat, lng, st.y, st.x);
       const walkMin = Math.max(1, Math.ceil(dist / 0.07));
       setLocBadge(`🚇 ${st.stationName}역 (도보 ${walkMin}분)`);
-      showTimetable(st.stationName, st.y);
+      // 역 마커 표시
+      addStationMarker(st.y, st.x, st.stationName);
+      showTimetable(st.stationName, '');
     })
     .catch(() => setLocBadge('위치 확인 실패'));
 }
@@ -289,20 +305,28 @@ function buildRoute(path, destName) {
   S.alertedSet = new Set();
   clearMapLayers();
 
-  path.subPath.forEach((sp, spIdx) => {
-    if (sp.trafficType !== 1) return;
+  const subwaySegs = path.subPath.filter(sp => sp.trafficType === 1);
+  const totalSubs = subwaySegs.length;
+
+  subwaySegs.forEach((sp, subIdx) => {
     const stations = sp.passStopList?.stations || [];
     const color = lineColor(sp.lane?.[0]?.subwayCode);
     const lineName = sp.lane?.[0]?.laneName || '';
-    const hasNextSubway = path.subPath.slice(spIdx + 1).some(nx => nx.trafficType === 1);
+    const direction = sp.direction || '';          // ODsay가 주는 방면 (예: "강남방면")
+    const hasNext = subIdx < totalSubs - 1;
+
     stations.forEach((st, si) => {
+      // 두 번째 이상 구간의 첫 역 = 환승역 중복 → 건너뜀
+      if (si === 0 && subIdx > 0) return;
+
       const isLast = si === stations.length - 1;
       S.flatStations.push({
         name: st.stationName,
         x: parseFloat(st.x), y: parseFloat(st.y),
         color, lineName,
-        isTransfer: isLast && hasNextSubway,
-        isFinal: spIdx === path.subPath.filter(x => x.trafficType === 1).length - 1 && isLast,
+        direction,
+        isTransfer: isLast && hasNext,
+        isFinal: !hasNext && isLast,
       });
     });
     S.subPaths.push({ stations, color });
@@ -313,9 +337,14 @@ function buildRoute(path, destName) {
   const info = path.info;
   document.getElementById('routeTitle').textContent = `→ ${destName}역  ${info.totalTime}분 · 환승 ${info.transferCount}회`;
 
+  enableSplitMode();
   renderRouteList();
   drawRouteOnMap();
-  showTimetable(S.flatStations[0].name, S.flatStations[0].y);
+  showTimetable(S.flatStations[0].name, S.flatStations[0].direction || destName + '방면');
+}
+
+function enableSplitMode() {
+  document.querySelector('.main').classList.add('split');
 }
 
 // ── 경로 목록 렌더링 ────────────────────────────────
@@ -397,13 +426,30 @@ function clearMapLayers() {
   S.mapLayers = [];
 }
 
+function addStationMarker(lat, lng, name) {
+  if (!S.map) return;
+  if (S.useKakao) {
+    const ov = new kakao.maps.CustomOverlay({
+      position: new kakao.maps.LatLng(lat, lng),
+      content: `<div style="background:#1D4ED8;color:#fff;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;white-space:nowrap">🚇 ${name}</div>`,
+      yAnchor: 1.5, map: S.map,
+    });
+    S.mapLayers.push(ov);
+  } else {
+    const marker = L.circleMarker([lat, lng], {
+      radius: 7, color: '#1D4ED8', fillColor: '#3B82F6', fillOpacity: 1, weight: 2,
+    }).bindTooltip(name, { permanent: true, direction: 'top', className: 'station-label' }).addTo(S.map);
+    S.mapLayers.push(marker);
+  }
+}
+
 // ── 역 이동 ──────────────────────────────────────────
 function jumpToStation(idx) {
   S.currentIdx = idx;
   renderRouteList();
   const st = S.flatStations[idx];
   mapSetCenter(st.y, st.x, S.useKakao ? 4 : 15);
-  showTimetable(st.name, st.y);
+  showTimetable(st.name, st.direction || '');
 }
 
 function mapSetCenter(lat, lng, level) {
@@ -428,7 +474,7 @@ function checkTransferAlert() {
     S.currentIdx = closestIdx;
     renderRouteList();
     const st = S.flatStations[closestIdx];
-    showTimetable(st.name, st.y);
+    showTimetable(st.name, st.direction || '');
   }
   const alertIdxs = getAlertIdxs();
   if (alertIdxs.includes(S.currentIdx) && !S.alertedSet.has(S.currentIdx)) {
@@ -468,55 +514,47 @@ function getInterval(lineNum) {
   return isLate ? ivs[2] : isRush ? ivs[0] : ivs[1];
 }
 
-function showTimetable(stationName, lat) {
+function showTimetable(stationName, direction) {
   S.ttStation = stationName;
+  S.ttDirection = direction || '';
   document.getElementById('ttStation').textContent = stationName + '역';
 
   // 현재 역의 호선 파악
-  let lineNums = [2]; // 기본값
+  let lineNum = 2; // 기본값
   if (S.flatStations.length) {
     const st = S.flatStations.find(s => s.name === stationName);
     if (st) {
       const match = st.lineName.match(/(\d+)/);
-      if (match) lineNums = [parseInt(match[1])];
+      if (match) lineNum = parseInt(match[1]);
     }
   }
-  if (S.nearestStation?.stationName === stationName) lineNums = [2];
 
-  renderTimetable(lineNums[0] || 2);
+  renderTimetable(lineNum, S.ttDirection);
 }
 
-function renderTimetable(lineNum) {
+function renderTimetable(lineNum, direction) {
   const interval = getInterval(lineNum);
   const now = new Date();
   const nowMins = now.getHours()*60 + now.getMinutes();
   const nowSec = now.getSeconds();
-
-  // 다음 열차까지 남은 시간 (0~interval 사이 랜덤으로 현실감)
-  const seed = Math.floor((now.getTime() / 1000) / interval / 60) * interval;
   const elapsed = nowMins % interval + nowSec / 60;
   const nextMins = interval - (elapsed % interval);
 
+  const dirLabel = direction || '행선지';
   const trains = [];
-  const DIRS = ['상행', '하행'];
-  DIRS.forEach((dir, di) => {
-    for (let i = 0; i < 4; i++) {
-      const offset = nextMins + i * interval + di * (interval / 2);
-      const depTime = new Date(now.getTime() + offset * 60000);
-      trains.push({
-        dir,
-        time: depTime.getHours().toString().padStart(2,'0') + ':' + depTime.getMinutes().toString().padStart(2,'0'),
-        remaining: Math.round(offset),
-        isNext: i === 0,
-      });
-    }
-  });
-
-  // 시간순 정렬
-  trains.sort((a, b) => a.remaining - b.remaining);
+  for (let i = 0; i < 6; i++) {
+    const offset = nextMins + i * interval;
+    const depTime = new Date(now.getTime() + offset * 60000);
+    trains.push({
+      dir: dirLabel,
+      time: depTime.getHours().toString().padStart(2,'0') + ':' + depTime.getMinutes().toString().padStart(2,'0'),
+      remaining: Math.round(offset),
+      isNext: i === 0,
+    });
+  }
 
   const scroll = document.getElementById('ttScroll');
-  scroll.innerHTML = trains.slice(0, 6).map(t => `
+  scroll.innerHTML = trains.map(t => `
     <div class="tt-card${t.isNext ? ' next' : ''}">
       <div class="tt-dir">${t.dir}</div>
       <div class="tt-depart">${t.time}</div>
@@ -533,7 +571,7 @@ function startClock() {
       now.getHours().toString().padStart(2,'0') + ':' +
       now.getMinutes().toString().padStart(2,'0') + ':' +
       now.getSeconds().toString().padStart(2,'0');
-    if (S.ttStation) renderTimetable(getCurrentLineNum());
+    if (S.ttStation) renderTimetable(getCurrentLineNum(), S.ttDirection || '');
   }
   tick();
   setInterval(tick, 1000);
