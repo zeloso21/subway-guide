@@ -97,6 +97,11 @@
     .quote-text { font-size: 15px; font-weight: 600; color: #E2E8F0; line-height: 1.65; letter-spacing: -.2px; text-shadow: 0 1px 8px rgba(0,0,0,.8); }
     .quote-author { font-size: 11px; color: #60A5FA; margin-top: 6px; letter-spacing: .5px; }
 
+    /* 언어 선택 */
+    .lang-bar { display: flex; gap: 4px; margin-left: 8px; }
+    .lang-btn { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.6); border-radius: 6px; padding: 2px 7px; font-size: 10px; font-weight: 700; cursor: pointer; letter-spacing: .3px; }
+    .lang-btn.active { background: rgba(255,255,255,.25); border-color: rgba(255,255,255,.5); color: #fff; }
+
     /* 토스트 */
     .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: #DC2626; color: white; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,.6); display: none; text-align: center; max-width: 88vw; }
     .toast.info { background: linear-gradient(135deg,#1D4ED8,#2563EB); }
@@ -108,13 +113,18 @@
 
 <div class="header">
   <span style="font-size:18px">🚇</span>
-  <h1>지하철 길안내</h1>
+  <h1 id="appTitle">지하철 길안내</h1>
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('ko')">KO</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('ja')">JA</button>
+  </div>
   <div class="loc-badge" id="locBadge">위치 확인 중...</div>
 </div>
 
 <div class="search-bar">
   <input class="search-input" id="destInput" type="text" placeholder="목적지 역 입력 (예: 강남, 홍대입구)"/>
-  <button class="search-btn" onclick="searchRoute()">안내</button>
+  <button class="search-btn" id="searchBtn" onclick="searchRoute()">안내</button>
 </div>
 
 <div class="main">
@@ -142,7 +152,7 @@
   <!-- 시간표 1/4 -->
   <div class="timetable-section">
     <div class="tt-header">
-      <span class="tt-title">열차 시간표</span>
+      <span class="tt-title" id="ttTitle">열차 시간표</span>
       <span class="tt-station" id="ttStation">—</span>
       <span class="tt-time" id="ttClock"></span>
     </div>
@@ -161,8 +171,186 @@
 const ODSAY_KEY = 'OLKXZpgL39Z/FRXbnoLDyQ';
 const KAKAO_JS_KEY = '5f52a6cdf28d24897956e5bb497aac7b';
 
+// ── 다국어 ───────────────────────────────────────────
+let LANG_CODE = localStorage.getItem('lang') || 'ko';
+
+const I18N = {
+  ko: {
+    appTitle: '지하철 길안내',
+    locChecking: '위치 확인 중...',
+    locFail: '위치 권한이 필요합니다',
+    locError: '위치 확인 실패',
+    locNoStation: '📍 위치 확인됨 (반경 2km 내 지하철역 없음)',
+    locNear: (name, min) => `🚇 ${name}역 (도보 ${min}분)`,
+    placeholder: '목적지 역 입력 (예: 강남, 홍대입구)',
+    searchBtn: '안내',
+    routeEmpty: '목적지를 입력하세요',
+    routeListEmpty: '경로가 표시됩니다',
+    ttTitle: '열차 시간표',
+    ttEmpty: '역 선택 시 표시됩니다',
+    inputHint: '목적지를 입력하세요',
+    locating: '위치 확인 중입니다',
+    searching: '경로 검색 중...',
+    notFound: '역을 찾을 수 없습니다',
+    noRoute: '경로를 찾을 수 없습니다',
+    noSubway: '지하철 경로 없음',
+    searchFail: (msg) => '검색 실패: ' + msg,
+    routeTitle: (dest, time, tr) => `→ ${dest}역  ${time}분${tr > 0 ? ` · 환승 ${tr}회` : ' · 직통'}`,
+    badgeTransfer: '환승',
+    badgeArrive: '도착',
+    badgeAlert: '⚠ 환승준비',
+    transferAlert: (left, name) => `⚠️ ${left}정거장 후 [${name}]역 환승!`,
+    alertTitle: '환승 알림',
+    walkMin: (n) => `도보 ${n}분`,
+    soon: '곧 도착',
+    minsLater: (n) => `${n}분 후`,
+    dirDefault: '행선지',
+  },
+  en: {
+    appTitle: 'Subway Guide',
+    locChecking: 'Locating...',
+    locFail: 'Location permission required',
+    locError: 'Location failed',
+    locNoStation: '📍 Located (no subway within 2km)',
+    locNear: (name, min) => `🚇 ${name} (${min} min walk)`,
+    placeholder: 'Enter destination (e.g. Gangnam, Hongdae)',
+    searchBtn: 'Go',
+    routeEmpty: 'Enter a destination',
+    routeListEmpty: 'Route will appear here',
+    ttTitle: 'Train Schedule',
+    ttEmpty: 'Select a station',
+    inputHint: 'Enter a destination',
+    locating: 'Locating...',
+    searching: 'Searching route...',
+    notFound: 'Station not found',
+    noRoute: 'No route found',
+    noSubway: 'No subway route',
+    searchFail: (msg) => 'Search failed: ' + msg,
+    routeTitle: (dest, time, tr) => `→ ${dest}  ${time} min${tr > 0 ? ` · ${tr} transfer${tr > 1 ? 's' : ''}` : ' · Direct'}`,
+    badgeTransfer: 'Transfer',
+    badgeArrive: 'Arrive',
+    badgeAlert: '⚠ Prep',
+    transferAlert: (left, name) => `⚠️ Transfer at [${name}] in ${left} stop${left > 1 ? 's' : ''}!`,
+    alertTitle: 'Transfer Alert',
+    walkMin: (n) => `${n} min walk`,
+    soon: 'Arriving',
+    minsLater: (n) => `${n} min`,
+    dirDefault: 'Bound for',
+  },
+  ja: {
+    appTitle: '地下鉄ナビ',
+    locChecking: '位置確認中...',
+    locFail: '位置情報の許可が必要です',
+    locError: '位置情報の取得に失敗',
+    locNoStation: '📍 位置確認済 (半径2km以内に駅なし)',
+    locNear: (name, min) => `🚇 ${name}駅 (徒歩${min}分)`,
+    placeholder: '目的地を入力 (例: 江南、弘大入口)',
+    searchBtn: '案内',
+    routeEmpty: '目的地を入力してください',
+    routeListEmpty: 'ルートがここに表示されます',
+    ttTitle: '列車時刻表',
+    ttEmpty: '駅を選択してください',
+    inputHint: '目的地を入力してください',
+    locating: '位置確認中です',
+    searching: 'ルート検索中...',
+    notFound: '駅が見つかりません',
+    noRoute: 'ルートが見つかりません',
+    noSubway: '地下鉄ルートなし',
+    searchFail: (msg) => '検索失敗: ' + msg,
+    routeTitle: (dest, time, tr) => `→ ${dest}駅  ${time}分${tr > 0 ? ` · 乗換${tr}回` : ' · 直通'}`,
+    badgeTransfer: '乗換',
+    badgeArrive: '到着',
+    badgeAlert: '⚠ 乗換準備',
+    transferAlert: (left, name) => `⚠️ ${left}駅後 [${name}]駅で乗換！`,
+    alertTitle: '乗換案内',
+    walkMin: (n) => `徒歩${n}分`,
+    soon: 'まもなく',
+    minsLater: (n) => `${n}分後`,
+    dirDefault: '行先',
+  },
+};
+
+function t(key, ...args) {
+  const v = (I18N[LANG_CODE] || I18N.ko)[key];
+  return typeof v === 'function' ? v(...args) : (v || key);
+}
+
+function setLang(code) {
+  LANG_CODE = code;
+  localStorage.setItem('lang', code);
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent === code.toUpperCase());
+  });
+  applyLang();
+  // 경구 다시 표시
+  if (!document.querySelector('.main').classList.contains('split')) showQuote();
+}
+
+function applyLang() {
+  document.getElementById('appTitle').textContent = t('appTitle');
+  document.getElementById('destInput').placeholder = t('placeholder');
+  document.getElementById('searchBtn').textContent = t('searchBtn');
+  document.getElementById('ttTitle').textContent = t('ttTitle');
+  // 현재 locBadge가 초기 메시지면 갱신
+  const badge = document.getElementById('locBadge');
+  const initMsgs = ['위치 확인 중...', 'Locating...', '位置確認中...'];
+  if (initMsgs.includes(badge.textContent)) badge.textContent = t('locChecking');
+  // 라우트 타이틀이 초기 메시지면 갱신
+  const rt = document.getElementById('routeTitle');
+  if (rt) {
+    const initRts = ['목적지를 입력하세요', 'Enter a destination', '目的地を入力してください'];
+    if (initRts.includes(rt.textContent)) rt.textContent = t('routeEmpty');
+  }
+}
+
 // ── 경구 ─────────────────────────────────────────────
-const QUOTES = [
+const QUOTES_EN = [
+  { text: "If you don't walk today, you'll have to run tomorrow.", author: "— Confucius" },
+  { text: "A journey of a thousand miles begins with a single step.", author: "— Laozi" },
+  { text: "Today is the youngest you will ever be again.", author: "— Anonymous" },
+  { text: "Even the darkest night will end, and the sun will rise.", author: "— Victor Hugo" },
+  { text: "Whether you think you can or can't — you're right.", author: "— Henry Ford" },
+  { text: "Those who are grateful for small things receive great things.", author: "— Anonymous" },
+  { text: "After rain, the ground hardens.", author: "— Korean proverb" },
+  { text: "Well begun is half done.", author: "— Aristotle" },
+  { text: "There is no failure as long as you don't give up.", author: "— Anonymous" },
+  { text: "Those who dream never truly grow old.", author: "— Anonymous" },
+  { text: "Life is a tragedy in close-up, but a comedy in long-shot.", author: "— Charlie Chaplin" },
+  { text: "Hard work never betrays you. Effort always leads to results.", author: "— Anonymous" },
+  { text: "You are doing well enough today.", author: "— Anonymous" },
+  { text: "A river doesn't overcome a rock with force — it overcomes with gentleness.", author: "— Laozi" },
+  { text: "Opportunity always finds the one who is prepared.", author: "— Seneca" },
+  { text: "Speed is not everything. Direction matters.", author: "— Anonymous" },
+  { text: "Who you are today was made by yesterday's you. Tomorrow's you is being made right now.", author: "— Anonymous" },
+  { text: "Laughter comes from ease of mind, and ease of mind comes from gratitude.", author: "— Anonymous" },
+  { text: "Perseverance itself is a skill.", author: "— Anonymous" },
+  { text: "If life deceives you, neither grieve nor be angry.", author: "— Pushkin" },
+];
+
+const QUOTES_JA = [
+  { text: "今日歩かなければ、明日は走らなければならない。", author: "— 孔子" },
+  { text: "千里の道も一歩から。", author: "— 老子" },
+  { text: "今この瞬間が、これからの日々で最も若い時だ。", author: "— 作者不詳" },
+  { text: "どんなに暗い夜も終わり、太陽はまた昇る。", author: "— ヴィクトル・ユゴー" },
+  { text: "できると思っても、できないと思っても — あなたが正しい。", author: "— ヘンリー・フォード" },
+  { text: "小さなことに感謝できる人が、大きなものも得る。", author: "— 作者不詳" },
+  { text: "雨降って地固まる。", author: "— 日本のことわざ" },
+  { text: "始まりは成功の半分。", author: "— アリストテレス" },
+  { text: "諦めない限り、失敗はない。", author: "— 作者不詳" },
+  { text: "夢を見る人は永遠に老いない。", author: "— 作者不詳" },
+  { text: "人生はクローズアップで見れば悲劇だが、引いて見れば喜劇だ。", author: "— チャーリー・チャップリン" },
+  { text: "努力は裏切らない。過程は必ず結果につながる。", author: "— 作者不詳" },
+  { text: "今日も十分よくやっている。", author: "— 作者不詳" },
+  { text: "川は岩を力で制さない。柔らかさで制する。", author: "— 老子" },
+  { text: "準備された者に、チャンスは必ずやってくる。", author: "— セネカ" },
+  { text: "速さがすべてではない。方向が大切だ。", author: "— 作者不詳" },
+  { text: "今日の自分は昨日の自分が作り、明日の自分は今日の自分が作る。", author: "— 作者不詳" },
+  { text: "笑いは心の余裕から生まれ、余裕は感謝から生まれる。", author: "— 作者不詳" },
+  { text: "耐えることも実力のうち。", author: "— 作者不詳" },
+  { text: "人生があなたを欺いても、悲しまず怒らないで。", author: "— プーシキン" },
+];
+
+const QUOTES_KO = [
   { text: "오늘 걷지 않으면 내일은 뛰어야 한다.", author: "— 공자" },
   { text: "천 리 길도 한 걸음부터.", author: "— 노자" },
   { text: "지금 이 순간이 앞으로의 날들 중 가장 젊은 때다.", author: "— 작자 미상" },
@@ -186,9 +374,11 @@ const QUOTES = [
 ];
 
 function showQuote() {
-  const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  const pool = { ko: QUOTES_KO, en: QUOTES_EN, ja: QUOTES_JA }[LANG_CODE] || QUOTES_KO;
+  const q = pool[Math.floor(Math.random() * pool.length)];
   document.getElementById('quoteText').textContent = q.text;
   document.getElementById('quoteAuthor').textContent = q.author;
+  document.getElementById('quoteOverlay').classList.remove('hidden');
 }
 
 function hideQuote() {
@@ -249,6 +439,11 @@ function startWithLeaflet() {
 }
 
 function startApp() {
+  applyLang();
+  // 저장된 언어로 버튼 상태 복원
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent === LANG_CODE.toUpperCase());
+  });
   showQuote();
   requestLocation();
   requestNotifPerm();
@@ -257,7 +452,7 @@ function startApp() {
 
 // ── 위치 ────────────────────────────────────────────
 function requestLocation() {
-  if (!navigator.geolocation) { setLocBadge('위치 서비스 미지원'); return; }
+  if (!navigator.geolocation) { setLocBadge(t('locFail')); return; }
   navigator.geolocation.getCurrentPosition(onLocOK, onLocFail, { enableHighAccuracy: true, timeout: 12000 });
   navigator.geolocation.watchPosition(onLocUpdate, null, { enableHighAccuracy: true, maximumAge: 15000 });
 }
@@ -275,7 +470,7 @@ function onLocUpdate(p) {
   if (S.flatStations.length) checkTransferAlert();
 }
 
-function onLocFail() { setLocBadge('위치 권한이 필요합니다'); }
+function onLocFail() { setLocBadge(t('locFail')); }
 
 function setCurrentMarker() {
   if (!S.pos) return;
@@ -302,38 +497,38 @@ function findNearestStation() {
       const stations = d.result?.station || [];
       // 2km 이내 역 필터
       const nearby = stations.filter(st => calcDist(lat, lng, st.y, st.x) <= 2);
-      if (!nearby.length) { setLocBadge('📍 위치 확인됨 (반경 2km 내 지하철역 없음)'); return; }
+      if (!nearby.length) { setLocBadge(t('locNoStation')); return; }
       const st = nearby[0];
       S.nearestStation = st;
       const dist = calcDist(lat, lng, st.y, st.x);
       const walkMin = Math.max(1, Math.ceil(dist / 0.07));
-      setLocBadge(`🚇 ${st.stationName}역 (도보 ${walkMin}분)`);
+      setLocBadge(t('locNear', st.stationName, walkMin));
       // 역 마커 표시
       addStationMarker(st.y, st.x, st.stationName);
       showTimetable(st.stationName, '');
     })
-    .catch(() => setLocBadge('위치 확인 실패'));
+    .catch(() => setLocBadge(t('locError')));
 }
 
 // ── 경로 검색 ───────────────────────────────────────
 async function searchRoute() {
   const destName = document.getElementById('destInput').value.trim();
-  if (!destName) { showToast('목적지를 입력하세요', false, 2000); return; }
-  if (!S.pos) { showToast('위치 확인 중입니다', false, 2000); return; }
+  if (!destName) { showToast(t('inputHint'), false, 2000); return; }
+  if (!S.pos) { showToast(t('locating'), false, 2000); return; }
 
-  showToast('경로 검색 중...', true, 99999);
+  showToast(t('searching'), true, 99999);
   try {
     const dest = await findStation(destName);
-    if (!dest) { showToast('역을 찾을 수 없습니다', false, 3000); return; }
+    if (!dest) { showToast(t('notFound'), false, 3000); return; }
 
     const { lat, lng } = S.pos;
     const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${lng}&SY=${lat}&EX=${dest.x}&EY=${dest.y}&OPT=0&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
     hideToast();
-    if (!d.result?.path?.length) { showToast('경로를 찾을 수 없습니다', false, 3000); return; }
+    if (!d.result?.path?.length) { showToast(t('noRoute'), false, 3000); return; }
     buildRoute(d.result.path[0], destName);
   } catch(e) {
     hideToast();
-    showToast('검색 실패: ' + e.message, false, 3000);
+    showToast(t('searchFail', e.message), false, 3000);
   }
 }
 
@@ -377,12 +572,11 @@ function buildRoute(path, destName) {
     S.subPaths.push({ stations, color });
   });
 
-  if (!S.flatStations.length) { showToast('지하철 경로 없음', false, 3000); return; }
+  if (!S.flatStations.length) { showToast(t('noSubway'), false, 3000); return; }
 
   const info = path.info;
-  const subwayTransfers = subwaySegs.length - 1; // 직접 계산 (ODsay info.transferCount는 버스 포함이라 부정확)
-  const transferText = subwayTransfers > 0 ? ` · 환승 ${subwayTransfers}회` : ' · 직통';
-  document.getElementById('routeTitle').textContent = `→ ${destName}역  ${info.totalTime}분${transferText}`;
+  const subwayTransfers = subwaySegs.length - 1;
+  document.getElementById('routeTitle').textContent = t('routeTitle', destName, info.totalTime, subwayTransfers);
 
   enableSplitMode();
   renderRouteList();
@@ -413,9 +607,9 @@ function renderRouteList() {
     const div = document.createElement('div');
     div.className = 'station-row' + (i === S.currentIdx ? ' current' : '') + (isAlert ? ' talert' : '');
     let badge = '';
-    if (st.isTransfer) badge = '<span class="sbadge sb-transfer">환승</span>';
-    else if (st.isFinal) badge = '<span class="sbadge sb-arrive">도착</span>';
-    else if (isAlert) badge = '<span class="sbadge sb-alert">⚠ 환승준비</span>';
+    if (st.isTransfer) badge = `<span class="sbadge sb-transfer">${t('badgeTransfer')}</span>`;
+    else if (st.isFinal) badge = `<span class="sbadge sb-arrive">${t('badgeArrive')}</span>`;
+    else if (isAlert) badge = `<span class="sbadge sb-alert">${t('badgeAlert')}</span>`;
     const isFirst = i === 0, isLast = st.isFinal;
     div.innerHTML = `
       <div class="strack">
@@ -530,7 +724,7 @@ function checkTransferAlert() {
     const transferSt = S.flatStations.find((st, i) => st.isTransfer && i > S.currentIdx);
     if (transferSt) {
       const left = S.flatStations.indexOf(transferSt) - S.currentIdx;
-      triggerAlert(`⚠️ ${left}정거장 후 [${transferSt.name}]역 환승!`);
+      triggerAlert(t('transferAlert', left, transferSt.name));
     }
   }
 }
@@ -538,7 +732,7 @@ function checkTransferAlert() {
 function triggerAlert(msg) {
   showToast(msg, false, 6000);
   if ('vibrate' in navigator) navigator.vibrate([400, 150, 400]);
-  if (Notification.permission === 'granted') new Notification('환승 알림', { body: msg });
+  if (Notification.permission === 'granted') new Notification(t('alertTitle'), { body: msg });
 }
 
 function requestNotifPerm() {
@@ -565,7 +759,8 @@ function getInterval(lineNum) {
 function showTimetable(stationName, direction) {
   S.ttStation = stationName;
   S.ttDirection = direction || '';
-  document.getElementById('ttStation').textContent = stationName + '역';
+  const suffix = LANG_CODE === 'ko' ? '역' : LANG_CODE === 'ja' ? '駅' : '';
+  document.getElementById('ttStation').textContent = stationName + suffix;
 
   // 현재 역의 호선 파악
   let lineNum = 2; // 기본값
@@ -588,7 +783,7 @@ function renderTimetable(lineNum, direction) {
   const elapsed = nowMins % interval + nowSec / 60;
   const nextMins = interval - (elapsed % interval);
 
-  const dirLabel = direction || '행선지';
+  const dirLabel = direction || t('dirDefault');
   const trains = [];
   for (let i = 0; i < 6; i++) {
     const offset = nextMins + i * interval;
@@ -602,11 +797,11 @@ function renderTimetable(lineNum, direction) {
   }
 
   const scroll = document.getElementById('ttScroll');
-  scroll.innerHTML = trains.map(t => `
-    <div class="tt-card${t.isNext ? ' next' : ''}">
-      <div class="tt-dir">${t.dir}</div>
-      <div class="tt-depart">${t.time}</div>
-      <div class="tt-remaining">${t.remaining < 1 ? '곧 도착' : t.remaining + '분 후'}</div>
+  scroll.innerHTML = trains.map(tr => `
+    <div class="tt-card${tr.isNext ? ' next' : ''}">
+      <div class="tt-dir">${tr.dir}</div>
+      <div class="tt-depart">${tr.time}</div>
+      <div class="tt-remaining">${tr.remaining < 1 ? t('soon') : t('minsLater', tr.remaining)}</div>
     </div>
   `).join('');
 }
@@ -646,7 +841,7 @@ function lineColor(code) {
            6:'#CD7C2F',7:'#747F00',8:'#E6186C',9:'#BDB092'})[code]||'#4B5563';
 }
 
-function setLocBadge(t) { document.getElementById('locBadge').textContent = t; }
+function setLocBadge(msg) { document.getElementById('locBadge').textContent = msg; }
 
 let _tt;
 function showToast(msg, info=false, ms=3000) {
