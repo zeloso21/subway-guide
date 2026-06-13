@@ -91,6 +91,12 @@
     .station-label { background: #1D4ED8 !important; color: #fff !important; border: none !important; font-size: 10px !important; font-weight: 700 !important; padding: 2px 6px !important; border-radius: 4px !important; white-space: nowrap !important; }
     .station-label::before { display: none !important; }
 
+    /* 경구 오버레이 */
+    .quote-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 24px 28px; background: linear-gradient(to top, rgba(5,10,20,.92) 0%, rgba(5,10,20,.6) 70%, transparent 100%); z-index: 10; pointer-events: none; transition: opacity .6s ease; }
+    .quote-overlay.hidden { opacity: 0; }
+    .quote-text { font-size: 15px; font-weight: 600; color: #E2E8F0; line-height: 1.65; letter-spacing: -.2px; text-shadow: 0 1px 8px rgba(0,0,0,.8); }
+    .quote-author { font-size: 11px; color: #60A5FA; margin-top: 6px; letter-spacing: .5px; }
+
     /* 토스트 */
     .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: #DC2626; color: white; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,.6); display: none; text-align: center; max-width: 88vw; }
     .toast.info { background: linear-gradient(135deg,#1D4ED8,#2563EB); }
@@ -113,9 +119,13 @@
 
 <div class="main">
 
-  <!-- 지도 1/4 -->
+  <!-- 지도 -->
   <div class="map-section">
     <div id="map"></div>
+    <div class="quote-overlay" id="quoteOverlay">
+      <div class="quote-text" id="quoteText"></div>
+      <div class="quote-author" id="quoteAuthor"></div>
+    </div>
   </div>
 
   <!-- 노선 2/4 -->
@@ -150,6 +160,40 @@
 // ── API 키 ──────────────────────────────────────────
 const ODSAY_KEY = 'OLKXZpgL39Z/FRXbnoLDyQ';
 const KAKAO_JS_KEY = '5f52a6cdf28d24897956e5bb497aac7b';
+
+// ── 경구 ─────────────────────────────────────────────
+const QUOTES = [
+  { text: "오늘 걷지 않으면 내일은 뛰어야 한다.", author: "— 공자" },
+  { text: "천 리 길도 한 걸음부터.", author: "— 노자" },
+  { text: "지금 이 순간이 앞으로의 날들 중 가장 젊은 때다.", author: "— 작자 미상" },
+  { text: "가장 어두운 밤도 끝나고, 태양은 다시 뜬다.", author: "— 빅토르 위고" },
+  { text: "할 수 있다고 생각하든, 할 수 없다고 생각하든 — 당신이 옳다.", author: "— 헨리 포드" },
+  { text: "작은 것에 감사할 줄 아는 사람이 큰 것도 얻는다.", author: "— 작자 미상" },
+  { text: "비가 온 뒤에 땅이 굳어진다.", author: "— 한국 속담" },
+  { text: "시작이 반이다.", author: "— 아리스토텔레스" },
+  { text: "포기하지 않는 한 실패는 없다.", author: "— 작자 미상" },
+  { text: "꿈을 꾸는 사람은 영원히 늙지 않는다.", author: "— 작자 미상" },
+  { text: "인생은 가까이서 보면 비극이지만, 멀리서 보면 희극이다.", author: "— 찰리 채플린" },
+  { text: "노력은 배신하지 않는다. 과정은 반드시 결과로 이어진다.", author: "— 작자 미상" },
+  { text: "오늘 하루도 충분히 잘하고 있다.", author: "— 작자 미상" },
+  { text: "강물은 바위를 힘으로 이기지 않는다. 부드러움으로 이긴다.", author: "— 노자" },
+  { text: "준비된 자에게 기회는 반드시 찾아온다.", author: "— 세네카" },
+  { text: "빠른 것이 전부가 아니다. 방향이 중요하다.", author: "— 작자 미상" },
+  { text: "오늘의 나는 어제의 내가 만든 것이고, 내일의 나는 오늘의 내가 만든다.", author: "— 작자 미상" },
+  { text: "웃음은 마음의 여유에서 나오고, 여유는 감사에서 나온다.", author: "— 작자 미상" },
+  { text: "버티는 것도 실력이다.", author: "— 작자 미상" },
+  { text: "삶이 그대를 속일지라도 슬퍼하거나 노하지 말라.", author: "— 푸시킨" },
+];
+
+function showQuote() {
+  const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  document.getElementById('quoteText').textContent = q.text;
+  document.getElementById('quoteAuthor').textContent = q.author;
+}
+
+function hideQuote() {
+  document.getElementById('quoteOverlay').classList.add('hidden');
+}
 
 // ── 상태 ────────────────────────────────────────────
 let S = {
@@ -205,6 +249,7 @@ function startWithLeaflet() {
 }
 
 function startApp() {
+  showQuote();
   requestLocation();
   requestNotifPerm();
   startClock();
@@ -335,7 +380,9 @@ function buildRoute(path, destName) {
   if (!S.flatStations.length) { showToast('지하철 경로 없음', false, 3000); return; }
 
   const info = path.info;
-  document.getElementById('routeTitle').textContent = `→ ${destName}역  ${info.totalTime}분 · 환승 ${info.transferCount}회`;
+  const subwayTransfers = subwaySegs.length - 1; // 직접 계산 (ODsay info.transferCount는 버스 포함이라 부정확)
+  const transferText = subwayTransfers > 0 ? ` · 환승 ${subwayTransfers}회` : ' · 직통';
+  document.getElementById('routeTitle').textContent = `→ ${destName}역  ${info.totalTime}분${transferText}`;
 
   enableSplitMode();
   renderRouteList();
@@ -345,6 +392,7 @@ function buildRoute(path, destName) {
 
 function enableSplitMode() {
   document.querySelector('.main').classList.add('split');
+  hideQuote();
 }
 
 // ── 경로 목록 렌더링 ────────────────────────────────
