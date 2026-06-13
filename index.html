@@ -304,8 +304,154 @@ function applyLang() {
 }
 
 // ── 경구 ─────────────────────────────────────────────
-const QUOTES_EN = [
-  { text: "If you don't walk today, you'll have to run tomorrow.", author: "— Confucius" },
+// 영어: dummyjson API 동적 fetch (실패 시 fallback)
+const QUOTES_EN_FALLBACK = [
+  { text: "In the middle of every difficulty lies opportunity.", author: "— Albert Einstein" },
+  { text: "The only way to do great work is to love what you do.", author: "— Steve Jobs" },
+  { text: "It does not matter how slowly you go, as long as you do not stop.", author: "— Confucius" },
+];
+
+const QUOTES_KO = [
+  { text: "오늘 걷지 않으면 내일은 뛰어야 한다.", author: "— 공자" },
+  { text: "천 리 길도 한 걸음부터.", author: "— 노자" },
+  { text: "가장 어두운 밤도 끝나고, 태양은 다시 뜬다.", author: "— 빅토르 위고" },
+  { text: "할 수 있다고 생각하든, 할 수 없다고 생각하든 — 당신이 옳다.", author: "— 헨리 포드" },
+  { text: "비가 온 뒤에 땅이 굳어진다.", author: "— 한국 속담" },
+  { text: "시작이 반이다.", author: "— 아리스토텔레스" },
+  { text: "포기하지 않는 한 실패는 없다.", author: "— 작자 미상" },
+  { text: "인생은 가까이서 보면 비극이지만, 멀리서 보면 희극이다.", author: "— 찰리 채플린" },
+  { text: "버티는 것도 실력이다.", author: "— 작자 미상" },
+  { text: "삶이 그대를 속일지라도 슬퍼하거나 노하지 말라.", author: "— 푸시킨" },
+  { text: "내가 두려워하는 것은 죽음이 아니라, 제대로 살지 못하는 것이다.", author: "— 넬슨 만델라" },
+  { text: "성공은 열정을 잃지 않고 실패에서 실패로 걸어가는 것이다.", author: "— 윈스턴 처칠" },
+  { text: "지금 이 순간이 앞으로의 날들 중 가장 젊은 때다.", author: "— 작자 미상" },
+  { text: "꿈을 꾸는 사람은 영원히 늙지 않는다.", author: "— 작자 미상" },
+  { text: "강물은 바위를 힘으로 이기지 않는다. 부드러움으로 이긴다.", author: "— 노자" },
+  { text: "준비된 자에게 기회는 반드시 찾아온다.", author: "— 세네카" },
+  { text: "노력은 배신하지 않는다. 과정은 반드시 결과로 이어진다.", author: "— 작자 미상" },
+  { text: "작은 것에 감사할 줄 아는 사람이 큰 것도 얻는다.", author: "— 작자 미상" },
+  { text: "남을 탓하기 전에 먼저 자신을 살펴보라.", author: "— 공자" },
+  { text: "뜻이 있는 곳에 길이 있다.", author: "— 링컨" },
+  { text: "꽃이 지고 나서야 봄인 줄 안다.", author: "— 한국 속담" },
+  { text: "배움에는 끝이 없다.", author: "— 공자" },
+  { text: "실패는 성공의 어머니다.", author: "— 한국 속담" },
+  { text: "인내는 쓰지만 그 열매는 달다.", author: "— 루소" },
+  { text: "남보다 나을 필요는 없다. 어제의 자신보다 나으면 된다.", author: "— 작자 미상" },
+  { text: "넘어지는 것은 실패가 아니다. 넘어진 채로 있는 것이 실패다.", author: "— 작자 미상" },
+  { text: "모든 것은 마음먹기에 달려 있다.", author: "— 원효대사" },
+  { text: "하늘은 스스로 돕는 자를 돕는다.", author: "— 한국 속담" },
+  { text: "지식은 힘이다.", author: "— 프란시스 베이컨" },
+  { text: "두려움은 실패에서 오는 게 아니라 도전하지 않는 데서 온다.", author: "— 작자 미상" },
+  { text: "마음이 바르면 몸이 바르고, 몸이 바르면 삶이 바르다.", author: "— 퇴계 이황" },
+  { text: "고요한 물이 깊다.", author: "— 한국 속담" },
+  { text: "급할수록 돌아가라.", author: "— 한국 속담" },
+  { text: "좋은 말 한마디가 천 냥 빚도 갚는다.", author: "— 한국 속담" },
+  { text: "아는 것을 안다고 하고, 모르는 것을 모른다고 하는 것이 진정한 앎이다.", author: "— 공자" },
+  { text: "자신을 이기는 자가 가장 강한 자다.", author: "— 노자" },
+  { text: "사람은 꿈꾸는 만큼 성장한다.", author: "— 작자 미상" },
+  { text: "매일 조금씩 나아지는 것이 가장 위대한 발전이다.", author: "— 작자 미상" },
+  { text: "진정한 용기는 두려움이 없는 것이 아니라, 두려움을 딛고 나아가는 것이다.", author: "— 넬슨 만델라" },
+  { text: "사람은 그가 반복적으로 하는 행동의 결과물이다. 탁월함은 습관이다.", author: "— 아리스토텔레스" },
+  { text: "최선을 다하면 결과는 자연스럽게 따라온다.", author: "— 작자 미상" },
+  { text: "행복은 목적지가 아니라 여행하는 방식이다.", author: "— 작자 미상" },
+  { text: "독서는 완성된 인간을 만들고, 대화는 준비된 인간을 만든다.", author: "— 프란시스 베이컨" },
+  { text: "말보다 행동이 더 크게 말한다.", author: "— 링컨" },
+  { text: "꾸준함이 재능을 이긴다.", author: "— 작자 미상" },
+  { text: "자신감은 첫 번째 단계의 비밀이다.", author: "— 마크 트웨인" },
+  { text: "지식을 얻는 데 투자한 것은 항상 최고의 이자를 낳는다.", author: "— 벤저민 프랭클린" },
+  { text: "가장 위험한 것은 목표가 너무 낮아서 달성하는 것이다.", author: "— 미켈란젤로" },
+  { text: "내가 실패한 것이 아니다. 효과 없는 방법을 만 가지 발견했을 뿐이다.", author: "— 에디슨" },
+  { text: "생각하는 대로 살지 않으면, 사는 대로 생각하게 된다.", author: "— 폴 부르제" },
+  { text: "좋은 하루를 기다리지 말고 좋은 하루를 만들어라.", author: "— 작자 미상" },
+  { text: "오늘 당신이 낭비한 시간은 어제 죽은 사람이 살고 싶었던 오늘이다.", author: "— 작자 미상" },
+  { text: "변화를 두려워하지 말라. 변화는 성장의 기회다.", author: "— 작자 미상" },
+  { text: "세상에서 가장 큰 모험은 꿈꾸는 대로 사는 삶이다.", author: "— 오프라 윈프리" },
+  { text: "미래를 예측하는 가장 좋은 방법은 미래를 창조하는 것이다.", author: "— 피터 드러커" },
+  { text: "조용한 사람이 깊은 강이다.", author: "— 한국 속담" },
+  { text: "끝이 좋으면 다 좋다.", author: "— 셰익스피어" },
+  { text: "지금 이 자리에서, 지금 이 모습으로, 당신은 충분하다.", author: "— 작자 미상" },
+  { text: "한 방울의 물이 오랫동안 떨어지면 돌에 구멍을 뚫는다.", author: "— 한국 속담" },
+  { text: "오늘 하루도 충분히 잘하고 있다. 스스로를 믿어라.", author: "— 작자 미상" },
+  { text: "인생의 목적은 유용하고, 명예롭고, 동정심 있게 사는 것이다.", author: "— 에머슨" },
+  { text: "매일 아침 눈을 뜰 때, 기적 같은 하루가 시작된다는 것을 잊지 마라.", author: "— 작자 미상" },
+  { text: "고난 없이 얻은 성공은 진정한 성공이 아니다.", author: "— 작자 미상" },
+  { text: "역경은 위대함을 향한 징검다리다.", author: "— 작자 미상" },
+  { text: "운명은 준비된 자에게 온다.", author: "— 세네카" },
+  { text: "나무를 자르는 데 여섯 시간을 준다면, 나는 네 시간을 도끼를 가는 데 쓰겠다.", author: "— 링컨" },
+  { text: "성공은 노력과 인내, 배움과 희생, 그리고 하는 일에 대한 사랑이다.", author: "— 펠레" },
+  { text: "고통이 남기고 간 뒤를 보라. 고난이 지나간 자리마다 꽃이 피어난다.", author: "— 이병철" },
+  { text: "불행을 두려워하지 말고 행복을 소중히 여겨라.", author: "— 톨스토이" },
+  { text: "지금 힘든 것은 나중에 강해질 이유가 된다.", author: "— 작자 미상" },
+  { text: "삶은 선택의 연속이다. 매 순간 최선의 선택을 하라.", author: "— 작자 미상" },
+  { text: "최고가 되는 것보다 최선을 다하는 것이 더 중요하다.", author: "— 작자 미상" },
+  { text: "한 번 실패한 사람이 두 번 도전할 자격이 있다.", author: "— 작자 미상" },
+  { text: "도전하지 않으면 아무것도 이룰 수 없다.", author: "— 작자 미상" },
+  { text: "진실은 시간이 지나면 반드시 밝혀진다.", author: "— 한국 속담" },
+];
+
+const QUOTES_JA = [
+  { text: "七転び八起き。", author: "— 日本のことわざ" },
+  { text: "千里の道も一歩から。", author: "— 老子" },
+  { text: "雨降って地固まる。", author: "— 日本のことわざ" },
+  { text: "石の上にも三年。", author: "— 日本のことわざ" },
+  { text: "急がば回れ。", author: "— 日本のことわざ" },
+  { text: "継続は力なり。", author: "— 日本のことわざ" },
+  { text: "失敗は成功のもと。", author: "— 日本のことわざ" },
+  { text: "実るほど頭を垂れる稲穂かな。", author: "— 日本のことわざ" },
+  { text: "一期一会。", author: "— 茶道のことわざ" },
+  { text: "人生は近くで見ると悲劇だが、遠くから見ると喜劇だ。", author: "— チャーリー・チャップリン" },
+  { text: "諦めなければ、必ず道は開ける。", author: "— 作者不詳" },
+  { text: "知ることは力なり。", author: "— フランシス・ベーコン" },
+  { text: "思い立ったが吉日。", author: "— 日本のことわざ" },
+  { text: "逆境こそ、人を磨く砥石である。", author: "— 作者不詳" },
+  { text: "上を向いて歩こう。", author: "— 坂本九" },
+  { text: "自分が変われば世界が変わる。", author: "— 作者不詳" },
+  { text: "今日できることを明日に延ばすな。", author: "— ベンジャミン・フランクリン" },
+  { text: "困難の中にこそ、チャンスが隠れている。", author: "— アルベルト・アインシュタイン" },
+  { text: "人は夢を持つ限り若くいられる。", author: "— 作者不詳" },
+  { text: "できると信じれば、半分は達成したも同然だ。", author: "— セオドア・ルーズベルト" },
+  { text: "今この瞬間が最も若い瞬間だ。今を大切に。", author: "— 作者不詳" },
+  { text: "人生最大の喜びは、できないと言われたことをやり遂げること。", author: "— ウォルター・バジョット" },
+  { text: "小さな一歩でも、続ければ必ず頂上に着く。", author: "— 作者不詳" },
+  { text: "鉄は熱いうちに打て。", author: "— 日本のことわざ" },
+  { text: "忍耐は苦し、されどその実は甘い。", author: "— ルソー" },
+  { text: "心が変われば行動が変わり、行動が変われば習慣が変わる。", author: "— ウィリアム・ジェームズ" },
+  { text: "感謝する心が幸せの入り口だ。", author: "— 作者不詳" },
+  { text: "生きているだけで丸儲け。", author: "— 明石家さんま" },
+  { text: "人生に遅すぎることはない。始めたその時が最良の時だ。", author: "— 作者不詳" },
+  { text: "今日という日は、残りの人生の最初の日だ。", author: "— 作者不詳" },
+  { text: "己に勝つことが最大の勝利だ。", author: "— プラトン" },
+  { text: "夢なき者に理想なし、理想なき者に計画なし。", author: "— 吉田松陰" },
+  { text: "百聞は一見に如かず。", author: "— 日本のことわざ" },
+  { text: "今日の涙が、明日の笑顔の栄養になる。", author: "— 作者不詳" },
+  { text: "山高きゆえに貴からず。", author: "— 日本のことわざ" },
+  { text: "失敗を恐れるな。挑戦しないことを恐れよ。", author: "— 作者不詳" },
+  { text: "運命は勇者に味方する。", author: "— ウェルギリウス" },
+  { text: "進歩とは変化することだ。完璧になるとは、何度も変化することだ。", author: "— チャーチル" },
+  { text: "今日一日、精いっぱい生きることが最高の明日への贈り物だ。", author: "— 作者不詳" },
+  { text: "どんな困難も、乗り越えた後は必ず力になる。", author: "— 作者不詳" },
+  { text: "人生はマラソンだ。短距離走ではない。", author: "— 作者不詳" },
+  { text: "自分を信じること。それが成功への第一歩だ。", author: "— 作者不詳" },
+  { text: "転んでもただでは起きない。", author: "— 日本のことわざ" },
+  { text: "案ずるより産むが易し。", author: "— 日本のことわざ" },
+  { text: "木を見て森を見ず。", author: "— 日本のことわざ" },
+  { text: "明日は明日の風が吹く。", author: "— 日本のことわざ" },
+  { text: "花は咲き、散り、また咲く。人生もそれと同じだ。", author: "— 作者不詳" },
+  { text: "道は自分で切り開くものだ。", author: "— 作者不詳" },
+  { text: "準備が整ったとき、チャンスは必ずやってくる。", author: "— セネカ" },
+  { text: "一日一善。", author: "— 日本のことわざ" },
+  { text: "高きに登るには低きより始めよ。", author: "— 日本のことわざ" },
+  { text: "一人の千歩より千人の一歩。", author: "— 日本のことわざ" },
+  { text: "終わりよければすべてよし。", author: "— シェイクスピア" },
+  { text: "人生は自分次第で変わる。", author: "— 作者不詳" },
+  { text: "笑顔は世界共通の言語だ。", author: "— 作者不詳" },
+  { text: "知恵は経験から生まれる。", author: "— 作者不詳" },
+  { text: "輝く未来は、今日の努力の上に築かれる。", author: "— 作者不詳" },
+  { text: "過去は変えられない。しかし未来は自分で作れる。", author: "— 作者不詳" },
+  { text: "苦労しない花はない。努力しない成功もない。", author: "— 作者不詳" },
+  { text: "真剣になれば、道は必ず開ける。", author: "— 作者不詳" },
+  { text: "今日も一日、ありがとう。", author: "— 作者不詳" },
+];
   { text: "A journey of a thousand miles begins with a single step.", author: "— Laozi" },
   { text: "Today is the youngest you will ever be again.", author: "— Anonymous" },
   { text: "Even the darkest night will end, and the sun will rise.", author: "— Victor Hugo" },
@@ -374,16 +520,35 @@ const QUOTES_KO = [
 ];
 
 function showQuote() {
-  const pool = { ko: QUOTES_KO, en: QUOTES_EN, ja: QUOTES_JA }[LANG_CODE] || QUOTES_KO;
-  const q = pool[Math.floor(Math.random() * pool.length)];
-  document.getElementById('quoteText').textContent = q.text;
-  document.getElementById('quoteAuthor').textContent = q.author;
   document.getElementById('quoteOverlay').classList.remove('hidden');
+  if (LANG_CODE === 'en') {
+    // 영어는 API에서 동적 fetch
+    const randId = Math.floor(Math.random() * 1450) + 1;
+    fetch(`https://dummyjson.com/quotes/${randId}`)
+      .then(r => r.json())
+      .then(d => {
+        document.getElementById('quoteText').textContent = d.quote;
+        document.getElementById('quoteAuthor').textContent = '— ' + d.author;
+      })
+      .catch(() => {
+        const q = QUOTES_EN_FALLBACK[Math.floor(Math.random() * QUOTES_EN_FALLBACK.length)];
+        document.getElementById('quoteText').textContent = q.text;
+        document.getElementById('quoteAuthor').textContent = q.author;
+      });
+  } else {
+    const pool = LANG_CODE === 'ja' ? QUOTES_JA : QUOTES_KO;
+    const q = pool[Math.floor(Math.random() * pool.length)];
+    document.getElementById('quoteText').textContent = q.text;
+    document.getElementById('quoteAuthor').textContent = q.author;
+  }
 }
 
 function hideQuote() {
   document.getElementById('quoteOverlay').classList.add('hidden');
 }
+
+// ODsay lang 파라미터: ko=0, en/ja=1
+function odsayLang() { return LANG_CODE === 'ko' ? 0 : 1; }
 
 // ── 상태 ────────────────────────────────────────────
 let S = {
@@ -431,7 +596,10 @@ function startWithLeaflet() {
     document.head.appendChild(css);
     setTimeout(function() {
       S.map = L.map('map').setView([37.5665, 126.978], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(S.map);
+      const tileUrl = LANG_CODE === 'ko'
+        ? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        : 'https://{s}.basemaps.cartocdn.com/dark_matter_all/{z}/{x}/{y}{r}.png';
+      S.leafletTile = L.tileLayer(tileUrl).addTo(S.map);
       startApp();
     }, 200);
   };
@@ -491,7 +659,7 @@ function setCurrentMarker() {
 // ── 가까운 역 ───────────────────────────────────────
 function findNearestStation() {
   const { lat, lng } = S.pos;
-  fetch(`https://api.odsay.com/v1/api/searchStationByPosition?lang=0&x=${lng}&y=${lat}&stationClass=1&apiKey=${encodeURIComponent(ODSAY_KEY)}`)
+  fetch(`https://api.odsay.com/v1/api/searchStationByPosition?lang=${odsayLang()}&x=${lng}&y=${lat}&stationClass=1&apiKey=${encodeURIComponent(ODSAY_KEY)}`)
     .then(r => r.json())
     .then(d => {
       const stations = d.result?.station || [];
@@ -522,7 +690,7 @@ async function searchRoute() {
     if (!dest) { showToast(t('notFound'), false, 3000); return; }
 
     const { lat, lng } = S.pos;
-    const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${lng}&SY=${lat}&EX=${dest.x}&EY=${dest.y}&OPT=0&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
+    const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${lng}&SY=${lat}&EX=${dest.x}&EY=${dest.y}&OPT=0&lang=${odsayLang()}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
     hideToast();
     if (!d.result?.path?.length) { showToast(t('noRoute'), false, 3000); return; }
     buildRoute(d.result.path[0], destName);
@@ -533,7 +701,7 @@ async function searchRoute() {
 }
 
 async function findStation(name) {
-  const d = await fetch(`https://api.odsay.com/v1/api/searchStation?lang=0&stationName=${encodeURIComponent(name)}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
+  const d = await fetch(`https://api.odsay.com/v1/api/searchStation?lang=${odsayLang()}&stationName=${encodeURIComponent(name)}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
   return d.result?.station?.[0] || null;
 }
 
