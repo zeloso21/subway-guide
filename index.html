@@ -729,8 +729,8 @@ function renderRouteList() {
     const div = document.createElement('div');
     div.className = 'station-row' + (i === S.currentIdx ? ' current' : '') + (isAlert ? ' talert' : '');
     let badge = '';
-    if (st.isTransfer) badge = `<span class="sbadge sb-transfer">${t('badgeTransfer')}</span>`;
-    else if (st.isFinal) badge = `<span class="sbadge sb-arrive">${t('badgeArrive')}</span>`;
+    if (st.isFinal) badge = `<span class="sbadge sb-arrive">${t('badgeArrive')}</span>`;
+    else if (st.isTransfer) badge = `<span class="sbadge sb-transfer">${t('badgeTransfer')}</span>`;
     else if (isAlert) badge = `<span class="sbadge sb-alert">${t('badgeAlert')}</span>`;
     const isFirst = i === 0, isLast = st.isFinal;
     div.innerHTML = `
