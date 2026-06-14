@@ -848,12 +848,16 @@ function requestNotifPerm() {
 }
 
 // ── 시간표 ───────────────────────────────────────────
-// 호선별 배차 간격(분): [러시아워, 일반, 심야]
+const SEOUL_RT_KEY = '6457544f497a656c38355746706d63';
+let S_rtCache = null;
+let S_rtLastFetch = 0;
+
+// 실시간 실패 시 폴백용 배차 간격(분): [러시아워, 일반, 심야]
 const LINE_INTERVAL = {
   1: [4, 7, 12], 2: [2, 4, 8], 3: [4, 6, 12], 4: [4, 6, 12],
   5: [5, 7, 12], 6: [5, 7, 15], 7: [5, 7, 15], 8: [5, 8, 20], 9: [5, 8, 20],
 };
-const RUSH = [[7*60,9*60],[18*60,20*60]]; // 러시아워 (분 단위)
+const RUSH = [[7*60,9*60],[18*60,20*60]];
 
 function getInterval(lineNum) {
   const now = new Date();
@@ -864,14 +868,32 @@ function getInterval(lineNum) {
   return isLate ? ivs[2] : isRush ? ivs[0] : ivs[1];
 }
 
+async function fetchRealtimeArrival(stationName) {
+  try {
+    const url = `https://swopenAPI.seoul.go.kr/api/subway/${SEOUL_RT_KEY}/json/realtimeStationArrival/0/30/${encodeURIComponent(stationName)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.realtimeArrivalList && data.realtimeArrivalList.length > 0) return data.realtimeArrivalList;
+    return null;
+  } catch(e) { return null; }
+}
+
+async function refreshRealtimeTimetable(stationName, lineNum) {
+  const now = Date.now();
+  if (now - S_rtLastFetch > 30000) {
+    S_rtLastFetch = now;
+    S_rtCache = await fetchRealtimeArrival(stationName);
+  }
+  renderTimetable(lineNum, S.ttDirection, S_rtCache);
+}
+
 function showTimetable(stationName, direction) {
   S.ttStation = stationName;
   S.ttDirection = direction || '';
   const suffix = LANG_CODE === 'ko' ? '역' : LANG_CODE === 'ja' ? '駅' : '';
   document.getElementById('ttStation').textContent = stationName + suffix;
 
-  // 현재 역의 호선 파악
-  let lineNum = 2; // 기본값
+  let lineNum = 2;
   if (S.flatStations.length) {
     const st = S.flatStations.find(s => s.name === stationName);
     if (st) {
@@ -880,38 +902,49 @@ function showTimetable(stationName, direction) {
     }
   }
 
-  renderTimetable(lineNum, S.ttDirection);
+  S_rtCache = null;
+  S_rtLastFetch = 0;
+  refreshRealtimeTimetable(stationName, lineNum);
 }
 
-function renderTimetable(lineNum, direction) {
-  const interval = getInterval(lineNum);
-  const now = new Date();
-  const nowMins = now.getHours()*60 + now.getMinutes();
-  const nowSec = now.getSeconds();
-  const elapsed = nowMins % interval + nowSec / 60;
-  const nextMins = interval - (elapsed % interval);
-
-  const dirLabel = direction || t('dirDefault');
-  const trains = [];
-  for (let i = 0; i < 6; i++) {
-    const offset = nextMins + i * interval;
-    const depTime = new Date(now.getTime() + offset * 60000);
-    trains.push({
-      dir: dirLabel,
-      time: depTime.getHours().toString().padStart(2,'0') + ':' + depTime.getMinutes().toString().padStart(2,'0'),
-      remaining: Math.round(offset),
-      isNext: i === 0,
-    });
-  }
-
+function renderTimetable(lineNum, direction, rtList) {
   const scroll = document.getElementById('ttScroll');
-  scroll.innerHTML = trains.map(tr => `
-    <div class="tt-card${tr.isNext ? ' next' : ''}">
-      <div class="tt-dir">${tr.dir}</div>
-      <div class="tt-depart">${tr.time}</div>
-      <div class="tt-remaining">${tr.remaining < 1 ? t('soon') : t('minsLater', tr.remaining)}</div>
-    </div>
-  `).join('');
+
+  if (rtList && rtList.length > 0) {
+    scroll.innerHTML = rtList.slice(0, 6).map((item, i) => {
+      const secs = parseInt(item.barvlDt) || 0;
+      const mins = Math.floor(secs / 60);
+      const msg = item.arvlMsg2 || (mins < 1 ? t('soon') : t('minsLater', mins));
+      const dest = item.arvlMsg3 || '';
+      const lineName = item.subwayNm || '';
+      const updn = item.updnLine || '';
+      return `
+        <div class="tt-card${i === 0 ? ' next' : ''}">
+          <div class="tt-dir">${lineName} ${updn}</div>
+          <div class="tt-depart" style="font-size:13px;letter-spacing:0;line-height:1.3">${dest}</div>
+          <div class="tt-remaining">${msg}</div>
+        </div>`;
+    }).join('');
+  } else {
+    // 폴백: 배차 간격 기반 추정
+    const interval = getInterval(lineNum);
+    const now = new Date();
+    const elapsed = (now.getHours()*60 + now.getMinutes()) % interval + now.getSeconds()/60;
+    const nextMins = interval - (elapsed % interval);
+    const dirLabel = direction || t('dirDefault');
+    scroll.innerHTML = Array.from({length: 6}, (_, i) => {
+      const offset = nextMins + i * interval;
+      const depTime = new Date(now.getTime() + offset * 60000);
+      const time = depTime.getHours().toString().padStart(2,'0') + ':' + depTime.getMinutes().toString().padStart(2,'0');
+      const remaining = Math.round(offset);
+      return `
+        <div class="tt-card${i === 0 ? ' next' : ''}">
+          <div class="tt-dir">${dirLabel}</div>
+          <div class="tt-depart">${time}</div>
+          <div class="tt-remaining">${remaining < 1 ? t('soon') : t('minsLater', remaining)}</div>
+        </div>`;
+    }).join('');
+  }
 }
 
 // 시계 업데이트
@@ -922,7 +955,14 @@ function startClock() {
       now.getHours().toString().padStart(2,'0') + ':' +
       now.getMinutes().toString().padStart(2,'0') + ':' +
       now.getSeconds().toString().padStart(2,'0');
-    if (S.ttStation) renderTimetable(getCurrentLineNum(), S.ttDirection || '');
+    if (S.ttStation) {
+      const lineNum = getCurrentLineNum();
+      if (Date.now() - S_rtLastFetch > 30000) {
+        refreshRealtimeTimetable(S.ttStation, lineNum);
+      } else {
+        renderTimetable(lineNum, S.ttDirection || '', S_rtCache);
+      }
+    }
   }
   tick();
   setInterval(tick, 1000);
