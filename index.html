@@ -711,9 +711,13 @@ function enableSplitMode() {
 function getAlertIdxs() {
   const r = [];
   S.flatStations.forEach((st, i) => {
-    if (st.isTransfer) { if (i >= 2) r.push(i-2); if (i >= 1) r.push(i-1); }
+    if (st.isTransfer || st.isFinal) {
+      if (i >= 2) r.push(i-2);
+      if (i >= 1) r.push(i-1);
+      r.push(i);
+    }
   });
-  return r;
+  return [...new Set(r)];
 }
 
 function renderRouteList() {
@@ -823,6 +827,16 @@ function mapSetCenter(lat, lng, level) {
 }
 
 // ── 환승 알림 ────────────────────────────────────────
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = LANG_CODE === 'ja' ? 'ja-JP' : LANG_CODE === 'en' ? 'en-US' : 'ko-KR';
+  utter.rate = 0.92;
+  utter.volume = 1;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utter);
+}
+
 function checkTransferAlert() {
   if (!S.pos || !S.flatStations.length) return;
   let closestIdx = S.currentIdx, minDist = Infinity;
@@ -836,15 +850,42 @@ function checkTransferAlert() {
     const st = S.flatStations[closestIdx];
     showTimetable(st.name, st.direction || '');
   }
-  const alertIdxs = getAlertIdxs();
-  if (alertIdxs.includes(S.currentIdx) && !S.alertedSet.has(S.currentIdx)) {
+
+  if (S.alertedSet.has(S.currentIdx)) return;
+  const cur = S.flatStations[S.currentIdx];
+
+  // 환승 당역
+  if (cur.isTransfer) {
     S.alertedSet.add(S.currentIdx);
-    const transferSt = S.flatStations.find((st, i) => st.isTransfer && i > S.currentIdx);
-    if (transferSt) {
-      const left = S.flatStations.indexOf(transferSt) - S.currentIdx;
-      triggerAlert(t('transferAlert', left, transferSt.name));
-    }
+    const msg = `${cur.name}역입니다. 환승하세요.`;
+    speak(msg);
+    triggerAlert(`🔄 ${msg}`);
+    return;
   }
+
+  // 하차 당역
+  if (cur.isFinal) {
+    S.alertedSet.add(S.currentIdx);
+    const msg = `${cur.name}역입니다. 내리세요.`;
+    speak(msg);
+    triggerAlert(`🚉 ${msg}`);
+    return;
+  }
+
+  // 환승/하차 N정거장 전
+  const nextIdx = S.flatStations.findIndex((st, i) => i > S.currentIdx && (st.isTransfer || st.isFinal));
+  if (nextIdx === -1) return;
+  const left = nextIdx - S.currentIdx;
+  if (left !== 1 && left !== 2) return;
+
+  S.alertedSet.add(S.currentIdx);
+  const target = S.flatStations[nextIdx];
+  const type = target.isTransfer ? '환승' : '하차';
+  const msg = left === 1
+    ? `다음 역 [${target.name}] ${type}역입니다.`
+    : `2정거장 후 [${target.name}] ${type}역입니다.`;
+  speak(msg);
+  triggerAlert(`⚠️ ${msg}`);
 }
 
 function triggerAlert(msg) {
