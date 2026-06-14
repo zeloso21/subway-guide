@@ -682,6 +682,16 @@ function buildRoute(path, destName) {
 
   if (!S.flatStations.length) { showToast(t('noSubway'), false, 3000); return; }
 
+  // 도착 배지: destName과 일치하는 역 우선, 없으면 마지막 역 유지
+  const clean = s => s.replace(/역$/, '');
+  const destIdx = S.flatStations.findIndex(st => clean(st.name) === clean(destName));
+  if (destIdx !== -1) {
+    S.flatStations.forEach((st, i) => {
+      st.isFinal = i === destIdx;
+      if (i === destIdx) st.isTransfer = false;
+    });
+  }
+
   const info = path.info;
   const subwayTransfers = subwaySegs.length - 1;
   document.getElementById('routeTitle').textContent = t('routeTitle', destName, info.totalTime, subwayTransfers);
