@@ -199,6 +199,7 @@ const I18N = {
     badgeTransfer: '환승',
     badgeArrive: '도착',
     badgeAlert: '⚠ 환승준비',
+    badgeAlertFinal: '⚠ 하차준비',
     transferAlert: (left, name) => `⚠️ ${left}정거장 후 [${name}]역 환승!`,
     alertTitle: '환승 알림',
     walkMin: (n) => `도보 ${n}분`,
@@ -229,7 +230,8 @@ const I18N = {
     routeTitle: (dest, time, tr) => `→ ${dest}  ${time} min${tr > 0 ? ` · ${tr} transfer${tr > 1 ? 's' : ''}` : ' · Direct'}`,
     badgeTransfer: 'Transfer',
     badgeArrive: 'Arrive',
-    badgeAlert: '⚠ Prep',
+    badgeAlert: '⚠ Prep Transfer',
+    badgeAlertFinal: '⚠ Prep Exit',
     transferAlert: (left, name) => `⚠️ Transfer at [${name}] in ${left} stop${left > 1 ? 's' : ''}!`,
     alertTitle: 'Transfer Alert',
     walkMin: (n) => `${n} min walk`,
@@ -261,6 +263,7 @@ const I18N = {
     badgeTransfer: '乗換',
     badgeArrive: '到着',
     badgeAlert: '⚠ 乗換準備',
+    badgeAlertFinal: '⚠ 降車準備',
     transferAlert: (left, name) => `⚠️ ${left}駅後 [${name}]駅で乗換！`,
     alertTitle: '乗換案内',
     walkMin: (n) => `徒歩${n}分`,
@@ -731,7 +734,11 @@ function renderRouteList() {
     let badge = '';
     if (st.isFinal) badge = `<span class="sbadge sb-arrive">${t('badgeArrive')}</span>`;
     else if (st.isTransfer) badge = `<span class="sbadge sb-transfer">${t('badgeTransfer')}</span>`;
-    else if (isAlert) badge = `<span class="sbadge sb-alert">${t('badgeAlert')}</span>`;
+    else if (isAlert) {
+      const nextSp = S.flatStations.findIndex((s, j) => j > i && (s.isTransfer || s.isFinal));
+      const isFinalAlert = nextSp !== -1 && S.flatStations[nextSp].isFinal;
+      badge = `<span class="sbadge sb-alert">${t(isFinalAlert ? 'badgeAlertFinal' : 'badgeAlert')}</span>`;
+    }
     const isFirst = i === 0, isLast = st.isFinal;
     div.innerHTML = `
       <div class="strack">
