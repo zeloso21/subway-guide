@@ -182,7 +182,7 @@ const I18N = {
     locError: '위치 확인 실패',
     locNoStation: '📍 위치 확인됨 (반경 2km 내 지하철역 없음)',
     locNear: (name, min) => `🚇 ${name}역 (도보 ${min}분)`,
-    placeholder: '목적지 역 입력 (예: 강남, 홍대입구)',
+    placeholder: '목적지 입력 (예: 강남역, 홍대입구역)',
     searchBtn: '안내',
     routeEmpty: '목적지를 입력하세요',
     routeListEmpty: '경로가 표시됩니다',
@@ -214,7 +214,7 @@ const I18N = {
     locError: 'Location failed',
     locNoStation: '📍 Located (no subway within 2km)',
     locNear: (name, min) => `🚇 ${name} (${min} min walk)`,
-    placeholder: 'Enter destination (e.g. Gangnam, Hongdae)',
+    placeholder: 'Enter destination (e.g. Gangnam Station)',
     searchBtn: 'Go',
     routeEmpty: 'Enter a destination',
     routeListEmpty: 'Route will appear here',
@@ -246,7 +246,7 @@ const I18N = {
     locError: '位置情報の取得に失敗',
     locNoStation: '📍 位置確認済 (半径2km以内に駅なし)',
     locNear: (name, min) => `🚇 ${name}駅 (徒歩${min}分)`,
-    placeholder: '目的地を入力 (例: 江南、弘大入口)',
+    placeholder: '目的地を入力 (例: 江南駅、弘大入口駅)',
     searchBtn: '案内',
     routeEmpty: '目的地を入力してください',
     routeListEmpty: 'ルートがここに表示されます',
@@ -623,8 +623,9 @@ function findNearestStation() {
 
 // ── 경로 검색 ───────────────────────────────────────
 async function searchRoute() {
-  const destName = document.getElementById('destInput').value.trim();
-  if (!destName) { showToast(t('inputHint'), false, 2000); return; }
+  const raw = document.getElementById('destInput').value.trim();
+  if (!raw) { showToast(t('inputHint'), false, 2000); return; }
+  const destName = raw.endsWith('역') ? raw.slice(0, -1) : raw;
   if (!S.pos) { showToast(t('locating'), false, 2000); return; }
 
   showToast(t('searching'), true, 99999);
