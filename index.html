@@ -32,60 +32,60 @@
     #map { width: 100%; height: 100%; }
 
     /* 분할 모드 전 — 노선/시간표 숨김 */
-    .route-section { display: none; flex: 2; background: #111827; flex-direction: column; min-height: 0; border-bottom: 1px solid #1E293B; }
-    .timetable-section { display: none; flex: 1; background: #050A14; flex-direction: column; min-height: 0; }
+    .route-section { display: none; flex: 2; background: #F8FAFF; flex-direction: column; min-height: 0; border-bottom: 1px solid #DBEAFE; }
+    .timetable-section { display: none; flex: 1; background: #EFF6FF; flex-direction: column; min-height: 0; }
 
     /* 분할 모드 진입 시 */
     .main.split .map-section { flex: 1; }
     .main.split .route-section { display: flex; flex: 2; }
     .main.split .timetable-section { display: flex; flex: 1; }
 
-    .section-header { padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1E293B; flex-shrink: 0; background: #0F172A; }
-    .section-title { font-size: 12px; font-weight: 700; color: #60A5FA; letter-spacing: .3px; }
-    .toggle-btn { background: none; border: none; font-size: 14px; cursor: pointer; color: #475569; }
+    .section-header { padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #DBEAFE; flex-shrink: 0; background: #EFF6FF; }
+    .section-title { font-size: 12px; font-weight: 700; color: #2563EB; letter-spacing: .3px; }
+    .toggle-btn { background: none; border: none; font-size: 14px; cursor: pointer; color: #93C5FD; }
     .route-list { overflow-y: auto; flex: 1; }
 
     /* 역 행 — 지하철 노선도 스타일 */
-    .station-row { display: flex; align-items: center; padding: 7px 14px 7px 10px; gap: 0; border-bottom: 1px solid #1E293B; cursor: pointer; position: relative; }
-    .station-row.current { background: rgba(37,99,235,.12); }
-    .station-row.talert { background: rgba(239,68,68,.08); }
-    .station-row:active { background: rgba(255,255,255,.04); }
+    .station-row { display: flex; align-items: center; padding: 7px 14px 7px 10px; gap: 0; border-bottom: 1px solid #E2E8F0; cursor: pointer; position: relative; }
+    .station-row.current { background: rgba(59,130,246,.1); }
+    .station-row.talert { background: rgba(239,68,68,.06); }
+    .station-row:active { background: rgba(59,130,246,.05); }
 
     /* 왼쪽 라인 트랙 */
     .strack { width: 28px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; align-self: stretch; }
     .strack-line { width: 3px; flex: 1; }
     .strack-line.top { border-radius: 0; }
     .strack-line.bot { border-radius: 0; }
-    .sdot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #0A0F1E; flex-shrink: 0; box-shadow: 0 0 6px currentColor; }
+    .sdot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #F8FAFF; flex-shrink: 0; box-shadow: 0 0 6px currentColor; }
     .sdot.big { width: 14px; height: 14px; }
 
     .sinfo { flex: 1; padding-left: 8px; }
-    .sname { font-size: 13px; font-weight: 600; color: #E2E8F0; }
-    .station-row.current .sname { color: #60A5FA; font-weight: 700; }
-    .smeta { font-size: 10px; color: #475569; margin-top: 1px; }
+    .sname { font-size: 13px; font-weight: 600; color: #1E293B; }
+    .station-row.current .sname { color: #2563EB; font-weight: 700; }
+    .smeta { font-size: 10px; color: #94A3B8; margin-top: 1px; }
     .sbadge { font-size: 10px; padding: 2px 6px; border-radius: 4px; color: white; flex-shrink: 0; font-weight: 600; }
     .sb-transfer { background: #EA580C; }
     .sb-alert { background: #DC2626; animation: blink .8s infinite; }
     .sb-arrive { background: #059669; }
     @keyframes blink { 0%,100%{opacity:1}50%{opacity:.2} }
-    .route-empty { padding: 24px; text-align: center; color: #334155; font-size: 13px; }
+    .route-empty { padding: 24px; text-align: center; color: #94A3B8; font-size: 13px; }
 
-    /* 시간표 1/4 — 전광판 스타일 */
-    .tt-header { padding: 6px 14px; display: flex; align-items: center; gap: 6px; flex-shrink: 0; border-bottom: 1px solid #0F2460; }
+    /* 시간표 하단 */
+    .tt-header { padding: 6px 14px; display: flex; align-items: center; gap: 6px; flex-shrink: 0; border-bottom: 1px solid #BFDBFE; background: #DBEAFE; }
     .tt-label { font-size: 10px; font-weight: 700; color: #1D4ED8; letter-spacing: 1px; text-transform: uppercase; }
-    .tt-station { font-size: 13px; font-weight: 800; color: #FCD34D; margin-left: 4px; }
-    .tt-time { font-size: 13px; font-weight: 700; color: #10B981; margin-left: auto; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
-    .tt-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 8px 14px; flex: 1; align-items: center; scrollbar-width: none; }
+    .tt-station { font-size: 13px; font-weight: 800; color: #1E40AF; margin-left: 4px; }
+    .tt-time { font-size: 13px; font-weight: 700; color: #059669; margin-left: auto; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+    .tt-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 8px 14px; flex: 1; align-items: center; scrollbar-width: none; background: #EFF6FF; }
     .tt-scroll::-webkit-scrollbar { display: none; }
-    .tt-card { flex-shrink: 0; background: #0A1628; border-radius: 8px; padding: 8px 10px; min-width: 84px; text-align: center; border: 1px solid #1E3A5F; }
-    .tt-card.next { border-color: #FCD34D; background: #0F1E0A; box-shadow: 0 0 10px rgba(252,211,77,.15); }
-    .tt-dir { font-size: 9px; color: #475569; margin-bottom: 4px; letter-spacing: .5px; }
-    .tt-card.next .tt-dir { color: #FCD34D; }
-    .tt-depart { font-size: 18px; font-weight: 800; color: #CBD5E1; font-variant-numeric: tabular-nums; letter-spacing: 1px; font-family: 'Courier New', monospace; }
-    .tt-card.next .tt-depart { color: #FCD34D; text-shadow: 0 0 8px rgba(252,211,77,.5); }
-    .tt-remaining { font-size: 10px; color: #334155; margin-top: 3px; }
-    .tt-card.next .tt-remaining { color: #86EFAC; }
-    .tt-empty { color: #1E3A5F; font-size: 12px; }
+    .tt-card { flex-shrink: 0; background: #fff; border-radius: 8px; padding: 8px 10px; min-width: 84px; text-align: center; border: 1px solid #BFDBFE; box-shadow: 0 1px 4px rgba(59,130,246,.08); }
+    .tt-card.next { border-color: #2563EB; background: #DBEAFE; box-shadow: 0 0 10px rgba(37,99,235,.2); }
+    .tt-dir { font-size: 9px; color: #94A3B8; margin-bottom: 4px; letter-spacing: .5px; }
+    .tt-card.next .tt-dir { color: #2563EB; }
+    .tt-depart { font-size: 18px; font-weight: 800; color: #1E293B; font-variant-numeric: tabular-nums; letter-spacing: 1px; font-family: 'Courier New', monospace; }
+    .tt-card.next .tt-depart { color: #1E40AF; }
+    .tt-remaining { font-size: 10px; color: #94A3B8; margin-top: 3px; }
+    .tt-card.next .tt-remaining { color: #059669; }
+    .tt-empty { color: #BFDBFE; font-size: 12px; }
 
     /* Leaflet 역 라벨 */
     .station-label { background: #1D4ED8 !important; color: #fff !important; border: none !important; font-size: 10px !important; font-weight: 700 !important; padding: 2px 6px !important; border-radius: 4px !important; white-space: nowrap !important; }
