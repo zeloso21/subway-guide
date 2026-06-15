@@ -500,6 +500,8 @@ let S = {
   useKakao: false,
   ttStation: null,
   ttDirection: '',
+  destName: '',
+  offRouteSince: null,
   ttInterval: null,
 };
 
@@ -622,17 +624,12 @@ function findNearestStation() {
 }
 
 // ── 경로 검색 ───────────────────────────────────────
-async function searchRoute() {
-  const raw = document.getElementById('destInput').value.trim();
-  if (!raw) { showToast(t('inputHint'), false, 2000); return; }
-  const destName = raw.endsWith('역') ? raw.slice(0, -1) : raw;
+async function routeTo(destName) {
   if (!S.pos) { showToast(t('locating'), false, 2000); return; }
-
   showToast(t('searching'), true, 99999);
   try {
     const dest = await findStation(destName);
     if (!dest) { showToast(t('notFound'), false, 3000); return; }
-
     const { lat, lng } = S.pos;
     const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${lng}&SY=${lat}&EX=${dest.x}&EY=${dest.y}&OPT=0&lang=${odsayLang()}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
     hideToast();
@@ -642,6 +639,12 @@ async function searchRoute() {
     hideToast();
     showToast(t('searchFail', e.message), false, 3000);
   }
+}
+
+async function searchRoute() {
+  const raw = document.getElementById('destInput').value.trim();
+  if (!raw) { showToast(t('inputHint'), false, 2000); return; }
+  await routeTo(raw.endsWith('역') ? raw.slice(0, -1) : raw);
 }
 
 async function findStation(name) {
@@ -655,6 +658,8 @@ function buildRoute(path, destName) {
   S.subPaths = [];
   S.currentIdx = 0;
   S.alertedSet = new Set();
+  S.destName = destName;
+  S.offRouteSince = null;
   clearMapLayers();
 
   const subwaySegs = path.subPath.filter(sp => sp.trafficType === 1);
@@ -852,6 +857,21 @@ function checkTransferAlert() {
     const d = calcDist(S.pos.lat, S.pos.lng, st.y, st.x);
     if (d < minDist) { minDist = d; closestIdx = i; }
   });
+
+  // 경로 이탈 감지 — 60초 이상 이탈 시 자동 재탐색
+  if (minDist >= 0.6 && S.destName) {
+    if (!S.offRouteSince) S.offRouteSince = Date.now();
+    else if (Date.now() - S.offRouteSince > 60000) {
+      S.offRouteSince = null;
+      speak('경로를 벗어났습니다. 재탐색합니다.');
+      showToast('📍 경로 이탈 — 재탐색 중...', true, 99999);
+      routeTo(S.destName);
+      return;
+    }
+  } else {
+    S.offRouteSince = null;
+  }
+
   if (minDist < 0.6 && closestIdx !== S.currentIdx) {
     S.currentIdx = closestIdx;
     renderRouteList();
