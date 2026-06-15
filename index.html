@@ -861,7 +861,7 @@ function checkTransferAlert() {
   // 경로 이탈 감지 — 60초 이상 이탈 시 자동 재탐색
   if (minDist >= 0.6 && S.destName) {
     if (!S.offRouteSince) S.offRouteSince = Date.now();
-    else if (Date.now() - S.offRouteSince > 60000) {
+    else if (Date.now() - S.offRouteSince > 20000) {
       S.offRouteSince = null;
       speak('경로를 벗어났습니다. 재탐색합니다.');
       showToast('📍 경로 이탈 — 재탐색 중...', true, 99999);
