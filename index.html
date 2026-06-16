@@ -869,7 +869,7 @@ function checkTransferAlert() {
   });
 
   // 경로 이탈 감지 — 60초 이상 이탈 시 자동 재탐색
-  if (minDist >= 0.6 && S.destName) {
+  if (minDist >= 0.8 && S.destName) {
     if (!S.offRouteSince) S.offRouteSince = Date.now();
     else if (Date.now() - S.offRouteSince > 20000) {
       S.offRouteSince = null;
@@ -882,7 +882,7 @@ function checkTransferAlert() {
     S.offRouteSince = null;
   }
 
-  if (minDist < 0.6 && closestIdx !== S.currentIdx) {
+  if (minDist < 0.8 && closestIdx !== S.currentIdx) {
     S.currentIdx = closestIdx;
     renderRouteList();
     const st = S.flatStations[closestIdx];
@@ -1074,8 +1074,13 @@ function calcDist(lat1, lng1, lat2, lng2) {
 }
 
 function lineColor(code) {
-  return ({1:'#0052A4',2:'#009246',3:'#EF7C1C',4:'#00A5DE',5:'#996CAC',
-           6:'#CD7C2F',7:'#747F00',8:'#E6186C',9:'#BDB092'})[code]||'#4B5563';
+  return ({
+    1:'#0052A4', 2:'#009246', 3:'#EF7C1C', 4:'#00A5DE', 5:'#996CAC',
+    6:'#CD7C2F', 7:'#747F00', 8:'#E6186C', 9:'#BDB092',
+    21:'#7CA8D5', 22:'#F5A200',
+    101:'#0065B3', 104:'#77C4A3', 107:'#0C8E72',
+    108:'#F5A200', 109:'#D4003B', 110:'#B0CE4E', 112:'#8FC31F',
+  })[code] || '#4B5563';
 }
 
 function setLocBadge(msg) { document.getElementById('locBadge').textContent = msg; }
