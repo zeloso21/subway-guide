@@ -507,6 +507,7 @@ let S = {
   ttStation: null,
   ttDirection: '',
   destName: '',
+  destCoords: null,
   offRouteSince: null,
   isRerouting: false,
   ttInterval: null,
@@ -639,11 +640,21 @@ async function routeTo(destName) {
   try {
     const dest = await findStation(destName);
     if (!dest) { showToast(t('notFound'), false, 3000); S.isRerouting = false; return; }
+    S.destCoords = { x: parseFloat(dest.x), y: parseFloat(dest.y) };
     const { lat, lng } = S.pos;
     const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${lng}&SY=${lat}&EX=${dest.x}&EY=${dest.y}&OPT=0&lang=${odsayLang()}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
     hideToast();
     if (!d.result?.path?.length) { showToast(t('noRoute'), false, 3000); S.isRerouting = false; return; }
-    buildRoute(d.result.path[0], destName);
+    // 마지막 지하철 종착역이 목적지 이름과 일치하는 경로 우선 선택
+    const cleanStr = s => s.replace(/역$/, '');
+    const paths = d.result.path;
+    const bestPath = paths.find(p => {
+      const subSegs = p.subPath.filter(sp => sp.trafficType === 1);
+      if (!subSegs.length) return false;
+      const lastSt = subSegs[subSegs.length-1].passStopList?.stations?.slice(-1)[0];
+      return lastSt && cleanStr(lastSt.stationName) === cleanStr(destName);
+    }) || paths[0];
+    buildRoute(bestPath, destName);
   } catch(e) {
     hideToast();
     showToast(t('searchFail', e.message), false, 3000);
@@ -662,9 +673,12 @@ async function findStation(name) {
   const d = await fetch(`https://api.odsay.com/v1/api/searchStation?lang=${odsayLang()}&stationName=${encodeURIComponent(name)}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
   const list = d.result?.station || [];
   const clean = s => s.replace(/역$/, '');
-  // "강남"과 "강남역" 모두 같은 역으로 처리
-  return list.find(s => s.type === 1 && clean(s.stationName) === clean(name))
-      || list.find(s => s.type === 1)
+  // 수도권 범위 필터 (타 도시 동명 역 차단)
+  const inMetro = s => { const la=parseFloat(s.y),lo=parseFloat(s.x); return la>37.1&&la<37.9&&lo>126.6&&lo<127.5; };
+  return list.find(s => s.type===1 && inMetro(s) && clean(s.stationName)===clean(name))
+      || list.find(s => s.type===1 && clean(s.stationName)===clean(name))
+      || list.find(s => s.type===1 && inMetro(s))
+      || list.find(s => s.type===1)
       || list[0]
       || null;
 }
@@ -708,9 +722,16 @@ function buildRoute(path, destName) {
 
   if (!S.flatStations.length) { showToast(t('noSubway'), false, 3000); return; }
 
-  // 도착 배지: destName과 일치하는 역 우선, 없으면 마지막 역 유지
+  // 도착 배지: 이름 일치 우선, 실패 시 목적지 좌표 최근접 역
   const clean = s => s.replace(/역$/, '');
-  const destIdx = S.flatStations.findIndex(st => clean(st.name) === clean(destName));
+  let destIdx = S.flatStations.findIndex(st => clean(st.name) === clean(destName));
+  if (destIdx === -1 && S.destCoords) {
+    let minD = Infinity;
+    S.flatStations.forEach((st, i) => {
+      const d = calcDist(st.y, st.x, S.destCoords.y, S.destCoords.x);
+      if (d < minD) { minD = d; destIdx = i; }
+    });
+  }
   if (destIdx !== -1) {
     S.flatStations.forEach((st, i) => {
       st.isFinal = i === destIdx;
