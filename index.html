@@ -502,6 +502,7 @@ let S = {
   ttDirection: '',
   destName: '',
   offRouteSince: null,
+  isRerouting: false,
   ttInterval: null,
 };
 
@@ -625,31 +626,40 @@ function findNearestStation() {
 
 // ── 경로 검색 ───────────────────────────────────────
 async function routeTo(destName) {
+  if (S.isRerouting) return;
   if (!S.pos) { showToast(t('locating'), false, 2000); return; }
+  S.isRerouting = true;
   showToast(t('searching'), true, 99999);
   try {
     const dest = await findStation(destName);
-    if (!dest) { showToast(t('notFound'), false, 3000); return; }
+    if (!dest) { showToast(t('notFound'), false, 3000); S.isRerouting = false; return; }
     const { lat, lng } = S.pos;
     const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${lng}&SY=${lat}&EX=${dest.x}&EY=${dest.y}&OPT=0&lang=${odsayLang()}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
     hideToast();
-    if (!d.result?.path?.length) { showToast(t('noRoute'), false, 3000); return; }
+    if (!d.result?.path?.length) { showToast(t('noRoute'), false, 3000); S.isRerouting = false; return; }
     buildRoute(d.result.path[0], destName);
   } catch(e) {
     hideToast();
     showToast(t('searchFail', e.message), false, 3000);
   }
+  S.isRerouting = false;
 }
 
 async function searchRoute() {
   const raw = document.getElementById('destInput').value.trim();
   if (!raw) { showToast(t('inputHint'), false, 2000); return; }
+  S.isRerouting = false; // 수동 검색은 강제 초기화
   await routeTo(raw.endsWith('역') ? raw.slice(0, -1) : raw);
 }
 
 async function findStation(name) {
   const d = await fetch(`https://api.odsay.com/v1/api/searchStation?lang=${odsayLang()}&stationName=${encodeURIComponent(name)}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
-  return d.result?.station?.[0] || null;
+  const list = d.result?.station || [];
+  // 지하철역(type 1) 중 이름 정확히 일치하는 것 우선, 없으면 지하철역 첫 번째, 그것도 없으면 첫 번째
+  return list.find(s => s.type === 1 && s.stationName === name)
+      || list.find(s => s.type === 1)
+      || list[0]
+      || null;
 }
 
 // ── 경로 구성 ───────────────────────────────────────
