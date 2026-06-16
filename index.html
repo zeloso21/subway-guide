@@ -61,9 +61,9 @@
     .sdot.big { width: 14px; height: 14px; box-shadow: 0 0 12px currentColor, 0 2px 6px rgba(0,0,0,.2); }
 
     /* 기차 마커 */
-    .train-marker { position: absolute; left: 50%; transform: translateX(-50%); top: 0; pointer-events: none; z-index: 10; animation: trainRide var(--train-dur, 30s) linear infinite; }
+    .train-marker { display: inline-block; vertical-align: middle; margin-left: 6px; pointer-events: none; animation: trainRide var(--train-dur, 30s) linear infinite; }
     .train-marker svg { display: block; filter: drop-shadow(0 1px 3px rgba(0,0,0,.35)); }
-    @keyframes trainRide { from { top: -8px; } to { top: 100%; } }
+    @keyframes trainRide { 0%{transform:translateX(0);opacity:1} 70%{transform:translateX(18px);opacity:.7} 88%{transform:translateX(24px);opacity:0} 100%{transform:translateX(0);opacity:0} }
 
     .sinfo { flex: 1; padding-left: 8px; }
     .sname { font-size: 13px; font-weight: 600; color: #1a2a45; }
@@ -661,8 +661,9 @@ async function searchRoute() {
 async function findStation(name) {
   const d = await fetch(`https://api.odsay.com/v1/api/searchStation?lang=${odsayLang()}&stationName=${encodeURIComponent(name)}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
   const list = d.result?.station || [];
-  // 지하철역(type 1) 중 이름 정확히 일치하는 것 우선, 없으면 지하철역 첫 번째, 그것도 없으면 첫 번째
-  return list.find(s => s.type === 1 && s.stationName === name)
+  const clean = s => s.replace(/역$/, '');
+  // "강남"과 "강남역" 모두 같은 역으로 처리
+  return list.find(s => s.type === 1 && clean(s.stationName) === clean(name))
       || list.find(s => s.type === 1)
       || list[0]
       || null;
@@ -781,10 +782,10 @@ function renderRouteList() {
       <div class="strack">
         <div class="strack-line top" style="background:${isFirst?'transparent':st.color}"></div>
         <div class="sdot${(st.isTransfer||st.isFinal||isCurrent)?' big':''}" style="background:${st.color};color:${st.color}"></div>
-        <div class="strack-line bot" style="background:${isLast?'transparent':st.color}">${trainSvg}</div>
+        <div class="strack-line bot" style="background:${isLast?'transparent':st.color}"></div>
       </div>
       <div class="sinfo">
-        <div class="sname">${isCurrent ? '▶ ' : ''}${st.name}</div>
+        <div class="sname">${isCurrent ? '▶ ' : ''}${st.name}${trainSvg}</div>
         <div class="smeta">${st.lineName}</div>
       </div>${badge}`;
     div.onclick = () => jumpToStation(i);
