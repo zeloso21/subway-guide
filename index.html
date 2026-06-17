@@ -749,6 +749,9 @@ function buildRoute(path, destName) {
 
   if (!S.flatStations.length) { showToast(t('noSubway'), false, 3000); return; }
 
+  console.log('[ROUTE] flatStations:', S.flatStations.map(s=>s.name).join(' → '));
+  console.log('[ROUTE] destName:', destName);
+
   // 도착 배지: 이름 일치 우선, 실패 시 목적지 좌표 최근접 역
   const clean = s => s.replace(/역$/, '');
   let destIdx = S.flatStations.findIndex(st => clean(st.name) === clean(destName));
