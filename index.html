@@ -680,16 +680,24 @@ async function searchRoute() {
 async function findStation(name) {
   const d = await fetch(`https://api.odsay.com/v1/api/searchStation?lang=${odsayLang()}&stationName=${encodeURIComponent(name)}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
   const list = d.result?.station || [];
-  console.log('[DEBUG] searchStation 전체 결과:', JSON.stringify(list.map(s=>({name:s.stationName,type:s.type,x:s.x,y:s.y}))));
   const clean = s => s.replace(/역$/, '');
-  // 수도권 범위 필터 (타 도시 동명 역 차단)
   const inMetro = s => { const la=parseFloat(s.y),lo=parseFloat(s.x); return la>37.1&&la<37.9&&lo>126.6&&lo<127.5; };
-  return list.find(s => s.type===1 && inMetro(s) && clean(s.stationName)===clean(name))
+  const match = list.find(s => s.type===1 && inMetro(s) && clean(s.stationName)===clean(name))
       || list.find(s => s.type===1 && clean(s.stationName)===clean(name))
       || list.find(s => s.type===1 && inMetro(s))
       || list.find(s => s.type===1)
       || list[0]
       || null;
+  if (!match) return null;
+  // searchStation 좌표가 부정확할 수 있으므로 subwayStationInfo로 정확한 좌표 재조회
+  try {
+    const info = await fetch(`https://api.odsay.com/v1/api/subwayStationInfo?stationID=${match.stationID}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
+    const r = info.result;
+    console.log('[DEBUG] subwayStationInfo:', r?.stationName, r?.x, r?.y);
+    if (r?.x && r?.y) return { ...match, x: r.x, y: r.y };
+  } catch(e) {}
+  console.log('[DEBUG] searchStation 좌표 사용:', match.stationName, match.x, match.y);
+  return match;
 }
 
 // ── 경로 구성 ───────────────────────────────────────
