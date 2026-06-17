@@ -639,7 +639,7 @@ async function routeTo(destName) {
   showToast(t('searching'), true, 99999);
   try {
     const dest = await findStation(destName);
-    console.log('[DEBUG] findStation 결과:', dest);
+    console.log('[DEBUG] findStation 결과:', JSON.stringify(dest));
     if (!dest) { showToast(t('notFound'), false, 3000); S.isRerouting = false; return; }
     S.destCoords = { x: parseFloat(dest.x), y: parseFloat(dest.y) };
     const { lat, lng } = S.pos;
@@ -680,6 +680,7 @@ async function searchRoute() {
 async function findStation(name) {
   const d = await fetch(`https://api.odsay.com/v1/api/searchStation?lang=${odsayLang()}&stationName=${encodeURIComponent(name)}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
   const list = d.result?.station || [];
+  console.log('[DEBUG] searchStation 전체 결과:', JSON.stringify(list.map(s=>({name:s.stationName,type:s.type,x:s.x,y:s.y}))));
   const clean = s => s.replace(/역$/, '');
   // 수도권 범위 필터 (타 도시 동명 역 차단)
   const inMetro = s => { const la=parseFloat(s.y),lo=parseFloat(s.x); return la>37.1&&la<37.9&&lo>126.6&&lo<127.5; };
