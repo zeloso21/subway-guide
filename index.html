@@ -684,7 +684,7 @@ async function searchRoute() {
 async function geocodeStation(name) {
   try {
     const r = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name+'역 서울')}&format=json&limit=5&countrycodes=kr`,
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name+'역')}&format=json&limit=5&countrycodes=kr`,
       { headers: { 'Accept-Language': 'ko' } }
     ).then(r => r.json());
     const st = r?.find(s => ['railway','public_transport','amenity'].includes(s.class)) || r?.[0];
@@ -748,9 +748,6 @@ function buildRoute(path, destName) {
   });
 
   if (!S.flatStations.length) { showToast(t('noSubway'), false, 3000); return; }
-
-  console.log('[ROUTE] flatStations:', S.flatStations.map(s=>s.name).join(' → '));
-  console.log('[ROUTE] destName:', destName);
 
   // 도착 배지: 이름 일치 우선, 실패 시 목적지 좌표 최근접 역
   const clean = s => s.replace(/역$/, '');
