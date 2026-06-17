@@ -773,7 +773,7 @@ function buildRoute(path, destName) {
   enableSplitMode();
   renderRouteList();
   drawRouteOnMap();
-  showTimetable(S.flatStations[0].name, destName + '방면');
+  updateTimetableForCurrentPosition();
 }
 
 function enableSplitMode() {
@@ -955,8 +955,7 @@ function checkTransferAlert() {
   if (minDist < 0.8 && closestIdx !== S.currentIdx) {
     S.currentIdx = closestIdx;
     renderRouteList();
-    const st = S.flatStations[closestIdx];
-    showTimetable(st.name, st.direction || '');
+    updateTimetableForCurrentPosition();
   }
 
   if (S.alertedSet.has(S.currentIdx)) return;
@@ -1046,11 +1045,42 @@ async function refreshRealtimeTimetable(stationName, lineNum) {
   renderTimetable(lineNum, S.ttDirection, S_rtCache);
 }
 
-function showTimetable(stationName, direction) {
+// 현재 위치 기준으로 시간표 대상 역 결정
+// - 출발역/환승역: 해당 역 시간표 (탑승 대기)
+// - 이동 중: 다음 환승역 또는 도착역 시간표 (연결 열차 확인)
+function updateTimetableForCurrentPosition() {
+  if (!S.flatStations.length) return;
+  const cur = S.flatStations[S.currentIdx];
+
+  // 출발역이거나 환승·도착역이면 현재 역 시간표
+  if (S.currentIdx === 0 || cur.isTransfer || cur.isFinal) {
+    let dir = cur.direction;
+    if (cur.isTransfer && S.currentIdx + 1 < S.flatStations.length)
+      dir = S.flatStations[S.currentIdx + 1].direction;
+    showTimetable(cur.name, dir || '', false);
+    return;
+  }
+
+  // 이동 중: 다음 환승역 또는 도착역의 시간표
+  for (let i = S.currentIdx + 1; i < S.flatStations.length; i++) {
+    const st = S.flatStations[i];
+    if (st.isTransfer || st.isFinal) {
+      let dir = st.direction;
+      if (st.isTransfer && i + 1 < S.flatStations.length)
+        dir = S.flatStations[i + 1].direction;
+      showTimetable(st.name, dir || '', st.isTransfer);
+      return;
+    }
+  }
+  showTimetable(cur.name, cur.direction || '', false);
+}
+
+function showTimetable(stationName, direction, isUpcoming) {
   S.ttStation = stationName;
   S.ttDirection = direction || '';
   const suffix = LANG_CODE === 'ko' ? '역' : LANG_CODE === 'ja' ? '駅' : '';
-  document.getElementById('ttStation').textContent = stationName + suffix;
+  const label = isUpcoming ? '환승 예정 → ' : '';
+  document.getElementById('ttStation').textContent = label + stationName + suffix;
 
   let lineNum = 2;
   if (S.flatStations.length) {
