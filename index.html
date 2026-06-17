@@ -680,17 +680,34 @@ async function searchRoute() {
   await routeTo(raw.endsWith('역') ? raw.slice(0, -1) : raw);
 }
 
-// searchStation 결과에서 이름이 일치하는 지하철역 전부 반환 (좌표가 다른 동명 역 대응)
+// Nominatim(OpenStreetMap)으로 정확한 역 좌표 조회
+async function geocodeStation(name) {
+  try {
+    const r = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name+'역 서울')}&format=json&limit=5&countrycodes=kr`,
+      { headers: { 'Accept-Language': 'ko' } }
+    ).then(r => r.json());
+    const st = r?.find(s => ['railway','public_transport','amenity'].includes(s.class)) || r?.[0];
+    if (st) return { stationName: name, x: parseFloat(st.lon), y: parseFloat(st.lat), type: 1 };
+  } catch(e) {}
+  return null;
+}
+
+// Nominatim + ODsay searchStation 병렬 조회, 정확한 좌표 후보 리스트 반환
 async function findAllStations(name) {
-  const d = await fetch(`https://api.odsay.com/v1/api/searchStation?lang=${odsayLang()}&stationName=${encodeURIComponent(name)}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
-  const list = d.result?.station || [];
+  const [odsay, nom] = await Promise.all([
+    fetch(`https://api.odsay.com/v1/api/searchStation?lang=${odsayLang()}&stationName=${encodeURIComponent(name)}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json()).catch(() => null),
+    geocodeStation(name)
+  ]);
+  const list = odsay?.result?.station || [];
   const clean = s => s.replace(/역$/, '');
   const inMetro = s => { const la=parseFloat(s.y),lo=parseFloat(s.x); return la>37.1&&la<37.9&&lo>126.6&&lo<127.5; };
   const exact = list.filter(s => s.type===1 && inMetro(s) && clean(s.stationName)===clean(name));
-  if (exact.length) return exact;
+  // Nominatim 결과를 첫 번째 우선 (좌표 정확도 높음), 그 다음 ODsay
+  const candidates = [...(nom ? [nom] : []), ...exact];
+  if (candidates.length) return candidates;
   const metro = list.filter(s => s.type===1 && inMetro(s));
-  if (metro.length) return metro;
-  return list.filter(s => s.type===1).concat(list[0] ? [list[0]] : []);
+  return metro.length ? metro : list.filter(s => s.type===1).slice(0, 1);
 }
 
 // ── 경로 구성 ───────────────────────────────────────
