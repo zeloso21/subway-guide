@@ -638,31 +638,34 @@ async function routeTo(destName) {
   S.isRerouting = true;
   showToast(t('searching'), true, 99999);
   try {
-    const dest = await findStation(destName);
-    console.log('[DEBUG] findStation 결과:', JSON.stringify(dest));
-    if (!dest) { showToast(t('notFound'), false, 3000); S.isRerouting = false; return; }
-    S.destCoords = { x: parseFloat(dest.x), y: parseFloat(dest.y) };
+    const candidates = await findAllStations(destName);
+    if (!candidates.length) { showToast(t('notFound'), false, 3000); S.isRerouting = false; return; }
     const { lat, lng } = S.pos;
-    const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${lng}&SY=${lat}&EX=${dest.x}&EY=${dest.y}&OPT=0&lang=${odsayLang()}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
-    hideToast();
-    if (!d.result?.path?.length) { showToast(t('noRoute'), false, 3000); S.isRerouting = false; return; }
-    // 마지막 지하철 종착역이 목적지 이름과 일치하는 경로 우선 선택
     const cleanStr = s => s.replace(/역$/, '');
-    const paths = d.result.path;
-    console.log('[DEBUG] ODsay 경로 수:', paths.length);
-    paths.forEach((p, i) => {
-      const subSegs = p.subPath.filter(sp => sp.trafficType === 1);
-      const lastSt = subSegs[subSegs.length-1]?.passStopList?.stations?.slice(-1)[0];
-      console.log(`[DEBUG] 경로${i}: 지하철구간${subSegs.length}개, 마지막역="${lastSt?.stationName}"`);
-    });
-    const bestPath = paths.find(p => {
-      const subSegs = p.subPath.filter(sp => sp.trafficType === 1);
-      if (!subSegs.length) return false;
-      const lastSt = subSegs[subSegs.length-1].passStopList?.stations?.slice(-1)[0];
-      return lastSt && cleanStr(lastSt.stationName) === cleanStr(destName);
-    }) || paths[0];
-    console.log('[DEBUG] 선택된 경로 마지막역:', bestPath.subPath.filter(sp=>sp.trafficType===1).slice(-1)[0]?.passStopList?.stations?.slice(-1)[0]?.stationName);
-    buildRoute(bestPath, destName);
+    let chosenPath = null, chosenCoords = null;
+    // 후보역을 순서대로 시도 — 마지막 지하철역이 목적지와 일치하는 경로가 나오면 채택
+    for (const cand of candidates.slice(0, 4)) {
+      const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${lng}&SY=${lat}&EX=${cand.x}&EY=${cand.y}&OPT=0&lang=${odsayLang()}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
+      const paths = d.result?.path || [];
+      if (!paths.length) continue;
+      const good = paths.find(p => {
+        const subs = p.subPath.filter(sp => sp.trafficType === 1);
+        if (!subs.length) return false;
+        const last = subs[subs.length-1]?.passStopList?.stations?.slice(-1)[0];
+        return last && cleanStr(last.stationName) === cleanStr(destName);
+      });
+      if (good) {
+        chosenPath = good;
+        chosenCoords = { x: parseFloat(cand.x), y: parseFloat(cand.y) };
+        break;
+      }
+      // 이번 후보로 맞는 경로 없어도 첫 번째 결과는 보관 (최후 폴백용)
+      if (!chosenPath) { chosenPath = paths[0]; chosenCoords = { x: parseFloat(cand.x), y: parseFloat(cand.y) }; }
+    }
+    hideToast();
+    if (!chosenPath) { showToast(t('noRoute'), false, 3000); S.isRerouting = false; return; }
+    S.destCoords = chosenCoords;
+    buildRoute(chosenPath, destName);
   } catch(e) {
     hideToast();
     showToast(t('searchFail', e.message), false, 3000);
@@ -673,31 +676,21 @@ async function routeTo(destName) {
 async function searchRoute() {
   const raw = document.getElementById('destInput').value.trim();
   if (!raw) { showToast(t('inputHint'), false, 2000); return; }
-  S.isRerouting = false; // 수동 검색은 강제 초기화
+  S.isRerouting = false;
   await routeTo(raw.endsWith('역') ? raw.slice(0, -1) : raw);
 }
 
-async function findStation(name) {
+// searchStation 결과에서 이름이 일치하는 지하철역 전부 반환 (좌표가 다른 동명 역 대응)
+async function findAllStations(name) {
   const d = await fetch(`https://api.odsay.com/v1/api/searchStation?lang=${odsayLang()}&stationName=${encodeURIComponent(name)}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
   const list = d.result?.station || [];
   const clean = s => s.replace(/역$/, '');
   const inMetro = s => { const la=parseFloat(s.y),lo=parseFloat(s.x); return la>37.1&&la<37.9&&lo>126.6&&lo<127.5; };
-  const match = list.find(s => s.type===1 && inMetro(s) && clean(s.stationName)===clean(name))
-      || list.find(s => s.type===1 && clean(s.stationName)===clean(name))
-      || list.find(s => s.type===1 && inMetro(s))
-      || list.find(s => s.type===1)
-      || list[0]
-      || null;
-  if (!match) return null;
-  // searchStation 좌표가 부정확할 수 있으므로 subwayStationInfo로 정확한 좌표 재조회
-  try {
-    const info = await fetch(`https://api.odsay.com/v1/api/subwayStationInfo?stationID=${match.stationID}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
-    const r = info.result;
-    console.log('[DEBUG] subwayStationInfo:', r?.stationName, r?.x, r?.y);
-    if (r?.x && r?.y) return { ...match, x: r.x, y: r.y };
-  } catch(e) {}
-  console.log('[DEBUG] searchStation 좌표 사용:', match.stationName, match.x, match.y);
-  return match;
+  const exact = list.filter(s => s.type===1 && inMetro(s) && clean(s.stationName)===clean(name));
+  if (exact.length) return exact;
+  const metro = list.filter(s => s.type===1 && inMetro(s));
+  if (metro.length) return metro;
+  return list.filter(s => s.type===1).concat(list[0] ? [list[0]] : []);
 }
 
 // ── 경로 구성 ───────────────────────────────────────
