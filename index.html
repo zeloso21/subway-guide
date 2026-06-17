@@ -639,6 +639,7 @@ async function routeTo(destName) {
   showToast(t('searching'), true, 99999);
   try {
     const dest = await findStation(destName);
+    console.log('[DEBUG] findStation 결과:', dest);
     if (!dest) { showToast(t('notFound'), false, 3000); S.isRerouting = false; return; }
     S.destCoords = { x: parseFloat(dest.x), y: parseFloat(dest.y) };
     const { lat, lng } = S.pos;
@@ -648,12 +649,19 @@ async function routeTo(destName) {
     // 마지막 지하철 종착역이 목적지 이름과 일치하는 경로 우선 선택
     const cleanStr = s => s.replace(/역$/, '');
     const paths = d.result.path;
+    console.log('[DEBUG] ODsay 경로 수:', paths.length);
+    paths.forEach((p, i) => {
+      const subSegs = p.subPath.filter(sp => sp.trafficType === 1);
+      const lastSt = subSegs[subSegs.length-1]?.passStopList?.stations?.slice(-1)[0];
+      console.log(`[DEBUG] 경로${i}: 지하철구간${subSegs.length}개, 마지막역="${lastSt?.stationName}"`);
+    });
     const bestPath = paths.find(p => {
       const subSegs = p.subPath.filter(sp => sp.trafficType === 1);
       if (!subSegs.length) return false;
       const lastSt = subSegs[subSegs.length-1].passStopList?.stations?.slice(-1)[0];
       return lastSt && cleanStr(lastSt.stationName) === cleanStr(destName);
     }) || paths[0];
+    console.log('[DEBUG] 선택된 경로 마지막역:', bestPath.subPath.filter(sp=>sp.trafficType===1).slice(-1)[0]?.passStopList?.stations?.slice(-1)[0]?.stationName);
     buildRoute(bestPath, destName);
   } catch(e) {
     hideToast();
