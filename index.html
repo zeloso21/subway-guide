@@ -113,6 +113,34 @@
     .toast.info { background: linear-gradient(135deg,#1a4fd8,#1240b8); }
     .toast.show { display: block; animation: slideDown .25s ease; }
     @keyframes slideDown { from{opacity:0;top:50px}to{opacity:1;top:70px} }
+
+    /* 주변 맛집·카페 버튼 (헤더) */
+    .food-btn { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: #FDE68A; cursor: pointer; font-weight: 700; white-space: nowrap; box-shadow: inset 0 1px 3px rgba(0,0,0,.2); flex-shrink: 0; }
+    .food-btn:active { background: rgba(255,255,255,.2); }
+
+    /* 주변 맛집·카페 바텀시트 */
+    .food-overlay { position: fixed; inset: 0; background: rgba(4,8,20,.55); z-index: 200; display: none; }
+    .food-overlay.show { display: block; animation: fadeIn .2s ease; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .food-sheet { position: fixed; left: 0; right: 0; bottom: 0; max-height: 74vh; background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%); border-radius: 18px 18px 0 0; box-shadow: 0 -8px 32px rgba(0,0,0,.35); display: flex; flex-direction: column; z-index: 201; transform: translateY(100%); transition: transform .25s ease; }
+    .food-overlay.show .food-sheet { transform: translateY(0); }
+    .food-sheet-header { padding: 14px 16px 10px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #dbe8fc; flex-shrink: 0; }
+    .food-sheet-title { font-size: 14px; font-weight: 800; color: #1a2a45; }
+    .food-sheet-sub { font-size: 11px; color: #7a9fc0; margin-left: auto; }
+    .food-sheet-close { background: #eef5ff; border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 14px; color: #64748B; cursor: pointer; flex-shrink: 0; }
+    .food-tabs { display: flex; gap: 6px; padding: 10px 16px 0; flex-shrink: 0; }
+    .food-tab { flex: 1; text-align: center; padding: 8px; border-radius: 10px; font-size: 12px; font-weight: 700; color: #7a9fc0; background: #eef5ff; cursor: pointer; border: 1.5px solid transparent; }
+    .food-tab.active { color: #1d50c8; background: #dceaff; border-color: #a9c8f5; }
+    .food-list { overflow-y: auto; flex: 1; padding: 8px 12px 20px; }
+    .food-item { display: flex; align-items: center; gap: 10px; padding: 10px 8px; border-bottom: 1px solid rgba(59,130,246,.08); text-decoration: none; color: inherit; }
+    .food-item:active { background: rgba(59,130,246,.06); }
+    .food-rank { width: 22px; height: 22px; border-radius: 50%; background: #dceaff; color: #1d50c8; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .food-info { flex: 1; min-width: 0; }
+    .food-name { font-size: 13px; font-weight: 700; color: #1a2a45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .food-cat { font-size: 10.5px; color: #94A3B8; margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .food-dist { font-size: 11px; font-weight: 700; color: #10b97a; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+    .food-empty { padding: 30px 16px; text-align: center; color: #94A3B8; font-size: 12.5px; line-height: 1.7; }
+    .food-loading { padding: 30px 16px; text-align: center; color: #94A3B8; font-size: 12.5px; }
   </style>
 </head>
 <body>
@@ -126,6 +154,7 @@
     <button class="lang-btn" onclick="setLang('ja')">JA</button>
   </div>
   <div class="loc-badge" id="locBadge">위치 확인 중...</div>
+  <button class="food-btn" id="foodBtn" onclick="openFoodSheet()">🍜 맛집·카페</button>
 </div>
 
 <div class="search-bar">
@@ -171,11 +200,28 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- 주변 맛집·카페 바텀시트 -->
+<div class="food-overlay" id="foodOverlay" onclick="if(event.target===this) closeFoodSheet()">
+  <div class="food-sheet">
+    <div class="food-sheet-header">
+      <span class="food-sheet-title" id="foodSheetTitle">주변 맛집·카페</span>
+      <span class="food-sheet-sub" id="foodSheetSub"></span>
+      <button class="food-sheet-close" onclick="closeFoodSheet()">✕</button>
+    </div>
+    <div class="food-tabs">
+      <div class="food-tab active" id="foodTabFood" onclick="switchFoodTab('food')">🍚 맛집</div>
+      <div class="food-tab" id="foodTabCafe" onclick="switchFoodTab('cafe')">☕ 카페</div>
+    </div>
+    <div class="food-list" id="foodList"></div>
+  </div>
+</div>
+
 <!-- 카카오 맵 SDK -->
 <script>
 // ── API 키 ──────────────────────────────────────────
 const ODSAY_KEY = 'OLKXZpgL39Z/FRXbnoLDyQ';
 const KAKAO_JS_KEY = '5f52a6cdf28d24897956e5bb497aac7b';
+const KAKAO_REST_KEY = '87247f0049864513c6a449172405d95a';
 
 // ── 다국어 ───────────────────────────────────────────
 let LANG_CODE = localStorage.getItem('lang') || 'ko';
@@ -212,6 +258,18 @@ const I18N = {
     soon: '곧 도착',
     minsLater: (n) => `${n}분 후`,
     dirDefault: '행선지',
+    foodBtn: '🍜 맛집·카페',
+    foodSheetTitle: '주변 맛집·카페',
+    foodTabFood: '🍚 맛집',
+    foodTabCafe: '☕ 카페',
+    foodNeedLoc: '위치를 먼저 확인해주세요',
+    foodLoading: '주변을 검색 중...',
+    foodEmpty: '주변에서 찾지 못했어요',
+    foodFail: '검색에 실패했어요',
+    foodRadius: (m) => m >= 1000 ? `반경 ${(m/1000).toFixed(1)}km` : `반경 ${m}m`,
+    foodRefBase: '현재 위치 기준',
+    foodRefDest: (name) => `${name} 기준`,
+    foodDist: (m) => m >= 1000 ? `${(m/1000).toFixed(1)}km` : `${m}m`,
   },
   en: {
     appTitle: 'Subway Guide',
@@ -244,6 +302,18 @@ const I18N = {
     soon: 'Arriving',
     minsLater: (n) => `${n} min`,
     dirDefault: 'Bound for',
+    foodBtn: '🍜 Food·Cafe',
+    foodSheetTitle: 'Nearby Food·Cafe',
+    foodTabFood: '🍚 Food',
+    foodTabCafe: '☕ Cafe',
+    foodNeedLoc: 'Waiting for your location',
+    foodLoading: 'Searching nearby...',
+    foodEmpty: 'Nothing found nearby',
+    foodFail: 'Search failed',
+    foodRadius: (m) => m >= 1000 ? `within ${(m/1000).toFixed(1)}km` : `within ${m}m`,
+    foodRefBase: 'near current location',
+    foodRefDest: (name) => `near ${name}`,
+    foodDist: (m) => m >= 1000 ? `${(m/1000).toFixed(1)}km` : `${m}m`,
   },
   ja: {
     appTitle: '地下鉄ナビ',
@@ -276,6 +346,18 @@ const I18N = {
     soon: 'まもなく',
     minsLater: (n) => `${n}分後`,
     dirDefault: '行先',
+    foodBtn: '🍜 グルメ·カフェ',
+    foodSheetTitle: '周辺グルメ·カフェ',
+    foodTabFood: '🍚 グルメ',
+    foodTabCafe: '☕ カフェ',
+    foodNeedLoc: '位置情報を確認しています',
+    foodLoading: '周辺を検索中...',
+    foodEmpty: '周辺に見つかりませんでした',
+    foodFail: '検索に失敗しました',
+    foodRadius: (m) => m >= 1000 ? `半径${(m/1000).toFixed(1)}km` : `半径${m}m`,
+    foodRefBase: '現在地基準',
+    foodRefDest: (name) => `${name}基準`,
+    foodDist: (m) => m >= 1000 ? `${(m/1000).toFixed(1)}km` : `${m}m`,
   },
 };
 
@@ -300,6 +382,10 @@ function applyLang() {
   document.getElementById('destInput').placeholder = t('placeholder');
   document.getElementById('searchBtn').textContent = t('searchBtn');
   document.getElementById('ttTitle').textContent = t('ttTitle');
+  document.getElementById('foodBtn').textContent = t('foodBtn');
+  document.getElementById('foodSheetTitle').textContent = t('foodSheetTitle');
+  document.getElementById('foodTabFood').textContent = t('foodTabFood');
+  document.getElementById('foodTabCafe').textContent = t('foodTabCafe');
   // 현재 locBadge가 초기 메시지면 갱신
   const badge = document.getElementById('locBadge');
   const initMsgs = ['위치 확인 중...', 'Locating...', '位置確認中...'];
@@ -609,6 +695,91 @@ function setCurrentMarker() {
   }
 }
 
+// ── 주변 맛집·카페 ───────────────────────────────────
+// Kakao Local 카테고리 검색(FD6=음식점, CE7=카페)을 REST API로 직접 호출.
+// 100m는 결과가 0~1개뿐인 경우가 많아, 부족하면 반경을 단계적으로 넓혀 재검색한다.
+const FOOD_RADII = [100, 300, 800];
+let FOOD_STATE = { tab: 'food', food: [], cafe: [], radius: FOOD_RADII[0], refLabel: '' };
+
+async function fetchCategory(code, lat, lng, radius) {
+  const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=${code}&x=${lng}&y=${lat}&radius=${radius}&sort=distance`;
+  const res = await fetch(url, { headers: { Authorization: 'KakaoAK ' + KAKAO_REST_KEY } });
+  if (!res.ok) throw new Error('food api ' + res.status);
+  const data = await res.json();
+  return (data.documents || []).map(d => ({
+    name: d.place_name, category: (d.category_name || '').split(' > ').slice(1).join(' · '),
+    distance: parseInt(d.distance, 10) || 0, url: d.place_url,
+  }));
+}
+
+async function searchNearbyFood(lat, lng) {
+  for (const radius of FOOD_RADII) {
+    const [food, cafe] = await Promise.all([
+      fetchCategory('FD6', lat, lng, radius),
+      fetchCategory('CE7', lat, lng, radius),
+    ]);
+    if (food.length >= 3 && cafe.length >= 3) return { food, cafe, radius };
+    if (radius === FOOD_RADII[FOOD_RADII.length - 1]) return { food, cafe, radius };
+  }
+}
+
+function currentFoodRef() {
+  // "가고 싶은 곳"(검색한 목적지)이 있으면 그 좌표, 없으면 현재 위치를 기준으로 삼는다.
+  if (S.destCoords) return { lat: S.destCoords.y, lng: S.destCoords.x, label: t('foodRefDest', S.destName) };
+  if (S.pos) return { lat: S.pos.lat, lng: S.pos.lng, label: t('foodRefBase') };
+  return null;
+}
+
+async function openFoodSheet() {
+  const ref = currentFoodRef();
+  const overlay = document.getElementById('foodOverlay');
+  const list = document.getElementById('foodList');
+  overlay.classList.add('show');
+  if (!ref) {
+    list.innerHTML = `<div class="food-empty">${t('foodNeedLoc')}</div>`;
+    document.getElementById('foodSheetSub').textContent = '';
+    return;
+  }
+  document.getElementById('foodSheetSub').textContent = ref.label;
+  list.innerHTML = `<div class="food-loading">${t('foodLoading')}</div>`;
+  try {
+    const result = await searchNearbyFood(ref.lat, ref.lng);
+    FOOD_STATE.food = result.food.slice(0, 5);
+    FOOD_STATE.cafe = result.cafe.slice(0, 5);
+    FOOD_STATE.radius = result.radius;
+    document.getElementById('foodSheetSub').textContent = `${ref.label} · ${t('foodRadius', result.radius)}`;
+    renderFoodList();
+  } catch (e) {
+    list.innerHTML = `<div class="food-empty">${t('foodFail')}</div>`;
+  }
+}
+
+function closeFoodSheet() {
+  document.getElementById('foodOverlay').classList.remove('show');
+}
+
+function switchFoodTab(tab) {
+  FOOD_STATE.tab = tab;
+  document.getElementById('foodTabFood').classList.toggle('active', tab === 'food');
+  document.getElementById('foodTabCafe').classList.toggle('active', tab === 'cafe');
+  renderFoodList();
+}
+
+function renderFoodList() {
+  const items = FOOD_STATE.tab === 'food' ? FOOD_STATE.food : FOOD_STATE.cafe;
+  const list = document.getElementById('foodList');
+  if (!items.length) { list.innerHTML = `<div class="food-empty">${t('foodEmpty')}</div>`; return; }
+  list.innerHTML = items.map((it, i) => `
+    <a class="food-item" href="${it.url}" target="_blank" rel="noopener">
+      <span class="food-rank">${i + 1}</span>
+      <span class="food-info">
+        <div class="food-name">${it.name}</div>
+        <div class="food-cat">${it.category}</div>
+      </span>
+      <span class="food-dist">${t('foodDist', it.distance)}</span>
+    </a>`).join('');
+}
+
 // ── 가까운 역 ───────────────────────────────────────
 function findNearestStation() {
   const { lat, lng } = S.pos;
@@ -655,7 +826,7 @@ async function routeTo(destName) {
     }
     const { lat, lng } = S.pos;
     const cleanStr = s => s.replace(/역$/, '').replace(/\s*\([^)]*\)$/, '').trim();
-    let chosenPath = null, chosenCoords = null;
+    let chosenPath = null, chosenCoords = null, foundGood = false;
     // 후보역을 순서대로 시도 — 마지막 지하철역이 목적지와 일치하는 경로가 나오면 채택
     for (const cand of candidates.slice(0, 4)) {
       const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${lng}&SY=${lat}&EX=${cand.x}&EY=${cand.y}&OPT=0&lang=${odsayLang()}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
@@ -670,13 +841,15 @@ async function routeTo(destName) {
       if (good) {
         chosenPath = good;
         chosenCoords = { x: parseFloat(cand.x), y: parseFloat(cand.y) };
+        foundGood = true;
         break;
       }
       // 이번 후보로 맞는 경로 없어도 첫 번째 결과는 보관 (최후 폴백용)
       if (!chosenPath) { chosenPath = paths[0]; chosenCoords = { x: parseFloat(cand.x), y: parseFloat(cand.y) }; }
     }
     hideToast();
-    if (!chosenPath) {
+    // 경로가 없거나, 경로는 있지만 목적지에 실제로 도달하지 못하는 경우 모두 폴백 체크
+    if (!chosenPath || !foundGood) {
       const fallback = BYEOLLAE_EXT[destName];
       if (fallback) {
         hideToast();
@@ -685,7 +858,7 @@ async function routeTo(destName) {
         setTimeout(() => routeTo(fallback), 300);
         return;
       }
-      showToast(t('noRoute'), false, 3000); S.isRerouting = false; return;
+      if (!chosenPath) { showToast(t('noRoute'), false, 3000); S.isRerouting = false; return; }
     }
     S.destCoords = chosenCoords;
     buildRoute(chosenPath, destName);
