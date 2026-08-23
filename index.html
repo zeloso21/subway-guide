@@ -126,21 +126,32 @@
     .food-overlay.show .food-sheet { transform: translateY(0); }
     .food-sheet-header { padding: 14px 16px 10px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #dbe8fc; flex-shrink: 0; }
     .food-sheet-title { font-size: 14px; font-weight: 800; color: #1a2a45; }
-    .food-sheet-sub { font-size: 11px; color: #7a9fc0; margin-left: auto; }
-    .food-sheet-close { background: #eef5ff; border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 14px; color: #64748B; cursor: pointer; flex-shrink: 0; }
+    .food-sheet-close { background: #eef5ff; border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 14px; color: #64748B; cursor: pointer; flex-shrink: 0; margin-left: auto; }
+    .food-search-row { display: flex; gap: 8px; padding: 10px 16px 0; flex-shrink: 0; }
+    .food-search-input { flex: 1; padding: 8px 12px; border: 1.5px solid #c8dcf8; border-radius: 9px; font-size: 13px; outline: none; color: #1a2a45; background: #f7fbff; }
+    .food-search-input:focus { border-color: #3B82F6; }
+    .food-search-btn { background: linear-gradient(145deg, #2d6ef5, #1a4fd8); color: #fff; border: none; border-radius: 9px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .food-radius-row { display: flex; gap: 6px; padding: 8px 16px 0; flex-shrink: 0; }
+    .food-radius-btn { flex: 1; padding: 6px; border-radius: 8px; font-size: 11.5px; font-weight: 700; color: #7a9fc0; background: #eef5ff; border: 1.5px solid transparent; cursor: pointer; font-variant-numeric: tabular-nums; }
+    .food-radius-btn.active { color: #1d50c8; background: #dceaff; border-color: #a9c8f5; }
     .food-tabs { display: flex; gap: 6px; padding: 10px 16px 0; flex-shrink: 0; }
     .food-tab { flex: 1; text-align: center; padding: 8px; border-radius: 10px; font-size: 12px; font-weight: 700; color: #7a9fc0; background: #eef5ff; cursor: pointer; border: 1.5px solid transparent; }
     .food-tab.active { color: #1d50c8; background: #dceaff; border-color: #a9c8f5; }
+    .food-sheet-sub { font-size: 11px; color: #7a9fc0; padding: 8px 16px 0; flex-shrink: 0; }
     .food-list { overflow-y: auto; flex: 1; padding: 8px 12px 20px; }
-    .food-item { display: flex; align-items: center; gap: 10px; padding: 10px 8px; border-bottom: 1px solid rgba(59,130,246,.08); text-decoration: none; color: inherit; }
+    .food-item { display: flex; align-items: center; gap: 8px; padding: 10px 8px; border-bottom: 1px solid rgba(59,130,246,.08); }
     .food-item:active { background: rgba(59,130,246,.06); }
     .food-rank { width: 22px; height: 22px; border-radius: 50%; background: #dceaff; color: #1d50c8; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .food-info { flex: 1; min-width: 0; }
+    .food-rank.cafe { background: #ffe9cc; color: #b5670c; }
+    .food-info { flex: 1; min-width: 0; text-decoration: none; color: inherit; }
     .food-name { font-size: 13px; font-weight: 700; color: #1a2a45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .food-cat { font-size: 10.5px; color: #94A3B8; margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .food-dist { font-size: 11px; font-weight: 700; color: #10b97a; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+    .food-dist { font-size: 11px; font-weight: 700; color: #10b97a; flex-shrink: 0; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .food-nav { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: #eef5ff; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 13px; }
     .food-empty { padding: 30px 16px; text-align: center; color: #94A3B8; font-size: 12.5px; line-height: 1.7; }
     .food-loading { padding: 30px 16px; text-align: center; color: #94A3B8; font-size: 12.5px; }
+    .food-pin-label { background: #f08a00 !important; color: #fff !important; border: none !important; font-size: 10px !important; font-weight: 800 !important; padding: 2px 6px !important; border-radius: 4px !important; white-space: nowrap !important; box-shadow: 0 2px 6px rgba(0,0,0,.3) !important; }
+    .food-pin-label::before { display: none !important; }
   </style>
 </head>
 <body>
@@ -205,13 +216,22 @@
   <div class="food-sheet">
     <div class="food-sheet-header">
       <span class="food-sheet-title" id="foodSheetTitle">주변 맛집·카페</span>
-      <span class="food-sheet-sub" id="foodSheetSub"></span>
       <button class="food-sheet-close" onclick="closeFoodSheet()">✕</button>
+    </div>
+    <div class="food-search-row">
+      <input class="food-search-input" id="foodPlaceInput" type="text" value="현위치" onkeydown="if(event.key==='Enter') runFoodSearchFromInput()">
+      <button class="food-search-btn" id="foodSearchBtn" onclick="runFoodSearchFromInput()">찾기</button>
+    </div>
+    <div class="food-radius-row" id="foodRadiusRow">
+      <button class="food-radius-btn active" data-r="100" onclick="setFoodRadius(100)">100m</button>
+      <button class="food-radius-btn" data-r="150" onclick="setFoodRadius(150)">150m</button>
+      <button class="food-radius-btn" data-r="200" onclick="setFoodRadius(200)">200m</button>
     </div>
     <div class="food-tabs">
       <div class="food-tab active" id="foodTabFood" onclick="switchFoodTab('food')">🍚 맛집</div>
       <div class="food-tab" id="foodTabCafe" onclick="switchFoodTab('cafe')">☕ 카페</div>
     </div>
+    <div class="food-sheet-sub" id="foodSheetSub"></div>
     <div class="food-list" id="foodList"></div>
   </div>
 </div>
@@ -266,10 +286,13 @@ const I18N = {
     foodLoading: '주변을 검색 중...',
     foodEmpty: '주변에서 찾지 못했어요',
     foodFail: '검색에 실패했어요',
-    foodRadius: (m) => m >= 1000 ? `반경 ${(m/1000).toFixed(1)}km` : `반경 ${m}m`,
+    foodRadius: (m) => `반경 ${m}m`,
     foodRefBase: '현재 위치 기준',
-    foodRefDest: (name) => `${name} 기준`,
+    foodRefStation: (name) => `${name}역 기준`,
     foodDist: (m) => m >= 1000 ? `${(m/1000).toFixed(1)}km` : `${m}m`,
+    foodCurrentLoc: '현위치',
+    foodSearchBtn: '찾기',
+    foodWalkNav: '카카오맵 도보 길찾기',
   },
   en: {
     appTitle: 'Subway Guide',
@@ -310,10 +333,13 @@ const I18N = {
     foodLoading: 'Searching nearby...',
     foodEmpty: 'Nothing found nearby',
     foodFail: 'Search failed',
-    foodRadius: (m) => m >= 1000 ? `within ${(m/1000).toFixed(1)}km` : `within ${m}m`,
+    foodRadius: (m) => `within ${m}m`,
     foodRefBase: 'near current location',
-    foodRefDest: (name) => `near ${name}`,
+    foodRefStation: (name) => `near ${name} Station`,
     foodDist: (m) => m >= 1000 ? `${(m/1000).toFixed(1)}km` : `${m}m`,
+    foodCurrentLoc: 'Current Location',
+    foodSearchBtn: 'Go',
+    foodWalkNav: 'Walking directions (Kakao Map)',
   },
   ja: {
     appTitle: '地下鉄ナビ',
@@ -354,10 +380,13 @@ const I18N = {
     foodLoading: '周辺を検索中...',
     foodEmpty: '周辺に見つかりませんでした',
     foodFail: '検索に失敗しました',
-    foodRadius: (m) => m >= 1000 ? `半径${(m/1000).toFixed(1)}km` : `半径${m}m`,
+    foodRadius: (m) => `半径${m}m`,
     foodRefBase: '現在地基準',
-    foodRefDest: (name) => `${name}基準`,
+    foodRefStation: (name) => `${name}駅基準`,
     foodDist: (m) => m >= 1000 ? `${(m/1000).toFixed(1)}km` : `${m}m`,
+    foodCurrentLoc: '現在地',
+    foodSearchBtn: '検索',
+    foodWalkNav: 'カカオマップ徒歩ルート',
   },
 };
 
@@ -386,6 +415,11 @@ function applyLang() {
   document.getElementById('foodSheetTitle').textContent = t('foodSheetTitle');
   document.getElementById('foodTabFood').textContent = t('foodTabFood');
   document.getElementById('foodTabCafe').textContent = t('foodTabCafe');
+  document.getElementById('foodSearchBtn').textContent = t('foodSearchBtn');
+  // 시트가 아직 안 열려 기본값("현위치"류) 그대로면, 언어 전환 시 그 표시도 맞춰 갱신
+  const foodInput = document.getElementById('foodPlaceInput');
+  const allCurLocLabels = [I18N.ko.foodCurrentLoc, I18N.en.foodCurrentLoc, I18N.ja.foodCurrentLoc];
+  if (allCurLocLabels.includes(foodInput.value)) foodInput.value = t('foodCurrentLoc');
   // 현재 locBadge가 초기 메시지면 갱신
   const badge = document.getElementById('locBadge');
   const initMsgs = ['위치 확인 중...', 'Locating...', '位置確認中...'];
@@ -697,9 +731,10 @@ function setCurrentMarker() {
 
 // ── 주변 맛집·카페 ───────────────────────────────────
 // Kakao Local 카테고리 검색(FD6=음식점, CE7=카페)을 REST API로 직접 호출.
-// 100m는 결과가 0~1개뿐인 경우가 많아, 부족하면 반경을 단계적으로 넓혀 재검색한다.
-const FOOD_RADII = [100, 300, 800];
-let FOOD_STATE = { tab: 'food', food: [], cafe: [], radius: FOOD_RADII[0], refLabel: '' };
+// 기준 장소는 "현위치" 또는 역 이름 검색(기존 findAllStations 재사용) — 지하철 경로안내(destInput)와는
+// 독립적인 별도 입력이다. 반경은 사용자가 100/150/200m 중 직접 선택(자동 확장 없음, 2026-08-23 변경).
+const FOOD_RADII = [100, 150, 200];
+let FOOD_STATE = { tab: 'food', food: [], cafe: [], radiusM: FOOD_RADII[0], ref: null };
 
 async function fetchCategory(code, lat, lng, radius) {
   const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=${code}&x=${lng}&y=${lat}&radius=${radius}&sort=distance`;
@@ -709,53 +744,70 @@ async function fetchCategory(code, lat, lng, radius) {
   return (data.documents || []).map(d => ({
     name: d.place_name, category: (d.category_name || '').split(' > ').slice(1).join(' · '),
     distance: parseInt(d.distance, 10) || 0, url: d.place_url,
+    lat: parseFloat(d.y), lng: parseFloat(d.x),
   }));
 }
 
-async function searchNearbyFood(lat, lng) {
-  for (const radius of FOOD_RADII) {
-    const [food, cafe] = await Promise.all([
-      fetchCategory('FD6', lat, lng, radius),
-      fetchCategory('CE7', lat, lng, radius),
-    ]);
-    if (food.length >= 3 && cafe.length >= 3) return { food, cafe, radius };
-    if (radius === FOOD_RADII[FOOD_RADII.length - 1]) return { food, cafe, radius };
+// "현위치" 입력 그대로면 S.pos, 그 외엔 지하철역 이름으로 간주해 기존 역 검색 로직을 재사용한다.
+async function resolveFoodRef(rawInput) {
+  const raw = (rawInput || '').trim();
+  if (!raw || raw === t('foodCurrentLoc')) {
+    if (!S.pos) return { error: 'needLoc' };
+    return { lat: S.pos.lat, lng: S.pos.lng, label: t('foodRefBase'), stationName: null };
   }
+  const name = raw.endsWith('역') ? raw.slice(0, -1) : raw;
+  const candidates = await findAllStations(name);
+  if (!candidates.length) return { error: 'notFound' };
+  const c = candidates[0];
+  return { lat: parseFloat(c.y), lng: parseFloat(c.x), label: t('foodRefStation', name), stationName: name };
 }
 
-function currentFoodRef() {
-  // "가고 싶은 곳"(검색한 목적지)이 있으면 그 좌표, 없으면 현재 위치를 기준으로 삼는다.
-  if (S.destCoords) return { lat: S.destCoords.y, lng: S.destCoords.x, label: t('foodRefDest', S.destName) };
-  if (S.pos) return { lat: S.pos.lat, lng: S.pos.lng, label: t('foodRefBase') };
-  return null;
-}
-
-async function openFoodSheet() {
-  const ref = currentFoodRef();
-  const overlay = document.getElementById('foodOverlay');
+async function runFoodSearchFromInput() {
+  const raw = document.getElementById('foodPlaceInput').value;
   const list = document.getElementById('foodList');
-  overlay.classList.add('show');
-  if (!ref) {
-    list.innerHTML = `<div class="food-empty">${t('foodNeedLoc')}</div>`;
-    document.getElementById('foodSheetSub').textContent = '';
-    return;
-  }
-  document.getElementById('foodSheetSub').textContent = ref.label;
   list.innerHTML = `<div class="food-loading">${t('foodLoading')}</div>`;
+  const ref = await resolveFoodRef(raw);
+  if (ref.error === 'needLoc') { list.innerHTML = `<div class="food-empty">${t('foodNeedLoc')}</div>`; return; }
+  if (ref.error === 'notFound') { list.innerHTML = `<div class="food-empty">${t('notFound')}</div>`; return; }
+  FOOD_STATE.ref = ref;
+  await runFoodSearch();
+}
+
+async function runFoodSearch() {
+  const ref = FOOD_STATE.ref;
+  if (!ref) return;
+  const list = document.getElementById('foodList');
+  list.innerHTML = `<div class="food-loading">${t('foodLoading')}</div>`;
+  document.getElementById('foodSheetSub').textContent = `${ref.label} · ${t('foodRadius', FOOD_STATE.radiusM)}`;
   try {
-    const result = await searchNearbyFood(ref.lat, ref.lng);
-    FOOD_STATE.food = result.food.slice(0, 5);
-    FOOD_STATE.cafe = result.cafe.slice(0, 5);
-    FOOD_STATE.radius = result.radius;
-    document.getElementById('foodSheetSub').textContent = `${ref.label} · ${t('foodRadius', result.radius)}`;
+    const [food, cafe] = await Promise.all([
+      fetchCategory('FD6', ref.lat, ref.lng, FOOD_STATE.radiusM),
+      fetchCategory('CE7', ref.lat, ref.lng, FOOD_STATE.radiusM),
+    ]);
+    FOOD_STATE.food = food.slice(0, 5);
+    FOOD_STATE.cafe = cafe.slice(0, 5);
     renderFoodList();
   } catch (e) {
     list.innerHTML = `<div class="food-empty">${t('foodFail')}</div>`;
   }
 }
 
+function setFoodRadius(m) {
+  FOOD_STATE.radiusM = m;
+  document.querySelectorAll('.food-radius-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.r, 10) === m));
+  if (FOOD_STATE.ref) runFoodSearch();
+}
+
+async function openFoodSheet() {
+  document.getElementById('foodOverlay').classList.add('show');
+  // 시트를 열 때마다 항상 "현위치"부터 새로 검색 (기본값 요구사항)
+  document.getElementById('foodPlaceInput').value = t('foodCurrentLoc');
+  await runFoodSearchFromInput();
+}
+
 function closeFoodSheet() {
   document.getElementById('foodOverlay').classList.remove('show');
+  clearFoodMapLayers();
 }
 
 function switchFoodTab(tab) {
@@ -765,19 +817,83 @@ function switchFoodTab(tab) {
   renderFoodList();
 }
 
+function buildWalkLink(ref, item) {
+  const seg = (name, lat, lng) => `${encodeURIComponent(name)},${lat},${lng}`;
+  const originName = ref.stationName || t('foodCurrentLoc');
+  return `https://map.kakao.com/link/by/walk/${seg(originName, ref.lat, ref.lng)}/${seg(item.name, item.lat, item.lng)}`;
+}
+
 function renderFoodList() {
   const items = FOOD_STATE.tab === 'food' ? FOOD_STATE.food : FOOD_STATE.cafe;
   const list = document.getElementById('foodList');
   if (!items.length) { list.innerHTML = `<div class="food-empty">${t('foodEmpty')}</div>`; return; }
+  const ref = FOOD_STATE.ref;
   list.innerHTML = items.map((it, i) => `
-    <a class="food-item" href="${it.url}" target="_blank" rel="noopener">
-      <span class="food-rank">${i + 1}</span>
-      <span class="food-info">
+    <div class="food-item">
+      <span class="food-rank${FOOD_STATE.tab === 'cafe' ? ' cafe' : ''}">${i + 1}</span>
+      <a class="food-info" href="${it.url}" target="_blank" rel="noopener">
         <div class="food-name">${it.name}</div>
         <div class="food-cat">${it.category}</div>
-      </span>
+      </a>
       <span class="food-dist">${t('foodDist', it.distance)}</span>
-    </a>`).join('');
+      <a class="food-nav" href="${buildWalkLink(ref, it)}" target="_blank" rel="noopener" title="${t('foodWalkNav')}">🧭</a>
+    </div>`).join('');
+  plotFoodPins(items, ref);
+}
+
+// ── 지도 위 번호 핀 (리스트 순번과 매칭) ──────────────
+function clearFoodMapLayers() {
+  if (!FOOD_STATE.mapLayers) { FOOD_STATE.mapLayers = []; return; }
+  if (S.useKakao) FOOD_STATE.mapLayers.forEach(l => l.setMap(null));
+  else FOOD_STATE.mapLayers.forEach(l => S.map.removeLayer(l));
+  FOOD_STATE.mapLayers = [];
+}
+
+function plotFoodPins(items, ref) {
+  if (!S.map) return;
+  clearFoodMapLayers();
+  if (!FOOD_STATE.mapLayers) FOOD_STATE.mapLayers = [];
+  const color = FOOD_STATE.tab === 'cafe' ? '#b5670c' : '#f08a00';
+  const points = [];
+  if (ref) points.push([ref.lat, ref.lng]);
+
+  if (S.useKakao) {
+    if (ref) {
+      const refOv = new kakao.maps.CustomOverlay({
+        position: new kakao.maps.LatLng(ref.lat, ref.lng),
+        content: `<div style="background:#1D4ED8;color:#fff;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;white-space:nowrap">📍 ${ref.stationName || t('foodCurrentLoc')}</div>`,
+        yAnchor: 1.5, map: S.map,
+      });
+      FOOD_STATE.mapLayers.push(refOv);
+    }
+    items.forEach((it, i) => {
+      points.push([it.lat, it.lng]);
+      const ov = new kakao.maps.CustomOverlay({
+        position: new kakao.maps.LatLng(it.lat, it.lng),
+        content: `<div style="background:${color};color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.35)">${i + 1}</div>`,
+        yAnchor: 0.5, map: S.map,
+      });
+      FOOD_STATE.mapLayers.push(ov);
+    });
+    if (points.length) {
+      const bounds = new kakao.maps.LatLngBounds();
+      points.forEach(p => bounds.extend(new kakao.maps.LatLng(p[0], p[1])));
+      S.map.setBounds(bounds, 60);
+    }
+  } else {
+    if (ref) {
+      const refMarker = L.circleMarker([ref.lat, ref.lng], { radius: 7, color: '#1D4ED8', fillColor: '#3B82F6', fillOpacity: 1, weight: 2 })
+        .bindTooltip(ref.stationName || t('foodCurrentLoc'), { permanent: true, direction: 'top', className: 'station-label' }).addTo(S.map);
+      FOOD_STATE.mapLayers.push(refMarker);
+    }
+    items.forEach((it, i) => {
+      points.push([it.lat, it.lng]);
+      const icon = L.divIcon({ className: '', html: `<div style="background:${color};color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.35)">${i + 1}</div>` });
+      const marker = L.marker([it.lat, it.lng], { icon }).addTo(S.map);
+      FOOD_STATE.mapLayers.push(marker);
+    });
+    if (points.length) S.map.fitBounds(points, { padding: [50, 50] });
+  }
 }
 
 // ── 가까운 역 ───────────────────────────────────────
