@@ -114,9 +114,9 @@
     .toast.show { display: block; animation: slideDown .25s ease; }
     @keyframes slideDown { from{opacity:0;top:50px}to{opacity:1;top:70px} }
 
-    /* 주변 맛집·카페 버튼 (헤더) */
-    .food-btn { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: #FDE68A; cursor: pointer; font-weight: 700; white-space: nowrap; box-shadow: inset 0 1px 3px rgba(0,0,0,.2); flex-shrink: 0; }
-    .food-btn:active { background: rgba(255,255,255,.2); }
+    /* 주변 맛집·카페 플로팅 버튼 (지도 위, 헤더 공간을 쓰지 않음) */
+    .food-fab { position: absolute; right: 14px; bottom: 14px; z-index: 15; width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(145deg, #ffb020, #f08a00); border: none; box-shadow: 0 6px 18px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.3); font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .food-fab:active { transform: translateY(1px); box-shadow: 0 3px 10px rgba(0,0,0,.35); }
 
     /* 주변 맛집·카페 바텀시트 */
     .food-overlay { position: fixed; inset: 0; background: rgba(4,8,20,.55); z-index: 200; display: none; }
@@ -154,7 +154,6 @@
     <button class="lang-btn" onclick="setLang('ja')">JA</button>
   </div>
   <div class="loc-badge" id="locBadge">위치 확인 중...</div>
-  <button class="food-btn" id="foodBtn" onclick="openFoodSheet()">🍜 맛집·카페</button>
 </div>
 
 <div class="search-bar">
@@ -171,6 +170,7 @@
       <div class="quote-text" id="quoteText"></div>
       <div class="quote-author" id="quoteAuthor"></div>
     </div>
+    <button class="food-fab" id="foodBtn" onclick="openFoodSheet()" title="주변 맛집·카페">🍜</button>
   </div>
 
   <!-- 노선 2/4 -->
@@ -382,7 +382,7 @@ function applyLang() {
   document.getElementById('destInput').placeholder = t('placeholder');
   document.getElementById('searchBtn').textContent = t('searchBtn');
   document.getElementById('ttTitle').textContent = t('ttTitle');
-  document.getElementById('foodBtn').textContent = t('foodBtn');
+  document.getElementById('foodBtn').title = t('foodBtn');
   document.getElementById('foodSheetTitle').textContent = t('foodSheetTitle');
   document.getElementById('foodTabFood').textContent = t('foodTabFood');
   document.getElementById('foodTabCafe').textContent = t('foodTabCafe');
