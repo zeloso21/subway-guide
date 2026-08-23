@@ -139,13 +139,16 @@
     .food-tab.active { color: #1d50c8; background: #dceaff; border-color: #a9c8f5; }
     .food-sheet-sub { font-size: 11px; color: #7a9fc0; padding: 8px 16px 0; flex-shrink: 0; }
     .food-list { overflow-y: auto; flex: 1; padding: 8px 12px 20px; }
-    .food-item { display: flex; align-items: center; gap: 8px; padding: 10px 8px; border-bottom: 1px solid rgba(59,130,246,.08); }
+    .food-item { display: flex; align-items: center; gap: 10px; padding: 10px 8px; border-bottom: 1px solid rgba(59,130,246,.08); position: relative; }
     .food-item:active { background: rgba(59,130,246,.06); }
-    .food-rank { width: 22px; height: 22px; border-radius: 50%; background: #dceaff; color: #1d50c8; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .food-rank.cafe { background: #ffe9cc; color: #b5670c; }
+    .food-rank { position: absolute; top: 6px; left: 6px; width: 18px; height: 18px; border-radius: 50%; background: rgba(29,80,200,.85); color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 1; }
+    .food-rank.cafe { background: rgba(181,103,12,.85); }
+    .food-thumb { position: relative; width: 52px; height: 52px; border-radius: 12px; flex-shrink: 0; overflow: hidden; background: #eef5ff; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .food-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .food-info { flex: 1; min-width: 0; text-decoration: none; color: inherit; }
     .food-name { font-size: 13px; font-weight: 700; color: #1a2a45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .food-cat { font-size: 10.5px; color: #94A3B8; margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .food-note { font-size: 10.5px; color: #1d50c8; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-style: italic; }
     .food-dist { font-size: 11px; font-weight: 700; color: #10b97a; flex-shrink: 0; font-variant-numeric: tabular-nums; white-space: nowrap; }
     .food-nav { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: #eef5ff; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 13px; }
     .food-empty { padding: 30px 16px; text-align: center; color: #94A3B8; font-size: 12.5px; line-height: 1.7; }
@@ -224,8 +227,8 @@
     </div>
     <div class="food-radius-row" id="foodRadiusRow">
       <button class="food-radius-btn active" data-r="100" onclick="setFoodRadius(100)">100m</button>
-      <button class="food-radius-btn" data-r="150" onclick="setFoodRadius(150)">150m</button>
       <button class="food-radius-btn" data-r="200" onclick="setFoodRadius(200)">200m</button>
+      <button class="food-radius-btn" data-r="300" onclick="setFoodRadius(300)">300m</button>
     </div>
     <div class="food-tabs">
       <div class="food-tab active" id="foodTabFood" onclick="switchFoodTab('food')">🍚 맛집</div>
@@ -730,22 +733,70 @@ function setCurrentMarker() {
 }
 
 // ── 주변 맛집·카페 ───────────────────────────────────
-// Kakao Local 카테고리 검색(FD6=음식점, CE7=카페)을 REST API로 직접 호출.
-// 기준 장소는 "현위치" 또는 역 이름 검색(기존 findAllStations 재사용) — 지하철 경로안내(destInput)와는
-// 독립적인 별도 입력이다. 반경은 사용자가 100/150/200m 중 직접 선택(자동 확장 없음, 2026-08-23 변경).
-const FOOD_RADII = [100, 150, 200];
-let FOOD_STATE = { tab: 'food', food: [], cafe: [], radiusM: FOOD_RADII[0], ref: null };
+// Kakao Local "키워드 검색"(query=맛집/카페, category_group_code로 필터)을 REST API로 직접 호출.
+// 카테고리 검색(순수 거리순)보다 키워드 검색이 카카오 자체 관련도 순위를 적용해줘서, 단순 거리순보다는
+// 유명한 곳이 우선될 가능성이 높다 — 다만 카카오 API 자체가 평점·리뷰수 필드를 제공하지 않으므로
+// 진짜 "평점순"은 아니고 어디까지나 API로 가능한 최선의 근사치다(2026-08-23, 사용자와 확인됨).
+//
+// 사진: 카카오 API는 장소 사진도 제공하지 않는다. 대신 사용자가 직접 찍어 보내준 사진을
+// places.json(placeId로 매칭)에 등록해두면 그 장소만 실제 사진 카드로 보여주고, 등록 안 된
+// 곳은 카테고리 아이콘 카드로 표시한다 — 큐레이션이 쌓일수록 점점 사진이 채워지는 구조.
+//
+// 반경: 100m에서 시작해 결과가 부족하면(5개 미만) 200m→300m로 자동 확장한다. 사용자가 반경
+// 버튼을 직접 누르면 그 순간부터는 그 반경 고정(자동확장 끔) — 다음 시트를 열면 다시 자동모드로 리셋.
+const FOOD_RADII_LADDER = [100, 200, 300];
+const CAFE_EXCLUDE_KEYWORDS = ['보드게임', '만화', '룸카페', '키즈카페', '스터디카페', 'PC방', '오락'];
+let FOOD_STATE = { tab: 'food', food: [], cafe: [], radiusM: FOOD_RADII_LADDER[0], autoRadius: true, ref: null, mapLayers: [] };
+let CURATED_PLACES = [];
+let curatedLoadPromise = null;
 
-async function fetchCategory(code, lat, lng, radius) {
-  const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=${code}&x=${lng}&y=${lat}&radius=${radius}&sort=distance`;
+function loadCuratedPlaces() {
+  if (!curatedLoadPromise) {
+    curatedLoadPromise = fetch('places.json').then(r => r.ok ? r.json() : []).then(d => { CURATED_PLACES = d; }).catch(() => { CURATED_PLACES = []; });
+  }
+  return curatedLoadPromise;
+}
+
+async function fetchKeyword(query, code, lat, lng, radius) {
+  const url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(query)}&category_group_code=${code}&x=${lng}&y=${lat}&radius=${radius}`;
   const res = await fetch(url, { headers: { Authorization: 'KakaoAK ' + KAKAO_REST_KEY } });
   if (!res.ok) throw new Error('food api ' + res.status);
   const data = await res.json();
-  return (data.documents || []).map(d => ({
-    name: d.place_name, category: (d.category_name || '').split(' > ').slice(1).join(' · '),
+  let items = (data.documents || []).map(d => ({
+    id: d.id, name: d.place_name, category: (d.category_name || '').split(' > ').slice(1).join(' · '),
     distance: parseInt(d.distance, 10) || 0, url: d.place_url,
     lat: parseFloat(d.y), lng: parseFloat(d.x),
   }));
+  if (code === 'CE7') {
+    items = items.filter(it => !CAFE_EXCLUDE_KEYWORDS.some(k => it.category.includes(k) || it.name.includes(k)));
+  }
+  return items;
+}
+
+function applyCuration(items, category) {
+  const byId = new Map(CURATED_PLACES.filter(p => p.category === category).map(p => [p.placeId, p]));
+  const withCuration = items.map(it => {
+    const c = byId.get(it.id);
+    return c ? { ...it, photo: c.photo, note: c.note || '' } : it;
+  });
+  // 사진(큐레이션) 있는 곳을 우선 노출
+  withCuration.sort((a, b) => (b.photo ? 1 : 0) - (a.photo ? 1 : 0));
+  return withCuration;
+}
+
+async function searchOneCategory(query, code, category, lat, lng) {
+  if (!FOOD_STATE.autoRadius) {
+    const items = await fetchKeyword(query, code, lat, lng, FOOD_STATE.radiusM);
+    return { items: applyCuration(items, category).slice(0, 5), radius: FOOD_STATE.radiusM };
+  }
+  let items = [];
+  let usedRadius = FOOD_RADII_LADDER[0];
+  for (const r of FOOD_RADII_LADDER) {
+    items = await fetchKeyword(query, code, lat, lng, r);
+    usedRadius = r;
+    if (items.length >= 5 || r === FOOD_RADII_LADDER[FOOD_RADII_LADDER.length - 1]) break;
+  }
+  return { items: applyCuration(items, category).slice(0, 5), radius: usedRadius };
 }
 
 // "현위치" 입력 그대로면 S.pos, 그 외엔 지하철역 이름으로 간주해 기존 역 검색 로직을 재사용한다.
@@ -778,14 +829,18 @@ async function runFoodSearch() {
   if (!ref) return;
   const list = document.getElementById('foodList');
   list.innerHTML = `<div class="food-loading">${t('foodLoading')}</div>`;
-  document.getElementById('foodSheetSub').textContent = `${ref.label} · ${t('foodRadius', FOOD_STATE.radiusM)}`;
+  document.getElementById('foodSheetSub').textContent = ref.label;
   try {
-    const [food, cafe] = await Promise.all([
-      fetchCategory('FD6', ref.lat, ref.lng, FOOD_STATE.radiusM),
-      fetchCategory('CE7', ref.lat, ref.lng, FOOD_STATE.radiusM),
+    await loadCuratedPlaces();
+    const [foodResult, cafeResult] = await Promise.all([
+      searchOneCategory('맛집', 'FD6', 'food', ref.lat, ref.lng),
+      searchOneCategory('카페', 'CE7', 'cafe', ref.lat, ref.lng),
     ]);
-    FOOD_STATE.food = food.slice(0, 5);
-    FOOD_STATE.cafe = cafe.slice(0, 5);
+    FOOD_STATE.food = foodResult.items;
+    FOOD_STATE.cafe = cafeResult.items;
+    FOOD_STATE.foodRadius = foodResult.radius;
+    FOOD_STATE.cafeRadius = cafeResult.radius;
+    updateFoodSub();
     renderFoodList();
   } catch (e) {
     list.innerHTML = `<div class="food-empty">${t('foodFail')}</div>`;
@@ -794,13 +849,15 @@ async function runFoodSearch() {
 
 function setFoodRadius(m) {
   FOOD_STATE.radiusM = m;
+  FOOD_STATE.autoRadius = false;
   document.querySelectorAll('.food-radius-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.r, 10) === m));
   if (FOOD_STATE.ref) runFoodSearch();
 }
 
 async function openFoodSheet() {
   document.getElementById('foodOverlay').classList.add('show');
-  // 시트를 열 때마다 항상 "현위치"부터 새로 검색 (기본값 요구사항)
+  // 시트를 열 때마다 항상 "현위치"부터, 반경도 자동모드로 새로 검색 (기본값 요구사항)
+  FOOD_STATE.autoRadius = true;
   document.getElementById('foodPlaceInput').value = t('foodCurrentLoc');
   await runFoodSearchFromInput();
 }
@@ -814,7 +871,16 @@ function switchFoodTab(tab) {
   FOOD_STATE.tab = tab;
   document.getElementById('foodTabFood').classList.toggle('active', tab === 'food');
   document.getElementById('foodTabCafe').classList.toggle('active', tab === 'cafe');
+  updateFoodSub();
   renderFoodList();
+}
+
+function updateFoodSub() {
+  const ref = FOOD_STATE.ref;
+  if (!ref) return;
+  const radius = FOOD_STATE.tab === 'cafe' ? FOOD_STATE.cafeRadius : FOOD_STATE.foodRadius;
+  document.querySelectorAll('.food-radius-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.r, 10) === radius));
+  document.getElementById('foodSheetSub').textContent = `${ref.label} · ${t('foodRadius', radius)}`;
 }
 
 function buildWalkLink(ref, item) {
@@ -828,12 +894,17 @@ function renderFoodList() {
   const list = document.getElementById('foodList');
   if (!items.length) { list.innerHTML = `<div class="food-empty">${t('foodEmpty')}</div>`; return; }
   const ref = FOOD_STATE.ref;
+  const fallbackIcon = FOOD_STATE.tab === 'cafe' ? '☕' : '🍚';
   list.innerHTML = items.map((it, i) => `
     <div class="food-item">
-      <span class="food-rank${FOOD_STATE.tab === 'cafe' ? ' cafe' : ''}">${i + 1}</span>
+      <div class="food-thumb">
+        <span class="food-rank${FOOD_STATE.tab === 'cafe' ? ' cafe' : ''}">${i + 1}</span>
+        ${it.photo ? `<img src="${it.photo}" alt="${it.name}" loading="lazy">` : fallbackIcon}
+      </div>
       <a class="food-info" href="${it.url}" target="_blank" rel="noopener">
         <div class="food-name">${it.name}</div>
         <div class="food-cat">${it.category}</div>
+        ${it.note ? `<div class="food-note">${it.note}</div>` : ''}
       </a>
       <span class="food-dist">${t('foodDist', it.distance)}</span>
       <a class="food-nav" href="${buildWalkLink(ref, it)}" target="_blank" rel="noopener" title="${t('foodWalkNav')}">🧭</a>
