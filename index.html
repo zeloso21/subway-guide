@@ -166,6 +166,7 @@
     <div class="chips">
       <button class="chip" id="near">📍 내 주변</button>
       <button class="chip" id="free">무료만</button>
+      <button class="chip" id="sema">시립미술관</button>
       <select class="chip" id="gu"><option value="">모든 자치구</option></select>
       <select class="chip" id="sort">
         <option value="end">마감 임박순</option>
@@ -191,7 +192,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script>
   const $ = s => document.querySelector(s);
-  const S = { all: [], view: [], status: 'now', free: false, gu: '', sort: 'end', q: '', me: null, shown: 30, map: null, layer: null, markers: new Map(), selected: null };
+  const S = { all: [], view: [], status: 'now', free: false, sema: false, gu: '', sort: 'end', q: '', me: null, shown: 30, map: null, layer: null, markers: new Map(), selected: null };
 
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
@@ -207,11 +208,14 @@
     const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLng / 2) ** 2;
     return 2 * R * Math.asin(Math.sqrt(h));
   }
+  // 시립미술관 API에서 온 전시, 또는 문화행사 정보 중 시립미술관 분관 전시
+  const isSema = e => e.source === 'sema' || e.source === 'both' || /서울시립|시립미술관/.test(`${e.title} ${e.place} ${e.org}`);
   const fmtDist = km => km < 1 ? `${Math.round(km * 1000)}m` : `${km.toFixed(1)}km`;
 
   function badges(e) {
     const out = [];
     if (e.free) out.push('<span class="badge free">무료</span>');
+    if (isSema(e)) out.push('<span class="badge">시립미술관</span>');
     if (e.start > TODAY) {
       out.push(`<span class="badge">D-${daysBetween(TODAY, e.start)} 개막</span>`);
     } else {
@@ -237,6 +241,7 @@
       if (S.status === 'now' && !(e.start <= TODAY && e.end >= TODAY)) return false;
       if (S.status === 'soon' && !(e.start > TODAY)) return false;
       if (S.free && !e.free) return false;
+      if (S.sema && !isSema(e)) return false;
       if (S.gu && e.gu !== S.gu) return false;
       if (q && !`${e.title} ${e.place} ${e.artist} ${e.org}`.toLowerCase().includes(q)) return false;
       return true;
@@ -341,6 +346,7 @@
       ['기간', period(e)],
       ['장소', [e.place, e.gu].filter(Boolean).join(' · ')],
       ['요금', e.fee || (e.free ? '무료' : '')],
+      ['관람', e.hours],
       ['대상', e.target],
       ['작가', e.artist],
       ['주최', e.org],
@@ -358,7 +364,7 @@
           <a class="btn primary" href="${esc(dir)}" target="_blank" rel="noopener" aria-disabled="${!dir}">길찾기</a>
           <a class="btn" href="${esc(link)}" target="_blank" rel="noopener" aria-disabled="${!link}">전시 홈페이지</a>
         </div>
-        <p class="source">출처: 서울 열린데이터광장 · 서울시 문화행사 정보. 방문 전 운영 시간과 휴관일을 꼭 확인하세요.</p>
+        <p class="source">출처: 서울 열린데이터광장 · ${e.source === 'sema' ? '서울시립미술관 전시 정보' : e.source === 'both' ? '서울시 문화행사 정보, 서울시립미술관 전시 정보' : '서울시 문화행사 정보'}. 방문 전 운영 시간과 휴관일을 꼭 확인하세요.</p>
       </div>`;
     $('#close').onclick = closeDetail;
     document.body.classList.add('sheet-open');
@@ -384,6 +390,7 @@
     apply();
   });
   $('#free').onclick = () => { S.free = !S.free; $('#free').classList.toggle('on', S.free); apply(); };
+  $('#sema').onclick = () => { S.sema = !S.sema; $('#sema').classList.toggle('on', S.sema); apply(); };
   $('#gu').onchange = ev => { S.gu = ev.target.value; $('#gu').classList.toggle('on', !!S.gu); apply(); };
   $('#sort').onchange = ev => {
     if (ev.target.value === 'dist' && !S.me) { locate(); return; }
