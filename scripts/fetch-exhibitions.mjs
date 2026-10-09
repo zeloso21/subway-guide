@@ -49,9 +49,12 @@ function day(s) {
 }
 const https = u => (u || '').trim().replace(/^http:\/\//i, 'https://');
 // HTML 설명을 줄바꿈만 살린 평문으로
-const text = s => String(s || '').replace(/<br\s*\/?>|<\/p>/gi, '\n').replace(/<[^>]+>/g, '')
-  .replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&')
-  .replace(/[ \t]+/g, ' ').replace(/\s*\n\s*/g, '\n').trim();
+const ENTITIES = { nbsp: ' ', lt: '<', gt: '>', quot: '"', apos: "'", amp: '&', ndash: '–', mdash: '—', middot: '·', hellip: '…',
+  lsquo: '‘', rsquo: '’', ldquo: '“', rdquo: '”', laquo: '«', raquo: '»', times: '×', bull: '•' };
+const decode = s => s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) =>
+  e[0] === '#' ? String.fromCodePoint(e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : +e.slice(1)) : ENTITIES[e.toLowerCase()] ?? m);
+const text = s => decode(String(s || '').replace(/<br\s*\/?>|<\/p>/gi, '\n').replace(/<[^>]+>/g, ''))
+  .replace(/[ \t\u00a0]+/g, ' ').replace(/\s*\n\s*/g, '\n').trim();
 // 필드 이름이 달라도 버티도록 후보 중 값이 있는 첫 필드를 쓴다.
 const pick = (r, ...names) => { for (const n of names) if (r[n] != null && String(r[n]).trim()) return String(r[n]).trim(); return ''; };
 // 제목 비교용: 앞의 [기관명], 기호, 공백 제거
@@ -91,7 +94,7 @@ for (const r of cultural) {
     free: r.IS_FREE === '무료',
     target: (r.USE_TRGT || '').trim(),
     artist: (r.PLAYER || '').trim(),
-    desc: (r.PROGRAM || r.ETC_DESC || '').trim(),
+    desc: text(r.PROGRAM || r.ETC_DESC),
     image: https(r.MAIN_IMG),
     link: https(r.ORG_LINK || r.HMPG_ADDR),
     lat: ll ? ll[0] : null,
@@ -103,14 +106,15 @@ const culturalCount = items.length;
 
 // 2) 서울시립미술관 전시 정보 — 실패해도 문화행사 데이터는 저장한다.
 // 시립미술관 분관 위치. 문화행사 데이터에 같은 분관이 있으면 그 좌표·자치구를 먼저 쓴다.
+// (key는 다른 장소와 헷갈리지 않도록 분관 이름 전체를 쓴다. 예: '북서울'은 북서울꿈의숲과 겹침)
 const SEMA_BRANCHES = [
-  { key: '서소문', name: '서울시립미술관 서소문본관', gu: '중구', lat: 37.5641, lng: 126.9737 },
-  { key: '북서울', name: '서울시립 북서울미술관', gu: '노원구', lat: 37.6407, lng: 127.0666 },
-  { key: '남서울', name: '서울시립 남서울미술관', gu: '관악구', lat: 37.4758, lng: 126.9794 },
-  { key: '서서울', name: '서울시립 서서울미술관', gu: '금천구', lat: null, lng: null },
-  { key: '사진미술관', name: '서울시립 사진미술관', gu: '도봉구', lat: null, lng: null },
-  { key: '미술아카이브', name: '서울시립 미술아카이브', gu: '종로구', lat: null, lng: null },
-  { key: '백남준', name: '백남준기념관', gu: '종로구', lat: null, lng: null },
+  { key: '서소문본관', gu: '중구', lat: 37.5641, lng: 126.9737 },
+  { key: '북서울미술관', gu: '노원구', lat: 37.6407, lng: 127.0666 },
+  { key: '남서울미술관', gu: '관악구', lat: 37.4758, lng: 126.9794 },
+  { key: '서서울미술관', gu: '금천구', lat: null, lng: null },
+  { key: '사진미술관', gu: '도봉구', lat: null, lng: null },
+  { key: '미술아카이브', gu: '종로구', lat: null, lng: null },
+  { key: '백남준', gu: '종로구', lat: null, lng: null },
 ];
 for (const b of SEMA_BRANCHES) {
   const hit = cultural.find(r => (r.PLACE || '').includes(b.key) && coords(r.LAT, r.LOT));
@@ -129,19 +133,22 @@ try {
     const start = day(pick(r, 'DP_START', 'DP_START_DATE', 'STRTDATE'));
     const end = day(pick(r, 'DP_END', 'DP_END_DATE', 'END_DATE'));
     if (!title || !end || end < today) continue;
-    const place = text(pick(r, 'DP_PLACE', 'PLACE'));
-    const branch = SEMA_BRANCHES.find(b => place.includes(b.key)) || SEMA_BRANCHES[0];
+    let place = text(pick(r, 'DP_PLACE', 'PLACE'));
+    if (place === '기타') place = '';
+    // 분관 밖(자치구 협력전 등)에서 열리는 전시는 위치를 알 수 없어 지도에 찍지 않는다.
+    const branch = SEMA_BRANCHES.find(b => place.includes(b.key)) || { gu: '', lat: null, lng: null };
     const fee = text(pick(r, 'DP_VIEWCHARGE', 'DP_CHARGE', 'USE_FEE'));
     const sema = {
       title,
       category: '전시/미술',
       gu: branch.gu,
-      place: place || branch.name,
+      place: place || '서울시립미술관 (장소는 전시 홈페이지 참고)',
       org: '서울시립미술관',
       start, end,
       fee,
       free: !fee || /무료/.test(fee),
       target: '',
+      hours: text(pick(r, 'DP_VIEWTIME')),
       artist: text(pick(r, 'DP_ARTIST', 'PLAYER')),
       desc: text(pick(r, 'DP_INFO', 'DP_DESC', 'DP_SUBNAME')),
       image: https(pick(r, 'DP_MAIN_IMG', 'DP_IMG', 'MAIN_IMG')),
@@ -156,7 +163,7 @@ try {
       norm(e.title).length > 3 &&
       (norm(e.title).includes(n) || n.includes(norm(e.title))) && e.start <= end && start <= e.end);
     if (dup) {
-      for (const k of ['artist', 'desc', 'image', 'link', 'fee']) if (!dup[k] && sema[k]) dup[k] = sema[k];
+      for (const k of ['artist', 'desc', 'image', 'link', 'fee', 'hours']) if (!dup[k] && sema[k]) dup[k] = sema[k];
       dup.source = 'both';
       semaMerged++;
     } else {

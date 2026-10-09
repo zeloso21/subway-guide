@@ -346,6 +346,7 @@
       ['기간', period(e)],
       ['장소', [e.place, e.gu].filter(Boolean).join(' · ')],
       ['요금', e.fee || (e.free ? '무료' : '')],
+      ['관람', e.hours],
       ['대상', e.target],
       ['작가', e.artist],
       ['주최', e.org],
