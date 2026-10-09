@@ -138,16 +138,13 @@
     .btn[aria-disabled="true"] { opacity: .4; pointer-events: none; }
     .source { margin-top: 18px; font-size: 11px; color: var(--ink-3); }
 
-    /* 지도 자리에 띄우는 전시 홈페이지 */
+    /* 지도 위 길찾기 패널 */
     .panel { position: absolute; inset: 0; z-index: 1050; background: var(--surface); display: none; flex-direction: column; }
     .panel.on { display: flex; }
     .panel-head { display: flex; align-items: center; gap: 8px; padding: 10px 10px 10px 14px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
     .panel-title { flex: 1; min-width: 0; font-family: var(--serif); font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .panel-btn { flex-shrink: 0; height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; }
     .panel-x { width: 32px; height: 32px; border-radius: 50%; border: 0; background: var(--chip); cursor: pointer; flex-shrink: 0; font-size: 15px; }
-    .web-hint { font-size: 12px; color: var(--ink-3); padding: 6px 14px; border-bottom: 1px solid var(--line); }
-    #webPanel iframe { flex: 1; width: 100%; border: 0; background: #fff; }
-    body.web-open .viewtoggle { display: none; }
     #routePanel { inset: 10px 10px auto 10px; border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
     .panel-body { padding: 12px 14px; font-size: 14px; color: var(--ink-2); line-height: 1.6; }
     .route-sum { font-size: 15px; color: var(--ink); }
@@ -205,7 +202,6 @@
     <div id="mapWrap">
       <div id="map"></div>
       <section class="panel" id="routePanel" aria-label="길찾기"></section>
-      <section class="panel" id="webPanel" aria-label="전시 홈페이지"></section>
     </div>
   </main>
 
@@ -389,12 +385,11 @@
         ${e.desc ? `<p class="desc">${esc(e.desc.slice(0, 600))}${e.desc.length > 600 ? '…' : ''}</p>` : ''}
         <div class="actions">
           <button class="btn primary" id="goRoute" aria-disabled="${e.lat == null}">길찾기</button>
-          <button class="btn" id="goWeb" aria-disabled="${!link}">전시 홈페이지</button>
+          <a class="btn" href="${esc(link)}" target="_blank" rel="noopener" aria-disabled="${!link}">전시 홈페이지</a>
         </div>
         <p class="source">출처: 서울 열린데이터광장 · ${e.source === 'sema' ? '서울시립미술관 전시 정보' : e.source === 'both' ? '서울시 문화행사 정보, 서울시립미술관 전시 정보' : '서울시 문화행사 정보'}. 방문 전 운영 시간과 휴관일을 꼭 확인하세요.</p>
       </div>`;
     $('#close').onclick = closeDetail;
-    $('#goWeb').onclick = () => showWeb(e);
     $('#goRoute').onclick = () => showRoute(e);
     document.body.classList.add('sheet-open');
     $('#sheet').scrollTop = 0;
@@ -458,7 +453,6 @@
   async function showRoute(e) {
     if (e.lat == null) return;
     closeDetail();
-    closeWeb();
     setView('map');
     ensureMap();
     if (!S.map) return;
@@ -502,34 +496,6 @@
     $('#routePanel').classList.remove('on');
     $('#routePanel').innerHTML = '';
     S.routeLayer?.clearLayers();
-  }
-
-  // 전시 홈페이지를 지도 자리에 띄운다
-  function showWeb(e) {
-    const url = safeUrl(e.link);
-    if (!url) return;
-    closeDetail();
-    closeRoute();
-    setView('map');
-    const p = $('#webPanel');
-    p.innerHTML = `
-      <div class="panel-head">
-        <div class="panel-title">${esc(e.title)}</div>
-        <button class="panel-btn" data-info>전시 정보</button>
-        <a class="panel-btn" href="${esc(url)}" target="_blank" rel="noopener">새 창</a>
-        <button class="panel-x" data-close aria-label="닫기">✕</button>
-      </div>
-      <p class="web-hint">페이지가 비어 보이면 그 사이트가 다른 화면 안에 띄우는 걸 막아 둔 거예요. '새 창'으로 열어 주세요.</p>
-      <iframe src="${esc(url)}" title="${esc(e.title)} 홈페이지" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>`;
-    p.classList.add('on');
-    document.body.classList.add('web-open');
-    p.querySelector('[data-close]').onclick = closeWeb;
-    p.querySelector('[data-info]').onclick = () => openDetail(e);
-  }
-  function closeWeb() {
-    $('#webPanel').classList.remove('on');
-    $('#webPanel').innerHTML = '';
-    document.body.classList.remove('web-open');
   }
 
   function setView(v) {
