@@ -74,18 +74,7 @@
 
     /* 본문 */
     main { flex: 1; min-height: 0; display: flex; position: relative; }
-    #list { flex: 1; overflow-y: auto; padding: 12px 16px calc(84px + env(safe-area-inset-bottom)); }
-    #mapWrap { flex: 1; display: none; position: relative; }
-    #map { position: absolute; inset: 0; background: var(--chip); }
-    /* OSM 기본 타일은 색이 강해서, 채도를 빼고 밝게 눌러 갤러리 톤에 맞춘다 */
-    #map .leaflet-tile-pane { filter: grayscale(.85) sepia(.12) brightness(1.04) contrast(.9); }
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) #map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(.85) contrast(.85); }
-    }
-    :root[data-theme="dark"] #map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(.85) contrast(.85); }
-    body.view-map #list { display: none; }
-    body.view-map #mapWrap { display: block; }
-
+    #list { flex: 1; overflow-y: auto; padding: 12px 16px calc(24px + env(safe-area-inset-bottom)); }
     .card { display: flex; gap: 14px; padding: 12px; background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); margin-bottom: 10px; cursor: pointer; text-align: left; width: 100%; border: 0; }
     .card:active { transform: scale(.995); }
     .card.sel { outline: 2px solid var(--accent); }
@@ -104,18 +93,6 @@
     .empty code { background: var(--chip); padding: 1px 6px; border-radius: 4px; font-size: 13px; }
     .more { display: block; margin: 8px auto 0; height: 42px; padding: 0 24px; border-radius: 21px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 14px; }
 
-    /* 목록/지도 토글 */
-    .viewtoggle { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 500; display: flex; background: var(--ink); border-radius: 24px; padding: 4px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
-    .viewtoggle button { border: 0; background: none; color: var(--bg); opacity: .6; height: 38px; padding: 0 18px; border-radius: 20px; font-size: 14px; font-weight: 700; cursor: pointer; }
-    .viewtoggle button.on { opacity: 1; background: rgba(255,255,255,.14); }
-
-    /* 지도 마커 */
-    .pin { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
-    .pin.free { background: #16A34A; }
-    .leaflet-popup-content { font-family: var(--sans); margin: 10px 12px; }
-    .pop-title { font-family: var(--serif); font-weight: 700; font-size: 14px; margin-bottom: 2px; }
-    .pop-meta { font-size: 12px; color: #5E5A52; }
-    .pop-btn { margin-top: 6px; font-size: 12px; font-weight: 700; color: #C2410C; background: none; border: 0; padding: 0; cursor: pointer; }
 
     /* 상세 시트 */
     .sheet-bg { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 1100; opacity: 0; pointer-events: none; transition: opacity .2s; }
@@ -138,30 +115,36 @@
     .btn[aria-disabled="true"] { opacity: .4; pointer-events: none; }
     .source { margin-top: 18px; font-size: 11px; color: var(--ink-3); }
 
-    /* 지도 위 길찾기 패널 */
-    .panel { position: absolute; inset: 0; z-index: 1050; background: var(--surface); display: none; flex-direction: column; }
-    .panel.on { display: flex; }
-    .panel-head { display: flex; align-items: center; gap: 8px; padding: 10px 10px 10px 14px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
-    .panel-title { flex: 1; min-width: 0; font-family: var(--serif); font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .panel-btn { flex-shrink: 0; height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; }
-    .panel-x { width: 32px; height: 32px; border-radius: 50%; border: 0; background: var(--chip); cursor: pointer; flex-shrink: 0; font-size: 15px; }
-    #routePanel { inset: 10px 10px auto 10px; border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
-    .panel-body { padding: 12px 14px; font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+    /* 상세 안 길찾기 */
+    .route-box { margin-top: 16px; padding: 14px; border-radius: 12px; background: var(--chip); font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+    .route-box[hidden] { display: none; }
     .route-sum { font-size: 15px; color: var(--ink); }
     .route-sum b { font-size: 20px; }
-    .panel-foot { margin-top: 6px; font-size: 12px; color: var(--ink-3); }
-    .panel-foot a { color: var(--ink-2); }
+    .route-map { height: 240px; margin-top: 10px; border-radius: 10px; overflow: hidden; background: var(--line); }
+    /* OSM 기본 타일은 색이 강해서, 채도를 빼고 밝게 눌러 갤러리 톤에 맞춘다 */
+    .route-map .leaflet-tile-pane { filter: grayscale(.85) sepia(.12) brightness(1.04) contrast(.9); }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .route-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(.85) contrast(.85); }
+    }
+    :root[data-theme="dark"] .route-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(.85) contrast(.85); }
+    .route-foot { margin-top: 8px; font-size: 12px; color: var(--ink-3); }
+    .route-foot a { color: var(--ink-2); }
+    .pin { width: 20px; height: 20px; border-radius: 50%; background: var(--accent); border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
+    .pick { display: none; }
+    .hero.ph { display: none; }
 
-    /* 넓은 화면: 목록 + 지도 나란히 */
+    /* 넓은 화면: 왼쪽 목록 + 오른쪽 상세 (포스터 옆에 정보) */
     @media (min-width: 900px) {
-      body { max-width: none; }
       header, .controls { padding-left: 24px; padding-right: 24px; }
-      #list { flex: 0 0 440px; display: block !important; padding-bottom: 24px; border-right: 1px solid var(--line); }
-      #mapWrap { display: block !important; }
-      #routePanel { left: 10px; right: auto; width: 360px; }
-      .viewtoggle { display: none; }
-      .sheet { left: auto; right: 24px; bottom: 24px; top: 24px; width: 440px; max-height: none; border-radius: 20px; transform: translateX(120%); }
-      body.sheet-open .sheet { transform: none; }
+      #list { flex: 0 0 440px; border-right: 1px solid var(--line); }
+      .sheet { position: static; flex: 1; min-width: 0; max-height: none; border-radius: 0; transform: none; transition: none; background: var(--bg); padding: 24px 32px 32px; }
+      .sheet-bg, .sheet-grip { display: none; }
+      .detail-grid { display: grid; grid-template-columns: minmax(220px, 340px) 1fr; gap: 28px; align-items: start; max-width: 1040px; }
+      .hero { width: 100%; max-height: none; margin: 0; position: sticky; top: 0; box-shadow: var(--shadow); }
+      .detail { padding: 0; }
+      .detail h2 { font-size: 26px; }
+      .hero.ph { display: grid; place-items: center; aspect-ratio: 3 / 4; font-family: var(--serif); font-size: 56px; color: var(--ink-3); }
+      .pick { display: grid; place-items: center; height: 100%; color: var(--ink-3); font-family: var(--serif); font-size: 18px; }
     }
   </style>
 </head>
@@ -199,24 +182,16 @@
 
   <main>
     <div id="list" aria-live="polite"></div>
-    <div id="mapWrap">
-      <div id="map"></div>
-      <section class="panel" id="routePanel" aria-label="길찾기"></section>
-    </div>
+    <article class="sheet" id="sheet" aria-label="전시 상세"><div class="pick">왼쪽에서 전시를 골라 주세요</div></article>
   </main>
 
-  <nav class="viewtoggle">
-    <button data-v="list" class="on">목록</button>
-    <button data-v="map">지도</button>
-  </nav>
-
   <div class="sheet-bg" id="sheetBg"></div>
-  <article class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="전시 상세"></article>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script>
   const $ = s => document.querySelector(s);
-  const S = { all: [], view: [], status: 'now', free: false, sema: false, gu: '', sort: 'start', q: '', me: null, shown: 30, map: null, layer: null, markers: new Map(), selected: null };
+  const S = { all: [], view: [], status: 'now', free: false, sema: false, gu: '', sort: 'start', q: '', me: null, shown: 30, selected: null, routeMap: null };
+  const isWide = () => matchMedia('(min-width: 900px)').matches;
 
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
@@ -279,7 +254,8 @@
     S.view = v.sort(by);
     S.shown = 30;
     renderList();
-    renderMap();
+    // 넓은 화면에서는 오른쪽에 늘 상세를 보여준다
+    if (isWide() && S.view.length && !S.view.includes(S.selected)) openDetail(S.view[0]);
     const label = { now: '지금 볼 수 있는 전시', soon: '곧 시작하는 전시', all: '진행 중·예정 전시' }[S.status];
     $('#summary').innerHTML = `${label} <b>${S.view.length.toLocaleString()}</b>곳${S.gu ? ` · ${esc(S.gu)}` : ''}`;
   }
@@ -311,56 +287,6 @@
     if (c) openDetail(S.all[+c.dataset.i]);
   });
 
-  // 지도
-  function ensureMap() {
-    if (S.map || !window.L) return;
-    S.map = L.map('map', { zoomControl: false }).setView([37.5665, 126.978], 12);
-    L.control.zoom({ position: 'topright' }).addTo(S.map);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(S.map);
-    S.layer = L.layerGroup().addTo(S.map);
-    S.map.on('popupopen', ev => {
-      const b = ev.popup.getElement().querySelector('.pop-btn');
-      if (b) b.onclick = () => openDetail(S.all[+b.dataset.i]);
-    });
-    renderMap();
-  }
-
-  function renderMap() {
-    if (!S.map) return;
-    S.layer.clearLayers();
-    S.markers.clear();
-    // 같은 장소의 전시는 한 마커로 묶는다
-    const groups = new Map();
-    for (const e of S.view) {
-      if (e.lat == null) continue;
-      const k = `${e.lat.toFixed(5)},${e.lng.toFixed(5)}`;
-      if (!groups.has(k)) groups.set(k, []);
-      groups.get(k).push(e);
-    }
-    const pts = [];
-    for (const g of groups.values()) {
-      const e0 = g[0];
-      const icon = L.divIcon({ className: '', html: `<div class="pin${g.every(e => e.free) ? ' free' : ''}"></div>`, iconSize: [14, 14] });
-      const html = g.slice(0, 5).map(e => `
-        <div style="margin-bottom:6px">
-          <div class="pop-title">${esc(e.title)}</div>
-          <div class="pop-meta">${period(e)}${e.free ? ' · 무료' : ''}</div>
-          <button class="pop-btn" data-i="${S.all.indexOf(e)}">자세히 보기 →</button>
-        </div>`).join('') +
-        `<div class="pop-meta">${esc(e0.place)}${g.length > 5 ? ` 외 ${g.length - 5}건` : ''}</div>`;
-      const m = L.marker([e0.lat, e0.lng], { icon }).bindPopup(html, { maxWidth: 240 }).addTo(S.layer);
-      g.forEach(e => S.markers.set(e, m));
-      pts.push([e0.lat, e0.lng]);
-    }
-    if (S.me) {
-      L.circleMarker([S.me.lat, S.me.lng], { radius: 7, color: '#fff', weight: 2, fillColor: '#2563EB', fillOpacity: 1 }).addTo(S.layer);
-    }
-    if (pts.length && !S.selected) S.map.fitBounds(pts, { padding: [30, 30], maxZoom: 15, animate: false });
-  }
-
   // 상세
   function openDetail(e) {
     S.selected = e;
@@ -375,9 +301,12 @@
       ['주최', e.org],
       ['거리', e._dist != null ? fmtDist(e._dist) : ''],
     ].filter(r => r[1]);
+    S.routeMap?.remove();
+    S.routeMap = null;
     $('#sheet').innerHTML = `
       <div class="sheet-grip"><button class="close" id="close" aria-label="닫기">✕</button></div>
-      ${safeUrl(e.image) ? `<img class="hero" src="${esc(e.image)}" alt="${esc(e.title)} 포스터" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+      <div class="detail-grid">
+      ${poster(e, 'hero')}
       <div class="detail">
         <h2>${esc(e.title)}</h2>
         <div class="badges" style="margin-bottom:14px">${badges(e)}</div>
@@ -387,7 +316,9 @@
           <button class="btn primary" id="goRoute" aria-disabled="${e.lat == null}">길찾기</button>
           <a class="btn" href="${esc(link)}" target="_blank" rel="noopener" aria-disabled="${!link}">전시 홈페이지</a>
         </div>
+        <div class="route-box" id="routeBox" hidden></div>
         <p class="source">출처: 서울 열린데이터광장 · ${e.source === 'sema' ? '서울시립미술관 전시 정보' : e.source === 'both' ? '서울시 문화행사 정보, 서울시립미술관 전시 정보' : '서울시 문화행사 정보'}. 방문 전 운영 시간과 휴관일을 꼭 확인하세요.</p>
+      </div>
       </div>`;
     $('#close').onclick = closeDetail;
     $('#goRoute').onclick = () => showRoute(e);
@@ -395,13 +326,10 @@
     $('#sheet').scrollTop = 0;
     document.querySelectorAll('.card.sel').forEach(c => c.classList.remove('sel'));
     document.querySelector(`.card[data-i="${S.all.indexOf(e)}"]`)?.classList.add('sel');
-    if (S.map && e.lat != null && getComputedStyle($('#mapWrap')).display !== 'none') {
-      S.map.setView([e.lat, e.lng], Math.max(S.map.getZoom(), 15));
-    }
   }
   function closeDetail() {
     document.body.classList.remove('sheet-open');
-    S.selected = null;
+    if (!isWide()) S.selected = null;
   }
   $('#sheetBg').onclick = closeDetail;
   addEventListener('keydown', ev => { if (ev.key === 'Escape') closeDetail(); });
@@ -441,7 +369,6 @@
       S.sort = 'dist'; $('#sort').value = 'dist';
       $('#near').classList.add('on');
       apply();
-      if (S.map) S.map.setView([S.me.lat, S.me.lng], 14);
     } catch (err) {
       $('#sort').value = S.sort;
       alert(err.message);
@@ -449,64 +376,39 @@
     $('#near').textContent = '📍 내 주변';
   }
 
-  // 길찾기: 내 위치와 전시장을 지도에 함께 띄우고 거리·예상 도보 시간을 보여준다
+  // 길찾기: 상세 안에 작은 지도를 띄워 내 위치·전시장·직선거리·예상 도보 시간을 보여준다
   async function showRoute(e) {
     if (e.lat == null) return;
-    closeDetail();
-    setView('map');
-    ensureMap();
-    if (!S.map) return;
+    const box = $('#routeBox');
     const kakao = `https://map.kakao.com/link/to/${encodeURIComponent(e.place || e.title)},${e.lat},${e.lng}`;
-    const panel = body => {
-      const p = $('#routePanel');
-      p.innerHTML = `
-        <div class="panel-head">
-          <div class="panel-title">${esc(e.place || e.title)}까지</div>
-          <button class="panel-btn" data-info>전시 정보</button>
-          <button class="panel-x" data-close aria-label="닫기">✕</button>
-        </div>
-        <div class="panel-body">${body}
-          <p class="panel-foot">대중교통 경로는 <a href="${esc(kakao)}" target="_blank" rel="noopener">카카오맵에서 보기</a></p>
-        </div>`;
-      p.classList.add('on');
-      p.querySelector('[data-close]').onclick = closeRoute;
-      p.querySelector('[data-info]').onclick = () => openDetail(e);
-    };
-    panel('<p>내 위치를 확인하는 중…</p>');
+    const foot = `<p class="route-foot">대중교통 경로는 <a href="${esc(kakao)}" target="_blank" rel="noopener">카카오맵에서 보기</a></p>`;
+    box.hidden = false;
+    box.innerHTML = '내 위치를 확인하는 중…';
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     let me;
-    try { me = await getPosition(); } catch (err) { panel(`<p>${esc(err.message)}</p>`); return; }
-    if (!S.routeLayer) S.routeLayer = L.layerGroup().addTo(S.map);
-    S.routeLayer.clearLayers();
-    const a = [me.lat, me.lng], b = [e.lat, e.lng];
-    L.polyline([a, b], { color: '#6B7280', weight: 4, dashArray: '2 8', lineCap: 'round' }).addTo(S.routeLayer);
-    L.circleMarker(a, { radius: 8, color: '#fff', weight: 3, fillColor: '#2563EB', fillOpacity: 1 }).bindTooltip('내 위치').addTo(S.routeLayer);
-    L.marker(b, { icon: L.divIcon({ className: '', html: '<div class="pin" style="width:20px;height:20px;border-width:3px"></div>', iconSize: [20, 20] }) })
-      .bindTooltip(e.place || e.title).addTo(S.routeLayer);
+    try { me = await getPosition(); } catch (err) { box.innerHTML = esc(err.message) + foot; return; }
+    if (S.selected !== e) return; // 위치를 기다리는 사이 다른 전시를 고른 경우
     const km = distKm(me, e);
     // 실제 길은 직선보다 길어서 1.3배로 보정하고, 시속 4.5km로 걷는다고 계산
     const min = Math.max(1, Math.round(km * 1.3 / 4.5 * 60));
     const walk = min < 60 ? `도보 약 ${min}분` : `도보 약 ${Math.floor(min / 60)}시간 ${min % 60}분`;
-    panel(`<p class="route-sum"><b>${fmtDist(km)}</b> · ${walk}</p><p>점선은 직선 방향이에요.${km > 2 ? ' 거리가 멀어서 대중교통을 추천해요.' : ''}</p>`);
-    S.map.invalidateSize(); // 목록 화면에서 막 넘어온 경우 지도 크기를 다시 잡는다
-    const wide = matchMedia('(min-width: 900px)').matches;
-    const top = $('#routePanel').offsetHeight;
-    S.map.fitBounds([a, b], { paddingTopLeft: [wide ? 390 : 30, wide ? 40 : top + 30], paddingBottomRight: [30, wide ? 40 : 90], maxZoom: 16, animate: false });
+    box.innerHTML = `<p class="route-sum"><b>${fmtDist(km)}</b> · ${walk}</p>
+      <p>점선은 직선 방향이에요.${km > 2 ? ' 거리가 멀어서 대중교통을 추천해요.' : ''}</p>
+      <div class="route-map" id="routeMap"></div>${foot}`;
+    if (!window.L) return;
+    S.routeMap?.remove();
+    const map = S.routeMap = L.map('routeMap', { zoomControl: false, attributionControl: true });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+    const a = [me.lat, me.lng], b = [e.lat, e.lng];
+    L.polyline([a, b], { color: '#6B7280', weight: 4, dashArray: '2 8', lineCap: 'round' }).addTo(map);
+    L.circleMarker(a, { radius: 8, color: '#fff', weight: 3, fillColor: '#2563EB', fillOpacity: 1 }).bindTooltip('내 위치').addTo(map);
+    L.marker(b, { icon: L.divIcon({ className: '', html: '<div class="pin"></div>', iconSize: [20, 20] }) }).bindTooltip(e.place || e.title).addTo(map);
+    map.fitBounds([a, b], { padding: [28, 28], maxZoom: 16, animate: false });
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
-  function closeRoute() {
-    $('#routePanel').classList.remove('on');
-    $('#routePanel').innerHTML = '';
-    S.routeLayer?.clearLayers();
-  }
-
-  function setView(v) {
-    document.body.classList.toggle('view-map', v === 'map');
-    document.querySelectorAll('.viewtoggle button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
-    if (v === 'map') { ensureMap(); setTimeout(() => S.map && S.map.invalidateSize(), 50); }
-  }
-  document.querySelector('.viewtoggle').addEventListener('click', ev => {
-    const b = ev.target.closest('button'); if (b) setView(b.dataset.v);
-  });
-  matchMedia('(min-width: 900px)').addEventListener('change', m => { if (m.matches) { ensureMap(); S.map?.invalidateSize(); } });
 
   // 데이터 로드
   async function load() {
@@ -531,8 +433,8 @@
     const gus = [...new Set(S.all.map(e => e.gu).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ko'));
     $('#gu').insertAdjacentHTML('beforeend', gus.map(g => `<option>${esc(g)}</option>`).join(''));
     apply();
-    if (matchMedia('(min-width: 900px)').matches) ensureMap();
   }
+  matchMedia('(min-width: 900px)').addEventListener('change', m => { if (m.matches && !S.selected && S.view.length) openDetail(S.view[0]); });
   load();
   </script>
 </body>
