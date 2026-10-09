@@ -1,0 +1,39 @@
+name: 전시 데이터 갱신
+
+on:
+  schedule:
+    - cron: '17 20 * * *' # 매일 05:17 KST
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/fetch-exhibitions.mjs
+      - .github/workflows/update-exhibitions.yml
+
+permissions:
+  contents: write
+
+# 예약 실행과 수동 실행이 겹쳐 동시에 push 하지 않도록 한 번에 하나만 돌린다
+concurrency:
+  group: update-exhibitions
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: 서울시 문화행사 정보에서 전시 가져오기
+        env:
+          SEOUL_API_KEY: ${{ secrets.SEOUL_API_KEY }}
+        run: node scripts/fetch-exhibitions.mjs
+      - name: 변경 시 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add data/exhibitions.json
+          git diff --cached --quiet && exit 0
+          git commit -m "전시 데이터 갱신 ($(TZ=Asia/Seoul date +%F))"
+          git push

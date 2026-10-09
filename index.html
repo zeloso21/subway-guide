@@ -2,1637 +2,449 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#1D4ED8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F6F3EE">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>지하철 길안내</title>
+  <title>서울 전시 지도</title>
+  <meta name="description" content="서울시 문화행사 공공데이터로 지금 갈 수 있는 미술 전시를 찾아보세요.">
   <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <style>
+    :root {
+      --bg: #F6F3EE;
+      --surface: #FFFFFF;
+      --ink: #1B1A17;
+      --ink-2: #5E5A52;
+      --ink-3: #8F897E;
+      --line: #E4DED3;
+      --accent: #C2410C;
+      --accent-soft: #FBE9DF;
+      --free: #166534;
+      --free-soft: #E3F1E6;
+      --chip: #EDE8DF;
+      --shadow: 0 1px 2px rgba(27,26,23,.06), 0 4px 16px rgba(27,26,23,.06);
+      --serif: 'Gowun Batang', 'AppleMyungjo', serif;
+      --sans: 'Noto Sans KR', -apple-system, 'Malgun Gothic', sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #14130F; --surface: #1E1C18; --ink: #F2EEE6; --ink-2: #BDB6A8; --ink-3: #8A8476;
+        --line: #2F2C26; --accent: #FB923C; --accent-soft: #3A2417; --free: #86EFAC; --free-soft: #17301F;
+        --chip: #29261F; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #14130F; --surface: #1E1C18; --ink: #F2EEE6; --ink-2: #BDB6A8; --ink-3: #8A8476;
+      --line: #2F2C26; --accent: #FB923C; --accent-soft: #3A2417; --free: #86EFAC; --free-soft: #17301F;
+      --chip: #29261F; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, 'Malgun Gothic', sans-serif; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; background: #060C1A; }
+    html, body { height: 100%; }
+    body { font-family: var(--sans); background: var(--bg); color: var(--ink); display: flex; flex-direction: column; -webkit-font-smoothing: antialiased; }
+    button, input, select { font: inherit; color: inherit; }
+    a { color: inherit; }
 
     /* 헤더 */
-    .header { height: 54px; background: linear-gradient(145deg, #1a3a8f 0%, #1e56e0 55%, #1341c4 100%); color: white; padding: 0 16px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; box-shadow: 0 4px 24px rgba(10,20,90,.7), inset 0 1px 0 rgba(255,255,255,.18); }
-    .header h1 { font-size: 16px; font-weight: 800; letter-spacing: -.3px; text-shadow: 0 1px 6px rgba(0,0,40,.5); }
-    .loc-badge { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 3px 10px; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; margin-left: auto; color: #BAE6FD; box-shadow: inset 0 1px 3px rgba(0,0,0,.2); }
+    header { padding: max(16px, env(safe-area-inset-top)) 16px 10px; }
+    .brand { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+    h1 { font-family: var(--serif); font-size: 26px; font-weight: 700; letter-spacing: -.5px; }
+    h1 span { color: var(--accent); }
+    .updated { font-size: 11px; color: var(--ink-3); white-space: nowrap; }
+    .summary { margin-top: 4px; font-size: 13px; color: var(--ink-2); }
+    .summary b { color: var(--ink); }
 
-    /* 검색바 */
-    .search-bar { height: 54px; background: linear-gradient(180deg, #0e1828 0%, #111f33 100%); padding: 8px 12px; display: flex; gap: 8px; flex-shrink: 0; align-items: center; box-shadow: 0 4px 16px rgba(0,0,0,.5), inset 0 -1px 0 rgba(0,0,0,.4); position: relative; z-index: 2; }
-    .search-input { flex: 1; padding: 8px 14px; background: #0a1422; border: 1.5px solid #1e3a5f; border-radius: 10px; font-size: 14px; outline: none; color: #E2E8F0; box-shadow: inset 0 2px 8px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.03); transition: border-color .2s; }
-    .search-input::placeholder { color: #3d5a7a; }
-    .search-input:focus { border-color: #3B82F6; box-shadow: inset 0 2px 8px rgba(0,0,0,.4), 0 0 0 3px rgba(59,130,246,.15); }
-    .search-btn { background: linear-gradient(145deg, #2d6ef5, #1a4fd8); color: white; border: none; border-radius: 10px; padding: 8px 18px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 14px rgba(29,78,216,.55), inset 0 1px 0 rgba(255,255,255,.22), inset 0 -2px 0 rgba(0,0,0,.25); transition: transform .1s, box-shadow .1s; }
-    .search-btn:active { transform: translateY(1px); box-shadow: 0 1px 6px rgba(29,78,216,.4), inset 0 1px 0 rgba(255,255,255,.1); }
+    /* 컨트롤 */
+    .controls { padding: 0 16px 10px; display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid var(--line); }
+    .search { position: relative; }
+    .search input { width: 100%; height: 42px; padding: 0 14px 0 38px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); font-size: 15px; outline: none; }
+    .search input:focus { border-color: var(--ink-3); }
+    .search svg { position: absolute; left: 12px; top: 12px; width: 18px; height: 18px; color: var(--ink-3); }
+    .seg { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--chip); border-radius: 10px; padding: 3px; }
+    .seg button { border: 0; background: none; height: 34px; border-radius: 8px; font-size: 14px; color: var(--ink-2); cursor: pointer; }
+    .seg button.on { background: var(--surface); color: var(--ink); font-weight: 700; box-shadow: var(--shadow); }
+    .chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { flex-shrink: 0; height: 34px; padding: 0 14px; border: 1px solid var(--line); border-radius: 17px; background: var(--surface); font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+    .chip.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    select.chip { appearance: none; padding-right: 28px; background-image: linear-gradient(45deg, transparent 50%, var(--ink-3) 50%), linear-gradient(135deg, var(--ink-3) 50%, transparent 50%); background-position: calc(100% - 15px) 15px, calc(100% - 10px) 15px; background-size: 5px 5px; background-repeat: no-repeat; }
 
-    /* 메인 */
-    .main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+    /* 본문 */
+    main { flex: 1; min-height: 0; display: flex; position: relative; }
+    #list { flex: 1; overflow-y: auto; padding: 12px 16px calc(84px + env(safe-area-inset-bottom)); }
+    #mapWrap { flex: 1; display: none; position: relative; }
+    #map { position: absolute; inset: 0; background: var(--chip); }
+    body.view-map #list { display: none; }
+    body.view-map #mapWrap { display: block; }
 
-    /* 지도 */
-    .map-section { flex: 1; position: relative; z-index: 1; }
-    .main.split .map-section { box-shadow: 0 6px 24px rgba(0,0,0,.45); }
-    #map { width: 100%; height: 100%; }
+    .card { display: flex; gap: 14px; padding: 12px; background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); margin-bottom: 10px; cursor: pointer; text-align: left; width: 100%; border: 0; }
+    .card:active { transform: scale(.995); }
+    .card.sel { outline: 2px solid var(--accent); }
+    .poster { width: 76px; height: 104px; border-radius: 8px; flex-shrink: 0; object-fit: cover; background: var(--chip); }
+    .poster.ph { display: grid; place-items: center; font-family: var(--serif); font-size: 28px; color: var(--ink-3); }
+    .card-body { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .card h3 { font-family: var(--serif); font-size: 16px; font-weight: 700; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .meta { font-size: 12.5px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; }
+    .badge { font-size: 11px; font-weight: 700; padding: 3px 7px; border-radius: 6px; background: var(--chip); color: var(--ink-2); }
+    .badge.free { background: var(--free-soft); color: var(--free); }
+    .badge.hot { background: var(--accent-soft); color: var(--accent); }
 
-    /* 분할 모드 전 — 노선/시간표 숨김 */
-    .route-section { display: none; flex: 2; background: linear-gradient(180deg, #eef5ff 0%, #f5f9ff 100%); flex-direction: column; min-height: 0; }
-    .timetable-section { display: none; flex: 1; background: linear-gradient(180deg, #e4efff 0%, #eef5ff 100%); flex-direction: column; min-height: 0; }
+    .empty { text-align: center; padding: 56px 20px; color: var(--ink-2); font-size: 14px; line-height: 1.7; }
+    .empty h2 { font-family: var(--serif); font-size: 20px; color: var(--ink); margin-bottom: 8px; }
+    .empty code { background: var(--chip); padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+    .more { display: block; margin: 8px auto 0; height: 42px; padding: 0 24px; border-radius: 21px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 14px; }
 
-    /* 분할 모드 진입 시 */
-    .main.split .map-section { flex: 1; }
-    .main.split .route-section { display: flex; flex: 2; }
-    .main.split .timetable-section { display: flex; flex: 1; }
+    /* 목록/지도 토글 */
+    .viewtoggle { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 500; display: flex; background: var(--ink); border-radius: 24px; padding: 4px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+    .viewtoggle button { border: 0; background: none; color: var(--bg); opacity: .6; height: 38px; padding: 0 18px; border-radius: 20px; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .viewtoggle button.on { opacity: 1; background: rgba(255,255,255,.14); }
 
-    .section-header { padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #c8dcf8; flex-shrink: 0; background: linear-gradient(180deg, #ddeaff 0%, #e8f1ff 100%); box-shadow: 0 2px 8px rgba(59,130,246,.12), inset 0 1px 0 rgba(255,255,255,.8); }
-    .section-title { font-size: 12px; font-weight: 700; color: #1d50c8; letter-spacing: .3px; text-shadow: 0 1px 0 rgba(255,255,255,.6); }
-    .toggle-btn { background: none; border: none; font-size: 14px; cursor: pointer; color: #93C5FD; }
-    .route-list { overflow-y: auto; flex: 1; }
+    /* 지도 마커 */
+    .pin { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
+    .pin.free { background: #16A34A; }
+    .leaflet-popup-content { font-family: var(--sans); margin: 10px 12px; }
+    .pop-title { font-family: var(--serif); font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+    .pop-meta { font-size: 12px; color: #5E5A52; }
+    .pop-btn { margin-top: 6px; font-size: 12px; font-weight: 700; color: #C2410C; background: none; border: 0; padding: 0; cursor: pointer; }
 
-    /* 역 행 */
-    .station-row { display: flex; align-items: center; padding: 8px 14px 8px 10px; gap: 0; border-bottom: 1px solid rgba(59,130,246,.08); cursor: pointer; position: relative; transition: background .15s; background: transparent; }
-    .station-row.current { background: linear-gradient(90deg, rgba(59,130,246,.13) 0%, rgba(59,130,246,.03) 100%); border-left: 3px solid #3B82F6; box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 1px 4px rgba(59,130,246,.1); }
-    .station-row.talert { background: linear-gradient(90deg, rgba(239,68,68,.07) 0%, transparent 100%); }
-    .station-row:active { background: rgba(59,130,246,.08); }
+    /* 상세 시트 */
+    .sheet-bg { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .sheet { position: fixed; left: 0; right: 0; bottom: 0; max-height: 88dvh; overflow-y: auto; background: var(--surface); border-radius: 20px 20px 0 0; z-index: 1001; transform: translateY(100%); transition: transform .25s ease; padding: 0 0 calc(20px + env(safe-area-inset-bottom)); }
+    body.sheet-open .sheet-bg { opacity: 1; pointer-events: auto; }
+    body.sheet-open .sheet { transform: none; }
+    .sheet-grip { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; padding: 10px 12px 6px 20px; background: var(--surface); z-index: 1; }
+    .sheet-grip::before { content: ''; position: absolute; left: 50%; top: 6px; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: var(--line); }
+    .close { width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--chip); font-size: 18px; cursor: pointer; margin-left: auto; }
+    .hero { display: block; width: calc(100% - 40px); max-height: 46dvh; object-fit: contain; margin: 0 20px; border-radius: 12px; background: var(--chip); }
+    .detail { padding: 16px 20px 0; }
+    .detail h2 { font-family: var(--serif); font-size: 22px; line-height: 1.35; margin-bottom: 10px; }
+    .rows { display: grid; grid-template-columns: 64px 1fr; gap: 8px 10px; font-size: 14px; line-height: 1.5; }
+    .rows dt { color: var(--ink-3); }
+    .rows dd { color: var(--ink); word-break: keep-all; overflow-wrap: anywhere; }
+    .desc { margin-top: 14px; font-size: 14px; line-height: 1.7; color: var(--ink-2); white-space: pre-line; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
+    .btn { display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 12px; font-weight: 700; font-size: 15px; text-decoration: none; border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
+    .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .btn[aria-disabled="true"] { opacity: .4; pointer-events: none; }
+    .source { margin-top: 18px; font-size: 11px; color: var(--ink-3); }
 
-    /* 왼쪽 라인 트랙 */
-    .strack { width: 28px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; align-self: stretch; }
-    .strack-line { width: 3px; flex: 1; position: relative; overflow: visible; }
-    .strack-line.top { border-radius: 0; }
-    .strack-line.bot { border-radius: 0; }
-    .sdot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #eef5ff; flex-shrink: 0; box-shadow: 0 0 8px currentColor, 0 2px 4px rgba(0,0,0,.15); }
-    .sdot.big { width: 14px; height: 14px; box-shadow: 0 0 12px currentColor, 0 2px 6px rgba(0,0,0,.2); }
-
-    /* 기차 마커 */
-    .train-marker { display: inline-block; vertical-align: middle; margin-left: 8px; pointer-events: none; animation: trainRide var(--train-dur, 30s) linear infinite; }
-    .train-marker svg { display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,.4)); }
-    @keyframes trainRide { 0%{transform:translateX(0);opacity:1} 70%{transform:translateX(28px);opacity:.8} 88%{transform:translateX(36px);opacity:0} 100%{transform:translateX(0);opacity:0} }
-
-    .sinfo { flex: 1; padding-left: 8px; }
-    .sname { font-size: 13px; font-weight: 600; color: #1a2a45; }
-    .station-row.current .sname { color: #1d4ed8; font-weight: 700; }
-    .smeta { font-size: 10px; color: #94A3B8; margin-top: 1px; }
-    .sbadge { font-size: 10px; padding: 2px 7px; border-radius: 5px; color: white; flex-shrink: 0; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.2); }
-    .sb-transfer { background: linear-gradient(145deg,#f07030,#d95c14); }
-    .sb-alert { background: linear-gradient(145deg,#e83232,#c41c1c); animation: blink .8s infinite; }
-    .sb-arrive { background: linear-gradient(145deg,#10b97a,#078a58); }
-    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
-    .route-empty { padding: 24px; text-align: center; color: #94A3B8; font-size: 13px; }
-
-    /* 시간표 하단 */
-    .tt-header { padding: 7px 14px; display: flex; align-items: center; gap: 6px; flex-shrink: 0; border-bottom: 1px solid #b8d0f5; background: linear-gradient(180deg, #c8deff 0%, #d5e8ff 100%); box-shadow: 0 2px 8px rgba(59,130,246,.15), inset 0 1px 0 rgba(255,255,255,.7); }
-    .tt-label { font-size: 10px; font-weight: 700; color: #1740b0; letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 1px 0 rgba(255,255,255,.5); }
-    .tt-station { font-size: 13px; font-weight: 800; color: #1e3a8a; margin-left: 4px; text-shadow: 0 1px 0 rgba(255,255,255,.4); }
-    .tt-time { font-size: 13px; font-weight: 700; color: #047857; margin-left: auto; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
-    .tt-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 10px 14px; flex: 1; align-items: center; scrollbar-width: none; background: linear-gradient(180deg, #e4efff 0%, #eef5ff 100%); }
-    .tt-scroll::-webkit-scrollbar { display: none; }
-    .tt-card { flex-shrink: 0; background: linear-gradient(145deg, #ffffff, #eef5ff); border-radius: 12px; padding: 10px 12px; min-width: 88px; text-align: center; border: 1px solid #c0d8f8; box-shadow: 0 4px 12px rgba(59,130,246,.1), 0 1px 0 rgba(255,255,255,.9) inset, 0 -1px 0 rgba(59,130,246,.08) inset; transition: transform .15s; }
-    .tt-card.next { border-color: #1d50c8; background: linear-gradient(145deg, #d6e8ff, #bdd4ff); box-shadow: 0 8px 24px rgba(29,80,200,.28), 0 1px 0 rgba(255,255,255,.5) inset; transform: translateY(-3px); }
-    .tt-dir { font-size: 9px; color: #7a9fc0; margin-bottom: 4px; letter-spacing: .5px; }
-    .tt-card.next .tt-dir { color: #1d4ed8; font-weight: 600; }
-    .tt-depart { font-size: 18px; font-weight: 800; color: #1a2a45; font-variant-numeric: tabular-nums; letter-spacing: 1px; font-family: 'Courier New', monospace; text-shadow: 0 1px 0 rgba(255,255,255,.8); }
-    .tt-card.next .tt-depart { color: #1e3a8a; }
-    .tt-remaining { font-size: 10px; color: #7a9fc0; margin-top: 4px; }
-    .tt-card.next .tt-remaining { color: #047857; font-weight: 600; }
-    .tt-empty { color: #b0c8e8; font-size: 12px; }
-
-    /* Leaflet 역 라벨 */
-    .station-label { background: #1D4ED8 !important; color: #fff !important; border: none !important; font-size: 10px !important; font-weight: 700 !important; padding: 2px 6px !important; border-radius: 4px !important; white-space: nowrap !important; box-shadow: 0 2px 6px rgba(0,0,0,.3) !important; }
-    .station-label::before { display: none !important; }
-
-    /* 명언 오버레이 */
-    .quote-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 24px 28px; background: linear-gradient(to top, rgba(4,8,20,.94) 0%, rgba(4,8,20,.6) 70%, transparent 100%); z-index: 10; pointer-events: none; transition: opacity .6s ease; }
-    .quote-overlay.hidden { opacity: 0; }
-    .quote-text { font-size: 15px; font-weight: 600; color: #E2E8F0; line-height: 1.65; letter-spacing: -.2px; text-shadow: 0 2px 10px rgba(0,0,0,.9); }
-    .quote-author { font-size: 11px; color: #60A5FA; margin-top: 6px; letter-spacing: .5px; }
-
-    /* 언어 선택 */
-    .lang-bar { display: flex; gap: 4px; margin-left: 8px; }
-    .lang-btn { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.55); border-radius: 6px; padding: 2px 7px; font-size: 10px; font-weight: 700; cursor: pointer; letter-spacing: .3px; box-shadow: inset 0 1px 0 rgba(255,255,255,.08); transition: background .15s; }
-    .lang-btn.active { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.45); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 2px 6px rgba(0,0,0,.3); }
-
-    /* 토스트 */
-    .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg,#c81c1c,#a81010); color: white; padding: 11px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; z-index: 1000; box-shadow: 0 8px 28px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.15); display: none; text-align: center; max-width: 88vw; }
-    .toast.info { background: linear-gradient(135deg,#1a4fd8,#1240b8); }
-    .toast.show { display: block; animation: slideDown .25s ease; }
-    @keyframes slideDown { from{opacity:0;top:50px}to{opacity:1;top:70px} }
-
-    /* 모드 전환(맛집찾기 ↔ 지하철 길안내) */
-    .mode-bar { display: flex; gap: 8px; padding: 7px 12px; background: #0a1422; flex-shrink: 0; box-shadow: inset 0 -1px 0 rgba(255,255,255,.04); }
-    .mode-btn { flex: 1; text-align: center; padding: 8px; border-radius: 10px; font-size: 12.5px; font-weight: 700; color: rgba(255,255,255,.45); background: rgba(255,255,255,.05); border: 1.5px solid transparent; cursor: pointer; }
-    .mode-btn.active { color: #fff; background: rgba(59,130,246,.32); border-color: rgba(59,130,246,.55); }
-
-    /* 맛집찾기 검색·반경·탭 (헤더 아래, 맛집찾기 모드의 기본 화면 상단) */
-    .food-controls { display: none; flex-direction: column; gap: 8px; padding: 10px 12px; background: linear-gradient(180deg, #0e1828 0%, #111f33 100%); flex-shrink: 0; box-shadow: 0 4px 16px rgba(0,0,0,.5); }
-    body[data-mode="food"] .food-controls { display: flex; }
-    .food-search-row { display: flex; gap: 8px; }
-    .food-search-input { flex: 1; padding: 8px 12px; background: #0a1422; border: 1.5px solid #1e3a5f; border-radius: 9px; font-size: 13px; outline: none; color: #E2E8F0; }
-    .food-search-input::placeholder { color: #3d5a7a; }
-    .food-search-input:focus { border-color: #3B82F6; }
-    .food-search-btn { background: linear-gradient(145deg, #2d6ef5, #1a4fd8); color: #fff; border: none; border-radius: 9px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-    .food-radius-row { display: flex; gap: 6px; }
-    .food-radius-btn { flex: 1; padding: 6px; border-radius: 8px; font-size: 11.5px; font-weight: 700; color: rgba(255,255,255,.45); background: rgba(255,255,255,.05); border: 1.5px solid transparent; cursor: pointer; font-variant-numeric: tabular-nums; }
-    .food-radius-btn.active { color: #fff; background: rgba(59,130,246,.32); border-color: rgba(59,130,246,.55); }
-    .food-tabs { display: flex; gap: 6px; }
-    .food-tab { flex: 1; text-align: center; padding: 7px; border-radius: 9px; font-size: 12px; font-weight: 700; color: rgba(255,255,255,.45); background: rgba(255,255,255,.05); cursor: pointer; border: 1.5px solid transparent; }
-    .food-tab.active { color: #fff; background: rgba(240,138,0,.35); border-color: rgba(240,138,0,.6); }
-    .food-sub { font-size: 11px; color: rgba(255,255,255,.4); }
-
-    /* 맛집찾기 결과 리스트 (지도 아래, 항상 지도와 함께 표시) */
-    .food-results-section { display: none; flex: 1.3; background: linear-gradient(180deg, #eef5ff 0%, #f5f9ff 100%); flex-direction: column; min-height: 0; }
-    body[data-mode="food"] .food-results-section { display: flex; }
-    body[data-mode="food"] .map-section { flex: 1; }
-    .food-list { overflow-y: auto; flex: 1; padding: 8px 12px 20px; }
-    .food-item { display: flex; align-items: center; gap: 10px; padding: 10px 8px; border-bottom: 1px solid rgba(59,130,246,.08); position: relative; }
-    .food-item:active { background: rgba(59,130,246,.06); }
-    .food-rank { position: absolute; top: 6px; left: 6px; width: 18px; height: 18px; border-radius: 50%; background: rgba(29,80,200,.85); color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 1; }
-    .food-rank.cafe { background: rgba(181,103,12,.85); }
-    .food-thumb { position: relative; width: 52px; height: 52px; border-radius: 12px; flex-shrink: 0; overflow: hidden; background: #eef5ff; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-    .food-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .food-info { flex: 1; min-width: 0; text-decoration: none; color: inherit; }
-    .food-name { font-size: 13px; font-weight: 700; color: #1a2a45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .food-cat { font-size: 10.5px; color: #94A3B8; margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .food-note { font-size: 10.5px; color: #1d50c8; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-style: italic; }
-    .food-dist { font-size: 11px; font-weight: 700; color: #10b97a; flex-shrink: 0; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .food-nav { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: #eef5ff; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 13px; }
-    .food-empty { padding: 30px 16px; text-align: center; color: #94A3B8; font-size: 12.5px; line-height: 1.7; }
-    .food-loading { padding: 30px 16px; text-align: center; color: #94A3B8; font-size: 12.5px; }
-    .food-pin-label { background: #f08a00 !important; color: #fff !important; border: none !important; font-size: 10px !important; font-weight: 800 !important; padding: 2px 6px !important; border-radius: 4px !important; white-space: nowrap !important; box-shadow: 0 2px 6px rgba(0,0,0,.3) !important; }
-    .food-pin-label::before { display: none !important; }
-
-    /* 모드별 표시 전환: 맛집찾기가 기본 화면, 지하철 길안내는 모드 전환으로 진입 */
-    body[data-mode="subway"] .food-controls,
-    body[data-mode="subway"] .food-results-section { display: none !important; }
-    body[data-mode="food"] .search-bar,
-    body[data-mode="food"] .route-section,
-    body[data-mode="food"] .timetable-section { display: none !important; }
+    /* 넓은 화면: 목록 + 지도 나란히 */
+    @media (min-width: 900px) {
+      body { max-width: none; }
+      header, .controls { padding-left: 24px; padding-right: 24px; }
+      #list { flex: 0 0 440px; display: block !important; padding-bottom: 24px; border-right: 1px solid var(--line); }
+      #mapWrap { display: block !important; }
+      .viewtoggle { display: none; }
+      .sheet { left: auto; right: 24px; bottom: 24px; top: 24px; width: 440px; max-height: none; border-radius: 20px; transform: translateX(120%); }
+      body.sheet-open .sheet { transform: none; }
+    }
   </style>
 </head>
-<body data-mode="food">
-
-<div class="header">
-  <span id="modeIcon" style="font-size:18px">🍜</span>
-  <h1 id="appTitle">맛집 찾기</h1>
-  <div class="lang-bar">
-    <button class="lang-btn active" onclick="setLang('ko')">KO</button>
-    <button class="lang-btn" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" onclick="setLang('ja')">JA</button>
-  </div>
-  <div class="loc-badge" id="locBadge">위치 확인 중...</div>
-</div>
-
-<div class="mode-bar">
-  <button class="mode-btn active" id="modeBtnFood" onclick="setMode('food')">🍜 맛집찾기</button>
-  <button class="mode-btn" id="modeBtnSubway" onclick="setMode('subway')">🚇 길안내</button>
-</div>
-
-<div class="search-bar">
-  <input class="search-input" id="destInput" type="text" placeholder="목적지 역 입력 (예: 강남, 홍대입구)"/>
-  <button class="search-btn" id="searchBtn" onclick="searchRoute()">안내</button>
-</div>
-
-<div class="food-controls" id="foodControls">
-  <div class="food-search-row">
-    <input class="food-search-input" id="foodPlaceInput" type="text" value="현위치" onkeydown="if(event.key==='Enter') runFoodSearchFromInput()">
-    <button class="food-search-btn" id="foodSearchBtn" onclick="runFoodSearchFromInput()">찾기</button>
-  </div>
-  <div class="food-radius-row" id="foodRadiusRow">
-    <button class="food-radius-btn active" data-r="100" onclick="setFoodRadius(100)">100m</button>
-    <button class="food-radius-btn" data-r="200" onclick="setFoodRadius(200)">200m</button>
-    <button class="food-radius-btn" data-r="300" onclick="setFoodRadius(300)">300m</button>
-  </div>
-  <div class="food-tabs">
-    <div class="food-tab active" id="foodTabFood" onclick="switchFoodTab('food')">🍚 맛집</div>
-    <div class="food-tab" id="foodTabCafe" onclick="switchFoodTab('cafe')">☕ 카페</div>
-  </div>
-  <div class="food-sub" id="foodSheetSub"></div>
-</div>
-
-<div class="main">
-
-  <!-- 지도 (두 모드가 공유) -->
-  <div class="map-section">
-    <div id="map"></div>
-    <div class="quote-overlay" id="quoteOverlay">
-      <div class="quote-text" id="quoteText"></div>
-      <div class="quote-author" id="quoteAuthor"></div>
+<body>
+  <header>
+    <div class="brand">
+      <h1>서울 전시 <span>지도</span></h1>
+      <div class="updated" id="updated"></div>
     </div>
-  </div>
+    <p class="summary" id="summary">전시 정보를 불러오는 중…</p>
+  </header>
 
-  <!-- 맛집찾기 결과 (기본 화면) -->
-  <div class="food-results-section" id="foodResultsSection">
-    <div class="food-list" id="foodList"></div>
-  </div>
-
-  <!-- 노선 (길안내 모드) -->
-  <div class="route-section">
-    <div class="section-header">
-      <span class="section-title" id="routeTitle">목적지를 입력하세요</span>
-      <button class="toggle-btn" id="routeToggleBtn" onclick="toggleRoute()">▼</button>
+  <section class="controls">
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="전시명, 작가, 미술관 검색" autocomplete="off">
+    </label>
+    <div class="seg" id="status">
+      <button data-v="now" class="on">진행 중</button>
+      <button data-v="soon">곧 시작</button>
+      <button data-v="all">전체</button>
     </div>
-    <div class="route-list" id="routeList">
-      <div class="route-empty">경로가 표시됩니다</div>
+    <div class="chips">
+      <button class="chip" id="near">📍 내 주변</button>
+      <button class="chip" id="free">무료만</button>
+      <select class="chip" id="gu"><option value="">모든 자치구</option></select>
+      <select class="chip" id="sort">
+        <option value="end">마감 임박순</option>
+        <option value="start">최근 시작순</option>
+        <option value="dist">가까운순</option>
+      </select>
     </div>
-  </div>
+  </section>
 
-  <!-- 시간표 (길안내 모드) -->
-  <div class="timetable-section">
-    <div class="tt-header">
-      <span class="tt-title" id="ttTitle">열차 시간표</span>
-      <span class="tt-station" id="ttStation">—</span>
-      <span class="tt-time" id="ttClock"></span>
-    </div>
-    <div class="tt-scroll" id="ttScroll">
-      <span class="tt-empty">역 선택 시 표시됩니다</span>
-    </div>
-  </div>
+  <main>
+    <div id="list" aria-live="polite"></div>
+    <div id="mapWrap"><div id="map"></div></div>
+  </main>
 
-</div>
+  <nav class="viewtoggle">
+    <button data-v="list" class="on">목록</button>
+    <button data-v="map">지도</button>
+  </nav>
 
-<div class="toast" id="toast"></div>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <article class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="전시 상세"></article>
 
-<!-- 카카오 맵 SDK -->
-<script>
-// ── API 키 ──────────────────────────────────────────
-const ODSAY_KEY = 'OLKXZpgL39Z/FRXbnoLDyQ';
-const KAKAO_JS_KEY = '5f52a6cdf28d24897956e5bb497aac7b';
-const KAKAO_REST_KEY = '87247f0049864513c6a449172405d95a';
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script>
+  const $ = s => document.querySelector(s);
+  const S = { all: [], view: [], status: 'now', free: false, gu: '', sort: 'end', q: '', me: null, shown: 30, map: null, layer: null, markers: new Map(), selected: null };
 
-// ── 다국어 ───────────────────────────────────────────
-let LANG_CODE = localStorage.getItem('lang') || 'ko';
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
+  const ymd = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const TODAY = ymd(new Date());
+  const daysBetween = (a, b) => Math.round((new Date(b) - new Date(a)) / 864e5);
+  const fmtDate = s => s ? s.slice(2).replace(/-/g, '.') : '';
+  const period = e => e.start === e.end ? fmtDate(e.start) : `${fmtDate(e.start)} – ${fmtDate(e.end)}`;
 
-const I18N = {
-  ko: {
-    appTitle: '지하철 길안내',
-    appTitleFood: '맛집 찾기',
-    subwayModeBtn: '🚇 길안내',
-    locChecking: '위치 확인 중...',
-    locFail: '위치 권한이 필요합니다',
-    locError: '위치 확인 실패',
-    locNoStation: '📍 위치 확인됨 (반경 2km 내 지하철역 없음)',
-    locNear: (name, min) => `🚇 ${name}역 (도보 ${min}분)`,
-    placeholder: '목적지 입력 (예: 강남역, 홍대입구역)',
-    searchBtn: '안내',
-    routeEmpty: '목적지를 입력하세요',
-    routeListEmpty: '경로가 표시됩니다',
-    ttTitle: '열차 시간표',
-    ttEmpty: '역 선택 시 표시됩니다',
-    inputHint: '목적지를 입력하세요',
-    locating: '위치 확인 중입니다',
-    searching: '경로 검색 중...',
-    notFound: '역을 찾을 수 없습니다',
-    noRoute: '경로를 찾을 수 없습니다',
-    noSubway: '지하철 경로 없음',
-    searchFail: (msg) => '검색 실패: ' + msg,
-    routeTitle: (dest, time, tr) => `→ ${dest}역  ${time}분${tr > 0 ? ` · 환승 ${tr}회` : ' · 직통'}`,
-    badgeTransfer: '환승',
-    badgeArrive: '도착',
-    badgeAlert: '⚠ 환승준비',
-    badgeAlertFinal: '⚠ 하차준비',
-    transferAlert: (left, name) => `⚠️ ${left}정거장 후 [${name}]역 환승!`,
-    alertTitle: '환승 알림',
-    walkMin: (n) => `도보 ${n}분`,
-    soon: '곧 도착',
-    minsLater: (n) => `${n}분 후`,
-    dirDefault: '행선지',
-    foodBtn: '🍜 맛집·카페',
-    foodTabFood: '🍚 맛집',
-    foodTabCafe: '☕ 카페',
-    foodNeedLoc: '위치를 먼저 확인해주세요',
-    foodLoading: '주변을 검색 중...',
-    foodEmpty: '주변에서 찾지 못했어요',
-    foodFail: '검색에 실패했어요',
-    foodRadius: (m) => `반경 ${m}m`,
-    foodRefBase: '현재 위치 기준',
-    foodRefStation: (name) => `${name}역 기준`,
-    foodDist: (m) => m >= 1000 ? `${(m/1000).toFixed(1)}km` : `${m}m`,
-    foodCurrentLoc: '현위치',
-    foodSearchBtn: '찾기',
-    foodWalkNav: '카카오맵 도보 길찾기',
-  },
-  en: {
-    appTitle: 'Subway Guide',
-    appTitleFood: 'Food Finder',
-    subwayModeBtn: '🚇 Subway',
-    locChecking: 'Locating...',
-    locFail: 'Location permission required',
-    locError: 'Location failed',
-    locNoStation: '📍 Located (no subway within 2km)',
-    locNear: (name, min) => `🚇 ${name} (${min} min walk)`,
-    placeholder: 'Enter destination (e.g. Gangnam Station)',
-    searchBtn: 'Go',
-    routeEmpty: 'Enter a destination',
-    routeListEmpty: 'Route will appear here',
-    ttTitle: 'Train Schedule',
-    ttEmpty: 'Select a station',
-    inputHint: 'Enter a destination',
-    locating: 'Locating...',
-    searching: 'Searching route...',
-    notFound: 'Station not found',
-    noRoute: 'No route found',
-    noSubway: 'No subway route',
-    searchFail: (msg) => 'Search failed: ' + msg,
-    routeTitle: (dest, time, tr) => `→ ${dest}  ${time} min${tr > 0 ? ` · ${tr} transfer${tr > 1 ? 's' : ''}` : ' · Direct'}`,
-    badgeTransfer: 'Transfer',
-    badgeArrive: 'Arrive',
-    badgeAlert: '⚠ Prep Transfer',
-    badgeAlertFinal: '⚠ Prep Exit',
-    transferAlert: (left, name) => `⚠️ Transfer at [${name}] in ${left} stop${left > 1 ? 's' : ''}!`,
-    alertTitle: 'Transfer Alert',
-    walkMin: (n) => `${n} min walk`,
-    soon: 'Arriving',
-    minsLater: (n) => `${n} min`,
-    dirDefault: 'Bound for',
-    foodBtn: '🍜 Food·Cafe',
-    foodTabFood: '🍚 Food',
-    foodTabCafe: '☕ Cafe',
-    foodNeedLoc: 'Waiting for your location',
-    foodLoading: 'Searching nearby...',
-    foodEmpty: 'Nothing found nearby',
-    foodFail: 'Search failed',
-    foodRadius: (m) => `within ${m}m`,
-    foodRefBase: 'near current location',
-    foodRefStation: (name) => `near ${name} Station`,
-    foodDist: (m) => m >= 1000 ? `${(m/1000).toFixed(1)}km` : `${m}m`,
-    foodCurrentLoc: 'Current Location',
-    foodSearchBtn: 'Go',
-    foodWalkNav: 'Walking directions (Kakao Map)',
-  },
-  ja: {
-    appTitle: '地下鉄ナビ',
-    appTitleFood: 'グルメ検索',
-    subwayModeBtn: '🚇 乗換案内',
-    locChecking: '位置確認中...',
-    locFail: '位置情報の許可が必要です',
-    locError: '位置情報の取得に失敗',
-    locNoStation: '📍 位置確認済 (半径2km以内に駅なし)',
-    locNear: (name, min) => `🚇 ${name}駅 (徒歩${min}分)`,
-    placeholder: '目的地を入力 (例: 江南駅、弘大入口駅)',
-    searchBtn: '案内',
-    routeEmpty: '目的地を入力してください',
-    routeListEmpty: 'ルートがここに表示されます',
-    ttTitle: '列車時刻表',
-    ttEmpty: '駅を選択してください',
-    inputHint: '目的地を入力してください',
-    locating: '位置確認中です',
-    searching: 'ルート検索中...',
-    notFound: '駅が見つかりません',
-    noRoute: 'ルートが見つかりません',
-    noSubway: '地下鉄ルートなし',
-    searchFail: (msg) => '検索失敗: ' + msg,
-    routeTitle: (dest, time, tr) => `→ ${dest}駅  ${time}分${tr > 0 ? ` · 乗換${tr}回` : ' · 直通'}`,
-    badgeTransfer: '乗換',
-    badgeArrive: '到着',
-    badgeAlert: '⚠ 乗換準備',
-    badgeAlertFinal: '⚠ 降車準備',
-    transferAlert: (left, name) => `⚠️ ${left}駅後 [${name}]駅で乗換！`,
-    alertTitle: '乗換案内',
-    walkMin: (n) => `徒歩${n}分`,
-    soon: 'まもなく',
-    minsLater: (n) => `${n}分後`,
-    dirDefault: '行先',
-    foodBtn: '🍜 グルメ·カフェ',
-    foodTabFood: '🍚 グルメ',
-    foodTabCafe: '☕ カフェ',
-    foodNeedLoc: '位置情報を確認しています',
-    foodLoading: '周辺を検索中...',
-    foodEmpty: '周辺に見つかりませんでした',
-    foodFail: '検索に失敗しました',
-    foodRadius: (m) => `半径${m}m`,
-    foodRefBase: '現在地基準',
-    foodRefStation: (name) => `${name}駅基準`,
-    foodDist: (m) => m >= 1000 ? `${(m/1000).toFixed(1)}km` : `${m}m`,
-    foodCurrentLoc: '現在地',
-    foodSearchBtn: '検索',
-    foodWalkNav: 'カカオマップ徒歩ルート',
-  },
-};
-
-function t(key, ...args) {
-  const v = (I18N[LANG_CODE] || I18N.ko)[key];
-  return typeof v === 'function' ? v(...args) : (v || key);
-}
-
-function setLang(code) {
-  LANG_CODE = code;
-  localStorage.setItem('lang', code);
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent === code.toUpperCase());
-  });
-  applyLang();
-  // 경구 다시 표시
-  if (!document.querySelector('.main').classList.contains('split')) showQuote();
-}
-
-function applyLang() {
-  document.getElementById('appTitle').textContent = APP_MODE === 'food' ? t('appTitleFood') : t('appTitle');
-  document.getElementById('destInput').placeholder = t('placeholder');
-  document.getElementById('searchBtn').textContent = t('searchBtn');
-  document.getElementById('ttTitle').textContent = t('ttTitle');
-  document.getElementById('modeBtnFood').textContent = t('foodBtn');
-  document.getElementById('modeBtnSubway').textContent = t('subwayModeBtn');
-  document.getElementById('foodTabFood').textContent = t('foodTabFood');
-  document.getElementById('foodTabCafe').textContent = t('foodTabCafe');
-  document.getElementById('foodSearchBtn').textContent = t('foodSearchBtn');
-  // 시트가 아직 안 열려 기본값("현위치"류) 그대로면, 언어 전환 시 그 표시도 맞춰 갱신
-  const foodInput = document.getElementById('foodPlaceInput');
-  const allCurLocLabels = [I18N.ko.foodCurrentLoc, I18N.en.foodCurrentLoc, I18N.ja.foodCurrentLoc];
-  if (allCurLocLabels.includes(foodInput.value)) foodInput.value = t('foodCurrentLoc');
-  // 현재 locBadge가 초기 메시지면 갱신
-  const badge = document.getElementById('locBadge');
-  const initMsgs = ['위치 확인 중...', 'Locating...', '位置確認中...'];
-  if (initMsgs.includes(badge.textContent)) badge.textContent = t('locChecking');
-  // 라우트 타이틀이 초기 메시지면 갱신
-  const rt = document.getElementById('routeTitle');
-  if (rt) {
-    const initRts = ['목적지를 입력하세요', 'Enter a destination', '目的地を入力してください'];
-    if (initRts.includes(rt.textContent)) rt.textContent = t('routeEmpty');
+  function distKm(a, b) {
+    const R = 6371, r = Math.PI / 180;
+    const dLat = (b.lat - a.lat) * r, dLng = (b.lng - a.lng) * r;
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(h));
   }
-}
+  const fmtDist = km => km < 1 ? `${Math.round(km * 1000)}m` : `${km.toFixed(1)}km`;
 
-// ── 경구 ─────────────────────────────────────────────
-// 영어: dummyjson API 동적 fetch (실패 시 fallback)
-const QUOTES_EN_FALLBACK = [
-  { text: "In the middle of every difficulty lies opportunity.", author: "— Albert Einstein" },
-  { text: "The only way to do great work is to love what you do.", author: "— Steve Jobs" },
-  { text: "It does not matter how slowly you go, as long as you do not stop.", author: "— Confucius" },
-];
-
-const QUOTES_KO = [
-  { text: "오늘 걷지 않으면 내일은 뛰어야 한다.", author: "— 공자" },
-  { text: "천 리 길도 한 걸음부터.", author: "— 노자" },
-  { text: "가장 어두운 밤도 끝나고, 태양은 다시 뜬다.", author: "— 빅토르 위고" },
-  { text: "할 수 있다고 생각하든, 할 수 없다고 생각하든 — 당신이 옳다.", author: "— 헨리 포드" },
-  { text: "비가 온 뒤에 땅이 굳어진다.", author: "— 한국 속담" },
-  { text: "시작이 반이다.", author: "— 아리스토텔레스" },
-  { text: "포기하지 않는 한 실패는 없다.", author: "— 작자 미상" },
-  { text: "인생은 가까이서 보면 비극이지만, 멀리서 보면 희극이다.", author: "— 찰리 채플린" },
-  { text: "버티는 것도 실력이다.", author: "— 작자 미상" },
-  { text: "삶이 그대를 속일지라도 슬퍼하거나 노하지 말라.", author: "— 푸시킨" },
-  { text: "내가 두려워하는 것은 죽음이 아니라, 제대로 살지 못하는 것이다.", author: "— 넬슨 만델라" },
-  { text: "성공은 열정을 잃지 않고 실패에서 실패로 걸어가는 것이다.", author: "— 윈스턴 처칠" },
-  { text: "지금 이 순간이 앞으로의 날들 중 가장 젊은 때다.", author: "— 작자 미상" },
-  { text: "꿈을 꾸는 사람은 영원히 늙지 않는다.", author: "— 작자 미상" },
-  { text: "강물은 바위를 힘으로 이기지 않는다. 부드러움으로 이긴다.", author: "— 노자" },
-  { text: "준비된 자에게 기회는 반드시 찾아온다.", author: "— 세네카" },
-  { text: "노력은 배신하지 않는다. 과정은 반드시 결과로 이어진다.", author: "— 작자 미상" },
-  { text: "작은 것에 감사할 줄 아는 사람이 큰 것도 얻는다.", author: "— 작자 미상" },
-  { text: "남을 탓하기 전에 먼저 자신을 살펴보라.", author: "— 공자" },
-  { text: "뜻이 있는 곳에 길이 있다.", author: "— 링컨" },
-  { text: "꽃이 지고 나서야 봄인 줄 안다.", author: "— 한국 속담" },
-  { text: "배움에는 끝이 없다.", author: "— 공자" },
-  { text: "실패는 성공의 어머니다.", author: "— 한국 속담" },
-  { text: "인내는 쓰지만 그 열매는 달다.", author: "— 루소" },
-  { text: "남보다 나을 필요는 없다. 어제의 자신보다 나으면 된다.", author: "— 작자 미상" },
-  { text: "넘어지는 것은 실패가 아니다. 넘어진 채로 있는 것이 실패다.", author: "— 작자 미상" },
-  { text: "모든 것은 마음먹기에 달려 있다.", author: "— 원효대사" },
-  { text: "하늘은 스스로 돕는 자를 돕는다.", author: "— 한국 속담" },
-  { text: "지식은 힘이다.", author: "— 프란시스 베이컨" },
-  { text: "두려움은 실패에서 오는 게 아니라 도전하지 않는 데서 온다.", author: "— 작자 미상" },
-  { text: "마음이 바르면 몸이 바르고, 몸이 바르면 삶이 바르다.", author: "— 퇴계 이황" },
-  { text: "고요한 물이 깊다.", author: "— 한국 속담" },
-  { text: "급할수록 돌아가라.", author: "— 한국 속담" },
-  { text: "좋은 말 한마디가 천 냥 빚도 갚는다.", author: "— 한국 속담" },
-  { text: "아는 것을 안다고 하고, 모르는 것을 모른다고 하는 것이 진정한 앎이다.", author: "— 공자" },
-  { text: "자신을 이기는 자가 가장 강한 자다.", author: "— 노자" },
-  { text: "사람은 꿈꾸는 만큼 성장한다.", author: "— 작자 미상" },
-  { text: "매일 조금씩 나아지는 것이 가장 위대한 발전이다.", author: "— 작자 미상" },
-  { text: "진정한 용기는 두려움이 없는 것이 아니라, 두려움을 딛고 나아가는 것이다.", author: "— 넬슨 만델라" },
-  { text: "사람은 그가 반복적으로 하는 행동의 결과물이다. 탁월함은 습관이다.", author: "— 아리스토텔레스" },
-  { text: "최선을 다하면 결과는 자연스럽게 따라온다.", author: "— 작자 미상" },
-  { text: "행복은 목적지가 아니라 여행하는 방식이다.", author: "— 작자 미상" },
-  { text: "독서는 완성된 인간을 만들고, 대화는 준비된 인간을 만든다.", author: "— 프란시스 베이컨" },
-  { text: "말보다 행동이 더 크게 말한다.", author: "— 링컨" },
-  { text: "꾸준함이 재능을 이긴다.", author: "— 작자 미상" },
-  { text: "자신감은 첫 번째 단계의 비밀이다.", author: "— 마크 트웨인" },
-  { text: "지식을 얻는 데 투자한 것은 항상 최고의 이자를 낳는다.", author: "— 벤저민 프랭클린" },
-  { text: "가장 위험한 것은 목표가 너무 낮아서 달성하는 것이다.", author: "— 미켈란젤로" },
-  { text: "내가 실패한 것이 아니다. 효과 없는 방법을 만 가지 발견했을 뿐이다.", author: "— 에디슨" },
-  { text: "생각하는 대로 살지 않으면, 사는 대로 생각하게 된다.", author: "— 폴 부르제" },
-  { text: "좋은 하루를 기다리지 말고 좋은 하루를 만들어라.", author: "— 작자 미상" },
-  { text: "오늘 당신이 낭비한 시간은 어제 죽은 사람이 살고 싶었던 오늘이다.", author: "— 작자 미상" },
-  { text: "변화를 두려워하지 말라. 변화는 성장의 기회다.", author: "— 작자 미상" },
-  { text: "세상에서 가장 큰 모험은 꿈꾸는 대로 사는 삶이다.", author: "— 오프라 윈프리" },
-  { text: "미래를 예측하는 가장 좋은 방법은 미래를 창조하는 것이다.", author: "— 피터 드러커" },
-  { text: "조용한 사람이 깊은 강이다.", author: "— 한국 속담" },
-  { text: "끝이 좋으면 다 좋다.", author: "— 셰익스피어" },
-  { text: "지금 이 자리에서, 지금 이 모습으로, 당신은 충분하다.", author: "— 작자 미상" },
-  { text: "한 방울의 물이 오랫동안 떨어지면 돌에 구멍을 뚫는다.", author: "— 한국 속담" },
-  { text: "오늘 하루도 충분히 잘하고 있다. 스스로를 믿어라.", author: "— 작자 미상" },
-  { text: "인생의 목적은 유용하고, 명예롭고, 동정심 있게 사는 것이다.", author: "— 에머슨" },
-  { text: "매일 아침 눈을 뜰 때, 기적 같은 하루가 시작된다는 것을 잊지 마라.", author: "— 작자 미상" },
-  { text: "고난 없이 얻은 성공은 진정한 성공이 아니다.", author: "— 작자 미상" },
-  { text: "역경은 위대함을 향한 징검다리다.", author: "— 작자 미상" },
-  { text: "운명은 준비된 자에게 온다.", author: "— 세네카" },
-  { text: "나무를 자르는 데 여섯 시간을 준다면, 나는 네 시간을 도끼를 가는 데 쓰겠다.", author: "— 링컨" },
-  { text: "성공은 노력과 인내, 배움과 희생, 그리고 하는 일에 대한 사랑이다.", author: "— 펠레" },
-  { text: "고통이 남기고 간 뒤를 보라. 고난이 지나간 자리마다 꽃이 피어난다.", author: "— 이병철" },
-  { text: "불행을 두려워하지 말고 행복을 소중히 여겨라.", author: "— 톨스토이" },
-  { text: "지금 힘든 것은 나중에 강해질 이유가 된다.", author: "— 작자 미상" },
-  { text: "삶은 선택의 연속이다. 매 순간 최선의 선택을 하라.", author: "— 작자 미상" },
-  { text: "최고가 되는 것보다 최선을 다하는 것이 더 중요하다.", author: "— 작자 미상" },
-  { text: "한 번 실패한 사람이 두 번 도전할 자격이 있다.", author: "— 작자 미상" },
-  { text: "도전하지 않으면 아무것도 이룰 수 없다.", author: "— 작자 미상" },
-  { text: "진실은 시간이 지나면 반드시 밝혀진다.", author: "— 한국 속담" },
-];
-
-const QUOTES_JA = [
-  { text: "七転び八起き。", author: "— 日本のことわざ" },
-  { text: "千里の道も一歩から。", author: "— 老子" },
-  { text: "雨降って地固まる。", author: "— 日本のことわざ" },
-  { text: "石の上にも三年。", author: "— 日本のことわざ" },
-  { text: "急がば回れ。", author: "— 日本のことわざ" },
-  { text: "継続は力なり。", author: "— 日本のことわざ" },
-  { text: "失敗は成功のもと。", author: "— 日本のことわざ" },
-  { text: "実るほど頭を垂れる稲穂かな。", author: "— 日本のことわざ" },
-  { text: "一期一会。", author: "— 茶道のことわざ" },
-  { text: "人生は近くで見ると悲劇だが、遠くから見ると喜劇だ。", author: "— チャーリー・チャップリン" },
-  { text: "諦めなければ、必ず道は開ける。", author: "— 作者不詳" },
-  { text: "知ることは力なり。", author: "— フランシス・ベーコン" },
-  { text: "思い立ったが吉日。", author: "— 日本のことわざ" },
-  { text: "逆境こそ、人を磨く砥石である。", author: "— 作者不詳" },
-  { text: "上を向いて歩こう。", author: "— 坂本九" },
-  { text: "自分が変われば世界が変わる。", author: "— 作者不詳" },
-  { text: "今日できることを明日に延ばすな。", author: "— ベンジャミン・フランクリン" },
-  { text: "困難の中にこそ、チャンスが隠れている。", author: "— アルベルト・アインシュタイン" },
-  { text: "人は夢を持つ限り若くいられる。", author: "— 作者不詳" },
-  { text: "できると信じれば、半分は達成したも同然だ。", author: "— セオドア・ルーズベルト" },
-  { text: "今この瞬間が最も若い瞬間だ。今を大切に。", author: "— 作者不詳" },
-  { text: "人生最大の喜びは、できないと言われたことをやり遂げること。", author: "— ウォルター・バジョット" },
-  { text: "小さな一歩でも、続ければ必ず頂上に着く。", author: "— 作者不詳" },
-  { text: "鉄は熱いうちに打て。", author: "— 日本のことわざ" },
-  { text: "忍耐は苦し、されどその実は甘い。", author: "— ルソー" },
-  { text: "心が変われば行動が変わり、行動が変われば習慣が変わる。", author: "— ウィリアム・ジェームズ" },
-  { text: "感謝する心が幸せの入り口だ。", author: "— 作者不詳" },
-  { text: "生きているだけで丸儲け。", author: "— 明石家さんま" },
-  { text: "人生に遅すぎることはない。始めたその時が最良の時だ。", author: "— 作者不詳" },
-  { text: "今日という日は、残りの人生の最初の日だ。", author: "— 作者不詳" },
-  { text: "己に勝つことが最大の勝利だ。", author: "— プラトン" },
-  { text: "夢なき者に理想なし、理想なき者に計画なし。", author: "— 吉田松陰" },
-  { text: "百聞は一見に如かず。", author: "— 日本のことわざ" },
-  { text: "今日の涙が、明日の笑顔の栄養になる。", author: "— 作者不詳" },
-  { text: "山高きゆえに貴からず。", author: "— 日本のことわざ" },
-  { text: "失敗を恐れるな。挑戦しないことを恐れよ。", author: "— 作者不詳" },
-  { text: "運命は勇者に味方する。", author: "— ウェルギリウス" },
-  { text: "進歩とは変化することだ。完璧になるとは、何度も変化することだ。", author: "— チャーチル" },
-  { text: "今日一日、精いっぱい生きることが最高の明日への贈り物だ。", author: "— 作者不詳" },
-  { text: "どんな困難も、乗り越えた後は必ず力になる。", author: "— 作者不詳" },
-  { text: "人生はマラソンだ。短距離走ではない。", author: "— 作者不詳" },
-  { text: "自分を信じること。それが成功への第一歩だ。", author: "— 作者不詳" },
-  { text: "転んでもただでは起きない。", author: "— 日本のことわざ" },
-  { text: "案ずるより産むが易し。", author: "— 日本のことわざ" },
-  { text: "木を見て森を見ず。", author: "— 日本のことわざ" },
-  { text: "明日は明日の風が吹く。", author: "— 日本のことわざ" },
-  { text: "花は咲き、散り、また咲く。人生もそれと同じだ。", author: "— 作者不詳" },
-  { text: "道は自分で切り開くものだ。", author: "— 作者不詳" },
-  { text: "準備が整ったとき、チャンスは必ずやってくる。", author: "— セネカ" },
-  { text: "一日一善。", author: "— 日本のことわざ" },
-  { text: "高きに登るには低きより始めよ。", author: "— 日本のことわざ" },
-  { text: "一人の千歩より千人の一歩。", author: "— 日本のことわざ" },
-  { text: "終わりよければすべてよし。", author: "— シェイクスピア" },
-  { text: "人生は自分次第で変わる。", author: "— 作者不詳" },
-  { text: "笑顔は世界共通の言語だ。", author: "— 作者不詳" },
-  { text: "知恵は経験から生まれる。", author: "— 作者不詳" },
-  { text: "輝く未来は、今日の努力の上に築かれる。", author: "— 作者不詳" },
-  { text: "過去は変えられない。しかし未来は自分で作れる。", author: "— 作者不詳" },
-  { text: "苦労しない花はない。努力しない成功もない。", author: "— 作者不詳" },
-  { text: "真剣になれば、道は必ず開ける。", author: "— 作者不詳" },
-  { text: "今日も一日、ありがとう。", author: "— 作者不詳" },
-];
-
-function showQuote() {
-  document.getElementById('quoteOverlay').classList.remove('hidden');
-  if (LANG_CODE === 'en') {
-    // 영어는 API에서 동적 fetch
-    const randId = Math.floor(Math.random() * 1450) + 1;
-    fetch(`https://dummyjson.com/quotes/${randId}`)
-      .then(r => r.json())
-      .then(d => {
-        document.getElementById('quoteText').textContent = d.quote;
-        document.getElementById('quoteAuthor').textContent = '— ' + d.author;
-      })
-      .catch(() => {
-        const q = QUOTES_EN_FALLBACK[Math.floor(Math.random() * QUOTES_EN_FALLBACK.length)];
-        document.getElementById('quoteText').textContent = q.text;
-        document.getElementById('quoteAuthor').textContent = q.author;
-      });
-  } else {
-    const pool = LANG_CODE === 'ja' ? QUOTES_JA : QUOTES_KO;
-    const q = pool[Math.floor(Math.random() * pool.length)];
-    document.getElementById('quoteText').textContent = q.text;
-    document.getElementById('quoteAuthor').textContent = q.author;
+  function badges(e) {
+    const out = [];
+    if (e.free) out.push('<span class="badge free">무료</span>');
+    if (e.start > TODAY) {
+      out.push(`<span class="badge">D-${daysBetween(TODAY, e.start)} 개막</span>`);
+    } else {
+      const left = daysBetween(TODAY, e.end);
+      if (left === 0) out.push('<span class="badge hot">오늘 마감</span>');
+      else if (left <= 7) out.push(`<span class="badge hot">${left}일 남음</span>`);
+    }
+    if (e._dist != null) out.push(`<span class="badge">${fmtDist(e._dist)}</span>`);
+    return out.join('');
   }
-}
 
-function hideQuote() {
-  document.getElementById('quoteOverlay').classList.add('hidden');
-}
+  function poster(e, cls) {
+    const src = safeUrl(e.image);
+    return src
+      ? `<img class="${cls}" src="${esc(src)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML='<div class=&quot;${cls} ph&quot;>畵</div>'">`
+      : `<div class="${cls} ph">畵</div>`;
+  }
 
-// ODsay lang 파라미터: ko=0, en/ja=1
-function odsayLang() { return LANG_CODE === 'ko' ? 0 : 1; }
-
-// ── 상태 ────────────────────────────────────────────
-let S = {
-  pos: null,
-  nearestStation: null,
-  flatStations: [],
-  subPaths: [],
-  currentIdx: 0,
-  alertedSet: new Set(),
-  map: null,
-  mapLayers: [],
-  useKakao: false,
-  ttStation: null,
-  ttDirection: '',
-  destName: '',
-  destCoords: null,
-  offRouteSince: null,
-  isRerouting: false,
-  ttInterval: null,
-};
-
-// ── 카카오 맵 초기화 ─────────────────────────────────
-window.onKakaoLoad = function() {
-  try {
-    let kakaoReady = false;
-    const fallback = setTimeout(function() {
-      if (!kakaoReady) startWithLeaflet();
-    }, 5000);
-    kakao.maps.load(function() {
-      kakaoReady = true;
-      clearTimeout(fallback);
-      S.useKakao = true;
-      const el = document.getElementById('map');
-      S.map = new kakao.maps.Map(el, {
-        center: new kakao.maps.LatLng(37.5665, 126.978),
-        level: 4,
-      });
-      startApp();
+  // 필터 · 정렬
+  function apply() {
+    const q = S.q.trim().toLowerCase();
+    let v = S.all.filter(e => {
+      if (S.status === 'now' && !(e.start <= TODAY && e.end >= TODAY)) return false;
+      if (S.status === 'soon' && !(e.start > TODAY)) return false;
+      if (S.free && !e.free) return false;
+      if (S.gu && e.gu !== S.gu) return false;
+      if (q && !`${e.title} ${e.place} ${e.artist} ${e.org}`.toLowerCase().includes(q)) return false;
+      return true;
     });
-  } catch(e) {
-    startWithLeaflet();
+    S.all.forEach(e => e._dist = S.me && e.lat ? distKm(S.me, e) : null);
+    const by = {
+      end: (a, b) => a.end.localeCompare(b.end) || a.title.localeCompare(b.title),
+      start: (a, b) => b.start.localeCompare(a.start),
+      dist: (a, b) => (a._dist ?? 1e9) - (b._dist ?? 1e9),
+    }[S.sort];
+    S.view = v.sort(by);
+    S.shown = 30;
+    renderList();
+    renderMap();
+    const label = { now: '지금 볼 수 있는 전시', soon: '곧 시작하는 전시', all: '진행 중·예정 전시' }[S.status];
+    $('#summary').innerHTML = `${label} <b>${S.view.length.toLocaleString()}</b>곳${S.gu ? ` · ${esc(S.gu)}` : ''}`;
   }
-};
 
-// 카카오 SDK 로드 실패 시 Leaflet 대체
-window.onKakaoError = function() { startWithLeaflet(); };
+  function renderList() {
+    const list = $('#list');
+    if (!S.all.length) return;
+    if (!S.view.length) {
+      list.innerHTML = '<div class="empty"><h2>조건에 맞는 전시가 없어요</h2>필터를 바꾸거나 검색어를 지워 보세요.</div>';
+      return;
+    }
+    const items = S.view.slice(0, S.shown);
+    list.innerHTML = items.map((e) => `
+      <button class="card${S.selected === e ? ' sel' : ''}" data-i="${S.all.indexOf(e)}">
+        ${poster(e, 'poster')}
+        <div class="card-body">
+          <h3>${esc(e.title)}</h3>
+          <div class="meta">${esc(e.place)}${e.gu ? ` · ${esc(e.gu)}` : ''}</div>
+          <div class="meta">${period(e)}</div>
+          <div class="badges">${badges(e)}</div>
+        </div>
+      </button>`).join('') +
+      (S.view.length > S.shown ? `<button class="more" id="more">더 보기 (${S.view.length - S.shown})</button>` : '');
+  }
 
-function startWithLeaflet() {
-  const script = document.createElement('script');
-  script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-  script.onload = function() {
-    const css = document.createElement('link');
-    css.rel = 'stylesheet';
-    css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-    document.head.appendChild(css);
-    setTimeout(function() {
-      S.map = L.map('map').setView([37.5665, 126.978], 13);
-      const tileUrl = LANG_CODE === 'ko'
-        ? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        : 'https://{s}.basemaps.cartocdn.com/dark_matter_all/{z}/{x}/{y}{r}.png';
-      S.leafletTile = L.tileLayer(tileUrl).addTo(S.map);
-      startApp();
-    }, 200);
-  };
-  document.head.appendChild(script);
-}
-
-function startApp() {
-  setMode('food'); // 맛집찾기를 기본 화면으로 (2026-08-23 개편 — 기존엔 지하철 길안내가 기본이었음)
-  applyLang();
-  // 저장된 언어로 버튼 상태 복원
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent === LANG_CODE.toUpperCase());
+  $('#list').addEventListener('click', ev => {
+    if (ev.target.closest('#more')) { S.shown += 30; renderList(); return; }
+    const c = ev.target.closest('.card');
+    if (c) openDetail(S.all[+c.dataset.i]);
   });
-  requestLocation();
-  requestNotifPerm();
-  startClock();
-}
 
-// ── 모드 전환 (맛집찾기 ↔ 지하철 길안내) ──────────────
-let APP_MODE = 'food';
-function setMode(mode) {
-  APP_MODE = mode;
-  document.body.dataset.mode = mode;
-  document.getElementById('modeBtnFood').classList.toggle('active', mode === 'food');
-  document.getElementById('modeBtnSubway').classList.toggle('active', mode === 'subway');
-  document.getElementById('modeIcon').textContent = mode === 'food' ? '🍜' : '🚇';
-  document.getElementById('appTitle').textContent = mode === 'food' ? t('appTitleFood') : t('appTitle');
-  if (mode === 'food') {
-    hideQuote();
-    if (FOOD_STATE.ref) { renderFoodList(); }
-    else if (S.pos) { runFoodSearchFromInput(); }
-    // 위치가 아직 없으면 onLocOK에서 처음 잡히는 시점에 자동 검색된다.
-  } else {
-    clearFoodMapLayers();
-    if (!document.querySelector('.main').classList.contains('split')) showQuote();
-  }
-}
-
-// ── 위치 ────────────────────────────────────────────
-function requestLocation() {
-  if (!navigator.geolocation) { setLocBadge(t('locFail')); return; }
-  navigator.geolocation.getCurrentPosition(onLocOK, onLocFail, { enableHighAccuracy: true, timeout: 12000 });
-  navigator.geolocation.watchPosition(onLocUpdate, null, { enableHighAccuracy: true, maximumAge: 15000 });
-}
-
-function onLocOK(p) {
-  S.pos = { lat: p.coords.latitude, lng: p.coords.longitude };
-  mapSetCenter(S.pos.lat, S.pos.lng, S.useKakao ? 5 : 13);
-  setCurrentMarker();
-  findNearestStation();
-  // 맛집찾기가 기본 화면인데 위치를 기다리느라 아직 첫 검색을 못 했다면 지금 실행
-  if (APP_MODE === 'food' && !FOOD_STATE.ref) runFoodSearchFromInput();
-}
-
-function onLocUpdate(p) {
-  S.pos = { lat: p.coords.latitude, lng: p.coords.longitude };
-  setCurrentMarker();
-  if (S.flatStations.length) checkTransferAlert();
-}
-
-function onLocFail() { setLocBadge(t('locFail')); }
-
-function setCurrentMarker() {
-  if (!S.pos) return;
-  if (S.useKakao) {
-    if (S._curMarker) S._curMarker.setMap(null);
-    S._curMarker = new kakao.maps.Marker({
-      position: new kakao.maps.LatLng(S.pos.lat, S.pos.lng),
-      map: S.map,
-    });
-  } else {
-    if (S._curMarker) S.map.removeLayer(S._curMarker);
-    S._curMarker = L.circleMarker([S.pos.lat, S.pos.lng], {
-      radius: 8, color: '#1D4ED8', fillColor: '#3B82F6', fillOpacity: 0.9, weight: 2,
+  // 지도
+  function ensureMap() {
+    if (S.map || !window.L) return;
+    S.map = L.map('map', { zoomControl: false }).setView([37.5665, 126.978], 12);
+    L.control.zoom({ position: 'topright' }).addTo(S.map);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19, subdomains: 'abcd',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
     }).addTo(S.map);
+    S.layer = L.layerGroup().addTo(S.map);
+    S.map.on('popupopen', ev => {
+      const b = ev.popup.getElement().querySelector('.pop-btn');
+      if (b) b.onclick = () => openDetail(S.all[+b.dataset.i]);
+    });
+    renderMap();
   }
-}
 
-// ── 주변 맛집·카페 ───────────────────────────────────
-// Kakao Local "키워드 검색"(query=맛집/카페, category_group_code로 필터)을 REST API로 직접 호출.
-// 카테고리 검색(순수 거리순)보다 키워드 검색이 카카오 자체 관련도 순위를 적용해줘서, 단순 거리순보다는
-// 유명한 곳이 우선될 가능성이 높다 — 다만 카카오 API 자체가 평점·리뷰수 필드를 제공하지 않으므로
-// 진짜 "평점순"은 아니고 어디까지나 API로 가능한 최선의 근사치다(2026-08-23, 사용자와 확인됨).
-//
-// 사진: 카카오 API는 장소 사진도 제공하지 않는다. 대신 사용자가 직접 찍어 보내준 사진을
-// places.json(placeId로 매칭)에 등록해두면 그 장소만 실제 사진 카드로 보여주고, 등록 안 된
-// 곳은 카테고리 아이콘 카드로 표시한다 — 큐레이션이 쌓일수록 점점 사진이 채워지는 구조.
-//
-// 반경: 100m에서 시작해 결과가 부족하면(5개 미만) 200m→300m로 자동 확장한다. 사용자가 반경
-// 버튼을 직접 누르면 그 순간부터는 그 반경 고정(자동확장 끔) — 다음 시트를 열면 다시 자동모드로 리셋.
-const FOOD_RADII_LADDER = [100, 200, 300];
-const CAFE_EXCLUDE_KEYWORDS = ['보드게임', '만화', '룸카페', '키즈카페', '스터디카페', 'PC방', '오락'];
-let FOOD_STATE = { tab: 'food', food: [], cafe: [], radiusM: FOOD_RADII_LADDER[0], autoRadius: true, ref: null, mapLayers: [] };
-let CURATED_PLACES = [];
-let curatedLoadPromise = null;
-
-function loadCuratedPlaces() {
-  if (!curatedLoadPromise) {
-    curatedLoadPromise = fetch('places.json').then(r => r.ok ? r.json() : []).then(d => { CURATED_PLACES = d; }).catch(() => { CURATED_PLACES = []; });
+  function renderMap() {
+    if (!S.map) return;
+    S.layer.clearLayers();
+    S.markers.clear();
+    // 같은 장소의 전시는 한 마커로 묶는다
+    const groups = new Map();
+    for (const e of S.view) {
+      if (e.lat == null) continue;
+      const k = `${e.lat.toFixed(5)},${e.lng.toFixed(5)}`;
+      if (!groups.has(k)) groups.set(k, []);
+      groups.get(k).push(e);
+    }
+    const pts = [];
+    for (const g of groups.values()) {
+      const e0 = g[0];
+      const icon = L.divIcon({ className: '', html: `<div class="pin${g.every(e => e.free) ? ' free' : ''}"></div>`, iconSize: [14, 14] });
+      const html = g.slice(0, 5).map(e => `
+        <div style="margin-bottom:6px">
+          <div class="pop-title">${esc(e.title)}</div>
+          <div class="pop-meta">${period(e)}${e.free ? ' · 무료' : ''}</div>
+          <button class="pop-btn" data-i="${S.all.indexOf(e)}">자세히 보기 →</button>
+        </div>`).join('') +
+        `<div class="pop-meta">${esc(e0.place)}${g.length > 5 ? ` 외 ${g.length - 5}건` : ''}</div>`;
+      const m = L.marker([e0.lat, e0.lng], { icon }).bindPopup(html, { maxWidth: 240 }).addTo(S.layer);
+      g.forEach(e => S.markers.set(e, m));
+      pts.push([e0.lat, e0.lng]);
+    }
+    if (S.me) {
+      L.circleMarker([S.me.lat, S.me.lng], { radius: 7, color: '#fff', weight: 2, fillColor: '#2563EB', fillOpacity: 1 }).addTo(S.layer);
+    }
+    if (pts.length && !S.selected) S.map.fitBounds(pts, { padding: [30, 30], maxZoom: 15 });
   }
-  return curatedLoadPromise;
-}
 
-async function fetchKeyword(query, code, lat, lng, radius) {
-  const url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(query)}&category_group_code=${code}&x=${lng}&y=${lat}&radius=${radius}`;
-  const res = await fetch(url, { headers: { Authorization: 'KakaoAK ' + KAKAO_REST_KEY } });
-  if (!res.ok) throw new Error('food api ' + res.status);
-  const data = await res.json();
-  let items = (data.documents || []).map(d => ({
-    id: d.id, name: d.place_name, category: (d.category_name || '').split(' > ').slice(1).join(' · '),
-    distance: parseInt(d.distance, 10) || 0, url: d.place_url,
-    lat: parseFloat(d.y), lng: parseFloat(d.x),
-  }));
-  if (code === 'CE7') {
-    items = items.filter(it => !CAFE_EXCLUDE_KEYWORDS.some(k => it.category.includes(k) || it.name.includes(k)));
+  // 상세
+  function openDetail(e) {
+    S.selected = e;
+    const link = safeUrl(e.link);
+    const dir = e.lat != null ? `https://map.kakao.com/link/to/${encodeURIComponent(e.place || e.title)},${e.lat},${e.lng}` : '';
+    const rows = [
+      ['기간', period(e)],
+      ['장소', [e.place, e.gu].filter(Boolean).join(' · ')],
+      ['요금', e.fee || (e.free ? '무료' : '')],
+      ['대상', e.target],
+      ['작가', e.artist],
+      ['주최', e.org],
+      ['거리', e._dist != null ? fmtDist(e._dist) : ''],
+    ].filter(r => r[1]);
+    $('#sheet').innerHTML = `
+      <div class="sheet-grip"><button class="close" id="close" aria-label="닫기">✕</button></div>
+      ${safeUrl(e.image) ? `<img class="hero" src="${esc(e.image)}" alt="${esc(e.title)} 포스터" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+      <div class="detail">
+        <h2>${esc(e.title)}</h2>
+        <div class="badges" style="margin-bottom:14px">${badges(e)}</div>
+        <dl class="rows">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+        ${e.desc ? `<p class="desc">${esc(e.desc.slice(0, 600))}${e.desc.length > 600 ? '…' : ''}</p>` : ''}
+        <div class="actions">
+          <a class="btn primary" href="${esc(dir)}" target="_blank" rel="noopener" aria-disabled="${!dir}">길찾기</a>
+          <a class="btn" href="${esc(link)}" target="_blank" rel="noopener" aria-disabled="${!link}">전시 홈페이지</a>
+        </div>
+        <p class="source">출처: 서울 열린데이터광장 · 서울시 문화행사 정보. 방문 전 운영 시간과 휴관일을 꼭 확인하세요.</p>
+      </div>`;
+    $('#close').onclick = closeDetail;
+    document.body.classList.add('sheet-open');
+    $('#sheet').scrollTop = 0;
+    document.querySelectorAll('.card.sel').forEach(c => c.classList.remove('sel'));
+    document.querySelector(`.card[data-i="${S.all.indexOf(e)}"]`)?.classList.add('sel');
+    if (S.map && e.lat != null && getComputedStyle($('#mapWrap')).display !== 'none') {
+      S.map.setView([e.lat, e.lng], Math.max(S.map.getZoom(), 15));
+    }
   }
-  return items;
-}
+  function closeDetail() {
+    document.body.classList.remove('sheet-open');
+    S.selected = null;
+  }
+  $('#sheetBg').onclick = closeDetail;
+  addEventListener('keydown', ev => { if (ev.key === 'Escape') closeDetail(); });
 
-function applyCuration(items, category) {
-  const byId = new Map(CURATED_PLACES.filter(p => p.category === category).map(p => [p.placeId, p]));
-  const withCuration = items.map(it => {
-    const c = byId.get(it.id);
-    return c ? { ...it, photo: c.photo, note: c.note || '' } : it;
+  // 컨트롤
+  $('#status').addEventListener('click', ev => {
+    const b = ev.target.closest('button'); if (!b) return;
+    S.status = b.dataset.v;
+    $('#status').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+    apply();
   });
-  // 사진(큐레이션) 있는 곳을 우선 노출
-  withCuration.sort((a, b) => (b.photo ? 1 : 0) - (a.photo ? 1 : 0));
-  return withCuration;
-}
+  $('#free').onclick = () => { S.free = !S.free; $('#free').classList.toggle('on', S.free); apply(); };
+  $('#gu').onchange = ev => { S.gu = ev.target.value; $('#gu').classList.toggle('on', !!S.gu); apply(); };
+  $('#sort').onchange = ev => {
+    if (ev.target.value === 'dist' && !S.me) { locate(); return; }
+    S.sort = ev.target.value; apply();
+  };
+  let qTimer;
+  $('#q').oninput = ev => { clearTimeout(qTimer); qTimer = setTimeout(() => { S.q = ev.target.value; apply(); }, 150); };
+  $('#near').onclick = locate;
 
-async function searchOneCategory(query, code, category, lat, lng) {
-  if (!FOOD_STATE.autoRadius) {
-    const items = await fetchKeyword(query, code, lat, lng, FOOD_STATE.radiusM);
-    return { items: applyCuration(items, category).slice(0, 5), radius: FOOD_STATE.radiusM };
+  function locate() {
+    if (!navigator.geolocation) { alert('이 브라우저는 위치 정보를 지원하지 않아요.'); return; }
+    $('#near').textContent = '📍 위치 확인 중…';
+    navigator.geolocation.getCurrentPosition(p => {
+      S.me = { lat: p.coords.latitude, lng: p.coords.longitude };
+      S.sort = 'dist'; $('#sort').value = 'dist';
+      $('#near').textContent = '📍 내 주변'; $('#near').classList.add('on');
+      apply();
+      if (S.map) S.map.setView([S.me.lat, S.me.lng], 14);
+    }, () => {
+      $('#near').textContent = '📍 내 주변';
+      $('#sort').value = S.sort;
+      alert('위치 권한이 필요해요. 브라우저 설정에서 위치 접근을 허용해 주세요.');
+    }, { enableHighAccuracy: true, timeout: 10000 });
   }
-  let items = [];
-  let usedRadius = FOOD_RADII_LADDER[0];
-  for (const r of FOOD_RADII_LADDER) {
-    items = await fetchKeyword(query, code, lat, lng, r);
-    usedRadius = r;
-    if (items.length >= 5 || r === FOOD_RADII_LADDER[FOOD_RADII_LADDER.length - 1]) break;
+
+  function setView(v) {
+    document.body.classList.toggle('view-map', v === 'map');
+    document.querySelectorAll('.viewtoggle button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+    if (v === 'map') { ensureMap(); setTimeout(() => S.map && S.map.invalidateSize(), 50); }
   }
-  return { items: applyCuration(items, category).slice(0, 5), radius: usedRadius };
-}
-
-// "현위치" 입력 그대로면 S.pos, 그 외엔 지하철역 이름으로 간주해 기존 역 검색 로직을 재사용한다.
-async function resolveFoodRef(rawInput) {
-  const raw = (rawInput || '').trim();
-  if (!raw || raw === t('foodCurrentLoc')) {
-    if (!S.pos) return { error: 'needLoc' };
-    return { lat: S.pos.lat, lng: S.pos.lng, label: t('foodRefBase'), stationName: null };
-  }
-  const name = raw.endsWith('역') ? raw.slice(0, -1) : raw;
-  const candidates = await findAllStations(name);
-  if (!candidates.length) return { error: 'notFound' };
-  const c = candidates[0];
-  return { lat: parseFloat(c.y), lng: parseFloat(c.x), label: t('foodRefStation', name), stationName: name };
-}
-
-async function runFoodSearchFromInput() {
-  const raw = document.getElementById('foodPlaceInput').value;
-  const list = document.getElementById('foodList');
-  list.innerHTML = `<div class="food-loading">${t('foodLoading')}</div>`;
-  const ref = await resolveFoodRef(raw);
-  if (ref.error === 'needLoc') { list.innerHTML = `<div class="food-empty">${t('foodNeedLoc')}</div>`; return; }
-  if (ref.error === 'notFound') { list.innerHTML = `<div class="food-empty">${t('notFound')}</div>`; return; }
-  FOOD_STATE.ref = ref;
-  await runFoodSearch();
-}
-
-async function runFoodSearch() {
-  const ref = FOOD_STATE.ref;
-  if (!ref) return;
-  const list = document.getElementById('foodList');
-  list.innerHTML = `<div class="food-loading">${t('foodLoading')}</div>`;
-  document.getElementById('foodSheetSub').textContent = ref.label;
-  try {
-    await loadCuratedPlaces();
-    const [foodResult, cafeResult] = await Promise.all([
-      searchOneCategory('맛집', 'FD6', 'food', ref.lat, ref.lng),
-      searchOneCategory('카페', 'CE7', 'cafe', ref.lat, ref.lng),
-    ]);
-    FOOD_STATE.food = foodResult.items;
-    FOOD_STATE.cafe = cafeResult.items;
-    FOOD_STATE.foodRadius = foodResult.radius;
-    FOOD_STATE.cafeRadius = cafeResult.radius;
-    updateFoodSub();
-    renderFoodList();
-  } catch (e) {
-    list.innerHTML = `<div class="food-empty">${t('foodFail')}</div>`;
-  }
-}
-
-function setFoodRadius(m) {
-  FOOD_STATE.radiusM = m;
-  FOOD_STATE.autoRadius = false;
-  document.querySelectorAll('.food-radius-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.r, 10) === m));
-  if (FOOD_STATE.ref) runFoodSearch();
-}
-
-function switchFoodTab(tab) {
-  FOOD_STATE.tab = tab;
-  document.getElementById('foodTabFood').classList.toggle('active', tab === 'food');
-  document.getElementById('foodTabCafe').classList.toggle('active', tab === 'cafe');
-  updateFoodSub();
-  renderFoodList();
-}
-
-function updateFoodSub() {
-  const ref = FOOD_STATE.ref;
-  if (!ref) return;
-  const radius = FOOD_STATE.tab === 'cafe' ? FOOD_STATE.cafeRadius : FOOD_STATE.foodRadius;
-  document.querySelectorAll('.food-radius-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.r, 10) === radius));
-  document.getElementById('foodSheetSub').textContent = `${ref.label} · ${t('foodRadius', radius)}`;
-}
-
-function buildWalkLink(ref, item) {
-  const seg = (name, lat, lng) => `${encodeURIComponent(name)},${lat},${lng}`;
-  const originName = ref.stationName || t('foodCurrentLoc');
-  return `https://map.kakao.com/link/by/walk/${seg(originName, ref.lat, ref.lng)}/${seg(item.name, item.lat, item.lng)}`;
-}
-
-function renderFoodList() {
-  const items = FOOD_STATE.tab === 'food' ? FOOD_STATE.food : FOOD_STATE.cafe;
-  const list = document.getElementById('foodList');
-  if (!items.length) { list.innerHTML = `<div class="food-empty">${t('foodEmpty')}</div>`; return; }
-  const ref = FOOD_STATE.ref;
-  const fallbackIcon = FOOD_STATE.tab === 'cafe' ? '☕' : '🍚';
-  list.innerHTML = items.map((it, i) => `
-    <div class="food-item">
-      <div class="food-thumb">
-        <span class="food-rank${FOOD_STATE.tab === 'cafe' ? ' cafe' : ''}">${i + 1}</span>
-        ${it.photo ? `<img src="${it.photo}" alt="${it.name}" loading="lazy">` : fallbackIcon}
-      </div>
-      <a class="food-info" href="${it.url}" target="_blank" rel="noopener">
-        <div class="food-name">${it.name}</div>
-        <div class="food-cat">${it.category}</div>
-        ${it.note ? `<div class="food-note">${it.note}</div>` : ''}
-      </a>
-      <span class="food-dist">${t('foodDist', it.distance)}</span>
-      <a class="food-nav" href="${buildWalkLink(ref, it)}" target="_blank" rel="noopener" title="${t('foodWalkNav')}">🧭</a>
-    </div>`).join('');
-  plotFoodPins(items, ref);
-}
-
-// ── 지도 위 번호 핀 (리스트 순번과 매칭) ──────────────
-function clearFoodMapLayers() {
-  if (!FOOD_STATE.mapLayers) { FOOD_STATE.mapLayers = []; return; }
-  if (S.useKakao) FOOD_STATE.mapLayers.forEach(l => l.setMap(null));
-  else FOOD_STATE.mapLayers.forEach(l => S.map.removeLayer(l));
-  FOOD_STATE.mapLayers = [];
-}
-
-function plotFoodPins(items, ref) {
-  if (!S.map) return;
-  clearFoodMapLayers();
-  if (!FOOD_STATE.mapLayers) FOOD_STATE.mapLayers = [];
-  const color = FOOD_STATE.tab === 'cafe' ? '#b5670c' : '#f08a00';
-  const points = [];
-  if (ref) points.push([ref.lat, ref.lng]);
-
-  if (S.useKakao) {
-    if (ref) {
-      const refOv = new kakao.maps.CustomOverlay({
-        position: new kakao.maps.LatLng(ref.lat, ref.lng),
-        content: `<div style="background:#1D4ED8;color:#fff;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;white-space:nowrap">📍 ${ref.stationName || t('foodCurrentLoc')}</div>`,
-        yAnchor: 1.5, map: S.map,
-      });
-      FOOD_STATE.mapLayers.push(refOv);
-    }
-    items.forEach((it, i) => {
-      points.push([it.lat, it.lng]);
-      const ov = new kakao.maps.CustomOverlay({
-        position: new kakao.maps.LatLng(it.lat, it.lng),
-        content: `<div style="background:${color};color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.35)">${i + 1}</div>`,
-        yAnchor: 0.5, map: S.map,
-      });
-      FOOD_STATE.mapLayers.push(ov);
-    });
-    if (points.length) {
-      const bounds = new kakao.maps.LatLngBounds();
-      points.forEach(p => bounds.extend(new kakao.maps.LatLng(p[0], p[1])));
-      S.map.setBounds(bounds, 60);
-    }
-  } else {
-    if (ref) {
-      const refMarker = L.circleMarker([ref.lat, ref.lng], { radius: 7, color: '#1D4ED8', fillColor: '#3B82F6', fillOpacity: 1, weight: 2 })
-        .bindTooltip(ref.stationName || t('foodCurrentLoc'), { permanent: true, direction: 'top', className: 'station-label' }).addTo(S.map);
-      FOOD_STATE.mapLayers.push(refMarker);
-    }
-    items.forEach((it, i) => {
-      points.push([it.lat, it.lng]);
-      const icon = L.divIcon({ className: '', html: `<div style="background:${color};color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.35)">${i + 1}</div>` });
-      const marker = L.marker([it.lat, it.lng], { icon }).addTo(S.map);
-      FOOD_STATE.mapLayers.push(marker);
-    });
-    if (points.length) S.map.fitBounds(points, { padding: [50, 50] });
-  }
-}
-
-// ── 가까운 역 ───────────────────────────────────────
-function findNearestStation() {
-  const { lat, lng } = S.pos;
-  fetch(`https://api.odsay.com/v1/api/searchStationByPosition?lang=${odsayLang()}&x=${lng}&y=${lat}&stationClass=1&apiKey=${encodeURIComponent(ODSAY_KEY)}`)
-    .then(r => r.json())
-    .then(d => {
-      const stations = d.result?.station || [];
-      // 2km 이내 역 필터
-      const nearby = stations.filter(st => calcDist(lat, lng, st.y, st.x) <= 2);
-      if (!nearby.length) { setLocBadge(t('locNoStation')); return; }
-      const st = nearby[0];
-      S.nearestStation = st;
-      const dist = calcDist(lat, lng, st.y, st.x);
-      const walkMin = Math.max(1, Math.ceil(dist / 0.07));
-      setLocBadge(t('locNear', st.stationName, walkMin));
-      // 역 마커 표시
-      addStationMarker(st.y, st.x, st.stationName);
-      showTimetable(st.stationName, '');
-    })
-    .catch(() => setLocBadge(t('locError')));
-}
-
-// 8호선 별내선 (2024년 개통) — ODsay DB 미포함 시 인접 지원역으로 대체
-const BYEOLLAE_EXT = { '별내': '구리', '별내별가람': '구리', '다산': '구리' };
-
-// ── 경로 검색 ───────────────────────────────────────
-async function routeTo(destName) {
-  if (S.isRerouting) return;
-  if (!S.pos) { showToast(t('locating'), false, 2000); return; }
-  S.isRerouting = true;
-  showToast(t('searching'), true, 99999);
-  try {
-    const candidates = await findAllStations(destName);
-    if (!candidates.length) {
-      const fallback = BYEOLLAE_EXT[destName];
-      if (fallback) {
-        hideToast();
-        showToast(`⚠️ "${destName}"역(별내선)은 경로 DB 미포함 — ${fallback}역까지 안내합니다`, false, 7000);
-        S.isRerouting = false;
-        setTimeout(() => routeTo(fallback), 300);
-        return;
-      }
-      showToast(t('notFound'), false, 3000); S.isRerouting = false; return;
-    }
-    const { lat, lng } = S.pos;
-    const cleanStr = s => s.replace(/역$/, '').replace(/\s*\([^)]*\)$/, '').trim();
-    let chosenPath = null, chosenCoords = null, foundGood = false;
-    // 후보역을 순서대로 시도 — 마지막 지하철역이 목적지와 일치하는 경로가 나오면 채택
-    for (const cand of candidates.slice(0, 4)) {
-      const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${lng}&SY=${lat}&EX=${cand.x}&EY=${cand.y}&OPT=0&lang=${odsayLang()}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
-      const paths = d.result?.path || [];
-      if (!paths.length) continue;
-      const good = paths.find(p => {
-        const subs = p.subPath.filter(sp => sp.trafficType === 1);
-        if (!subs.length) return false;
-        const last = subs[subs.length-1]?.passStopList?.stations?.slice(-1)[0];
-        return last && cleanStr(last.stationName) === cleanStr(destName);
-      });
-      if (good) {
-        chosenPath = good;
-        chosenCoords = { x: parseFloat(cand.x), y: parseFloat(cand.y) };
-        foundGood = true;
-        break;
-      }
-      // 이번 후보로 맞는 경로 없어도 첫 번째 결과는 보관 (최후 폴백용)
-      if (!chosenPath) { chosenPath = paths[0]; chosenCoords = { x: parseFloat(cand.x), y: parseFloat(cand.y) }; }
-    }
-    hideToast();
-    // 경로가 없거나, 경로는 있지만 목적지에 실제로 도달하지 못하는 경우 모두 폴백 체크
-    if (!chosenPath || !foundGood) {
-      const fallback = BYEOLLAE_EXT[destName];
-      if (fallback) {
-        hideToast();
-        showToast(`⚠️ "${destName}"역(별내선)은 경로 DB 미포함 — ${fallback}역 하차 후 별내선 이용`, false, 7000);
-        S.isRerouting = false;
-        setTimeout(() => routeTo(fallback), 300);
-        return;
-      }
-      if (!chosenPath) { showToast(t('noRoute'), false, 3000); S.isRerouting = false; return; }
-    }
-    S.destCoords = chosenCoords;
-    buildRoute(chosenPath, destName);
-  } catch(e) {
-    hideToast();
-    showToast(t('searchFail', e.message), false, 3000);
-  }
-  S.isRerouting = false;
-}
-
-async function searchRoute() {
-  const raw = document.getElementById('destInput').value.trim();
-  if (!raw) { showToast(t('inputHint'), false, 2000); return; }
-  S.isRerouting = false;
-  await routeTo(raw.endsWith('역') ? raw.slice(0, -1) : raw);
-}
-
-// Nominatim(OpenStreetMap)으로 정확한 역 좌표 조회
-async function geocodeStation(name) {
-  try {
-    const r = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name+'역')}&format=json&limit=5&countrycodes=kr`,
-      { headers: { 'Accept-Language': 'ko' } }
-    ).then(r => r.json());
-    const st = r?.find(s => ['railway','public_transport','amenity'].includes(s.class)) || r?.[0];
-    if (st) return { stationName: name, x: parseFloat(st.lon), y: parseFloat(st.lat), type: 1 };
-  } catch(e) {}
-  return null;
-}
-
-// Nominatim + ODsay searchStation 병렬 조회, 정확한 좌표 후보 리스트 반환
-async function findAllStations(name) {
-  const [odsay, nom] = await Promise.all([
-    fetch(`https://api.odsay.com/v1/api/searchStation?lang=${odsayLang()}&stationName=${encodeURIComponent(name)}&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json()).catch(() => null),
-    geocodeStation(name)
-  ]);
-  const list = odsay?.result?.station || [];
-  const clean = s => s.replace(/역$/, '');
-  // ODsay가 "다산(별내선)"처럼 괄호로 노선명을 붙이는 경우 대응
-  const cleanFull = s => clean(s).replace(/\s*\([^)]*\)$/, '').trim();
-  const inMetro = s => { const la=parseFloat(s.y),lo=parseFloat(s.x); return la>36.5&&la<38.5&&lo>126.0&&lo<128.5; };
-  const exact = list.filter(s => s.type===1 && inMetro(s) && cleanFull(s.stationName)===clean(name));
-  // Nominatim 결과를 첫 번째 우선 (좌표 정확도 높음), 그 다음 ODsay
-  const candidates = [...(nom ? [nom] : []), ...exact];
-  if (candidates.length) return candidates;
-  const metro = list.filter(s => s.type===1 && inMetro(s));
-  return metro.length ? metro : list.filter(s => s.type===1).slice(0, 1);
-}
-
-// ── 경로 구성 ───────────────────────────────────────
-function buildRoute(path, destName) {
-  S.flatStations = [];
-  S.subPaths = [];
-  S.currentIdx = 0;
-  S.alertedSet = new Set();
-  S.destName = destName;
-  S.offRouteSince = null;
-  clearMapLayers();
-
-  const subwaySegs = path.subPath.filter(sp => sp.trafficType === 1);
-  const totalSubs = subwaySegs.length;
-
-  subwaySegs.forEach((sp, subIdx) => {
-    const stations = sp.passStopList?.stations || [];
-    const color = lineColor(sp.lane?.[0]?.subwayCode);
-    const lineName = sp.lane?.[0]?.laneName || '';
-    const direction = sp.direction || '';          // ODsay가 주는 방면 (예: "강남방면")
-    const hasNext = subIdx < totalSubs - 1;
-
-    stations.forEach((st, si) => {
-      // 두 번째 이상 구간의 첫 역 = 환승역 중복 → 건너뜀
-      if (si === 0 && subIdx > 0) return;
-
-      const isLast = si === stations.length - 1;
-      S.flatStations.push({
-        name: st.stationName,
-        x: parseFloat(st.x), y: parseFloat(st.y),
-        color, lineName,
-        direction,
-        isTransfer: isLast && hasNext,
-        isFinal: !hasNext && isLast,
-      });
-    });
-    S.subPaths.push({ stations, color });
+  document.querySelector('.viewtoggle').addEventListener('click', ev => {
+    const b = ev.target.closest('button'); if (b) setView(b.dataset.v);
   });
+  matchMedia('(min-width: 900px)').addEventListener('change', m => { if (m.matches) { ensureMap(); S.map?.invalidateSize(); } });
 
-  if (!S.flatStations.length) { showToast(t('noSubway'), false, 3000); return; }
-
-  // 도착 배지: 이름 일치 우선, 실패 시 목적지 좌표 최근접 역
-  const clean = s => s.replace(/역$/, '');
-  let destIdx = S.flatStations.findIndex(st => clean(st.name) === clean(destName));
-  if (destIdx === -1 && S.destCoords) {
-    let minD = Infinity;
-    S.flatStations.forEach((st, i) => {
-      const d = calcDist(st.y, st.x, S.destCoords.y, S.destCoords.x);
-      if (d < minD) { minD = d; destIdx = i; }
-    });
-    if (destIdx !== -1) {
-      const lastSt = S.flatStations[destIdx];
-      const distKm = calcDist(lastSt.y, lastSt.x, S.destCoords.y, S.destCoords.x);
-      if (distKm > 1.5) {
-        // 목적지가 경로 마지막 역과 많이 떨어짐 — 연장선 미포함 가능성
-        setTimeout(() => showToast(`⚠️ "${destName}" 역은 경로 DB 미포함 구간일 수 있어요. ${lastSt.name}역 하차 후 이어 탑승하세요.`, false, 7000), 1200);
+  // 데이터 로드
+  async function load() {
+    try {
+      const res = await fetch('data/exhibitions.json', { cache: 'no-cache' });
+      const data = await res.json();
+      S.all = (data.items || []).filter(e => e.end >= TODAY);
+      if (data.updatedAt) {
+        const d = new Date(data.updatedAt);
+        $('#updated').textContent = `${d.getMonth() + 1}/${d.getDate()} 갱신`;
       }
+    } catch (err) {
+      S.all = [];
     }
-  }
-  if (destIdx !== -1) {
-    S.flatStations.forEach((st, i) => {
-      st.isFinal = i === destIdx;
-      if (i === destIdx) st.isTransfer = false;
-    });
-  }
-
-  const info = path.info;
-  const subwayTransfers = subwaySegs.length - 1;
-  document.getElementById('routeTitle').textContent = t('routeTitle', destName, info.totalTime, subwayTransfers);
-
-  enableSplitMode();
-  renderRouteList();
-  drawRouteOnMap();
-  updateTimetableForCurrentPosition();
-}
-
-function enableSplitMode() {
-  document.querySelector('.main').classList.add('split');
-  hideQuote();
-}
-
-// ── 경로 목록 렌더링 ────────────────────────────────
-function getAlertIdxs() {
-  const r = [];
-  S.flatStations.forEach((st, i) => {
-    if (st.isTransfer || st.isFinal) {
-      if (i >= 2) r.push(i-2);
-      if (i >= 1) r.push(i-1);
-      r.push(i);
-    }
-  });
-  return [...new Set(r)];
-}
-
-function renderRouteList() {
-  const alertIdxs = getAlertIdxs();
-  const list = document.getElementById('routeList');
-  list.innerHTML = '';
-  S.flatStations.forEach((st, i) => {
-    const isAlert = alertIdxs.includes(i) && i >= S.currentIdx;
-    const div = document.createElement('div');
-    div.className = 'station-row' + (i === S.currentIdx ? ' current' : '') + (isAlert ? ' talert' : '');
-    let badge = '';
-    if (st.isFinal) badge = `<span class="sbadge sb-arrive">${t('badgeArrive')}</span>`;
-    else if (st.isTransfer) badge = `<span class="sbadge sb-transfer">${t('badgeTransfer')}</span>`;
-    else if (isAlert) {
-      const nextSp = S.flatStations.findIndex((s, j) => j > i && (s.isTransfer || s.isFinal));
-      const isFinalAlert = nextSp !== -1 && S.flatStations[nextSp].isFinal;
-      badge = `<span class="sbadge sb-alert">${t(isFinalAlert ? 'badgeAlertFinal' : 'badgeAlert')}</span>`;
-    }
-    const isFirst = i === 0, isLast = st.isFinal;
-    const isCurrent = i === S.currentIdx;
-    // 기차 마커: 현재 역 아래 구간에만 표시
-    const trainDur = S_rtCache?.[0] ? Math.max(10, parseInt(S_rtCache[0].barvlDt) || 30) : 30;
-    const tc = st.color || '#3a7bd5';
-    const trainSvg = isCurrent && !isLast ? `
-      <div class="train-marker" style="--train-dur:${trainDur}s">
-        <svg width="34" height="20" viewBox="0 0 34 20" xmlns="http://www.w3.org/2000/svg">
-          <!-- 차체 -->
-          <rect x="1" y="1" width="28" height="14" rx="3.5" fill="${tc}" stroke="rgba(0,0,0,0.25)" stroke-width="1"/>
-          <!-- 흰 줄 (측면 라인) -->
-          <rect x="1" y="8" width="28" height="2.5" fill="rgba(255,255,255,0.28)"/>
-          <!-- 창문 3개 -->
-          <rect x="3"  y="2.5" width="6" height="5" rx="1.2" fill="rgba(255,255,255,0.88)"/>
-          <rect x="11" y="2.5" width="6" height="5" rx="1.2" fill="rgba(255,255,255,0.88)"/>
-          <rect x="19" y="2.5" width="5" height="5" rx="1.2" fill="rgba(255,255,255,0.88)"/>
-          <!-- 전면 노즈 -->
-          <rect x="27" y="3.5" width="5" height="8" rx="2" fill="${tc}" stroke="rgba(0,0,0,0.2)" stroke-width="0.8"/>
-          <rect x="28.5" y="5" width="2" height="2.5" rx="0.8" fill="rgba(255,255,255,0.75)"/>
-          <!-- 문 구분선 -->
-          <line x1="9.5"  y1="9.5" x2="9.5"  y2="15" stroke="rgba(0,0,0,0.18)" stroke-width="1"/>
-          <line x1="17.5" y1="9.5" x2="17.5" y2="15" stroke="rgba(0,0,0,0.18)" stroke-width="1"/>
-          <!-- 바퀴 -->
-          <circle cx="7"  cy="18" r="2.5" fill="#222"/>
-          <circle cx="7"  cy="18" r="1"   fill="#555"/>
-          <circle cx="22" cy="18" r="2.5" fill="#222"/>
-          <circle cx="22" cy="18" r="1"   fill="#555"/>
-        </svg>
-      </div>` : '';
-    div.innerHTML = `
-      <div class="strack">
-        <div class="strack-line top" style="background:${isFirst?'transparent':st.color}"></div>
-        <div class="sdot${(st.isTransfer||st.isFinal||isCurrent)?' big':''}" style="background:${st.color};color:${st.color}"></div>
-        <div class="strack-line bot" style="background:${isLast?'transparent':st.color}"></div>
-      </div>
-      <div class="sinfo">
-        <div class="sname">${isCurrent ? '▶ ' : ''}${st.name}${trainSvg}</div>
-        <div class="smeta">${st.lineName}</div>
-      </div>${badge}`;
-    div.onclick = () => jumpToStation(i);
-    list.appendChild(div);
-  });
-  list.querySelectorAll('.station-row')[S.currentIdx]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-// ── 지도 경로 그리기 ────────────────────────────────
-function drawRouteOnMap() {
-  if (S.useKakao) {
-    S.subPaths.forEach(sp => {
-      if (sp.stations.length < 2) return;
-      const path = sp.stations.map(s => new kakao.maps.LatLng(parseFloat(s.y), parseFloat(s.x)));
-      const poly = new kakao.maps.Polyline({ path, strokeWeight: 5, strokeColor: sp.color, strokeOpacity: 0.9, map: S.map });
-      S.mapLayers.push(poly);
-    });
-    S.flatStations.forEach((st, i) => {
-      if (i === 0 || st.isTransfer || st.isFinal) {
-        const ov = new kakao.maps.CustomOverlay({
-          position: new kakao.maps.LatLng(st.y, st.x),
-          content: `<div style="background:${st.color};color:#fff;padding:2px 6px;border-radius:5px;font-size:10px;font-weight:700">${st.name}</div>`,
-          yAnchor: 1.5, map: S.map,
-        });
-        S.mapLayers.push(ov);
-      }
-    });
-    const bounds = new kakao.maps.LatLngBounds();
-    S.flatStations.forEach(st => bounds.extend(new kakao.maps.LatLng(st.y, st.x)));
-    if (S.pos) bounds.extend(new kakao.maps.LatLng(S.pos.lat, S.pos.lng));
-    S.map.setBounds(bounds);
-  } else {
-    S.subPaths.forEach(sp => {
-      const pts = sp.stations.map(s => [parseFloat(s.y), parseFloat(s.x)]);
-      const poly = L.polyline(pts, { color: sp.color, weight: 5, opacity: 0.85 }).addTo(S.map);
-      S.mapLayers.push(poly);
-    });
-    const bounds = S.flatStations.map(st => [st.y, st.x]);
-    if (S.pos) bounds.push([S.pos.lat, S.pos.lng]);
-    if (bounds.length) S.map.fitBounds(bounds, { padding: [10, 10] });
-  }
-}
-
-function clearMapLayers() {
-  if (S.useKakao) S.mapLayers.forEach(l => l.setMap(null));
-  else S.mapLayers.forEach(l => S.map.removeLayer(l));
-  S.mapLayers = [];
-}
-
-function addStationMarker(lat, lng, name) {
-  if (!S.map) return;
-  if (S.useKakao) {
-    const ov = new kakao.maps.CustomOverlay({
-      position: new kakao.maps.LatLng(lat, lng),
-      content: `<div style="background:#1D4ED8;color:#fff;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;white-space:nowrap">🚇 ${name}</div>`,
-      yAnchor: 1.5, map: S.map,
-    });
-    S.mapLayers.push(ov);
-  } else {
-    const marker = L.circleMarker([lat, lng], {
-      radius: 7, color: '#1D4ED8', fillColor: '#3B82F6', fillOpacity: 1, weight: 2,
-    }).bindTooltip(name, { permanent: true, direction: 'top', className: 'station-label' }).addTo(S.map);
-    S.mapLayers.push(marker);
-  }
-}
-
-// ── 역 이동 ──────────────────────────────────────────
-function jumpToStation(idx) {
-  S.currentIdx = idx;
-  renderRouteList();
-  const st = S.flatStations[idx];
-  mapSetCenter(st.y, st.x, S.useKakao ? 4 : 15);
-  showTimetable(st.name, st.direction || '');
-}
-
-function mapSetCenter(lat, lng, level) {
-  if (!S.map) return;
-  if (S.useKakao) {
-    S.map.setCenter(new kakao.maps.LatLng(lat, lng));
-    S.map.setLevel(level);
-  } else {
-    S.map.setView([lat, lng], level);
-  }
-}
-
-// ── 환승 알림 ────────────────────────────────────────
-function speak(text) {
-  if (!('speechSynthesis' in window)) return;
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = LANG_CODE === 'ja' ? 'ja-JP' : LANG_CODE === 'en' ? 'en-US' : 'ko-KR';
-  utter.rate = 0.92;
-  utter.volume = 1;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(utter);
-}
-
-function checkTransferAlert() {
-  if (!S.pos || !S.flatStations.length) return;
-  let closestIdx = S.currentIdx, minDist = Infinity;
-  S.flatStations.forEach((st, i) => {
-    const d = calcDist(S.pos.lat, S.pos.lng, st.y, st.x);
-    if (d < minDist) { minDist = d; closestIdx = i; }
-  });
-
-  // 경로 이탈 감지 — 60초 이상 이탈 시 자동 재탐색
-  if (minDist >= 0.8 && S.destName) {
-    if (!S.offRouteSince) S.offRouteSince = Date.now();
-    else if (Date.now() - S.offRouteSince > 20000) {
-      S.offRouteSince = null;
-      speak('경로를 벗어났습니다. 재탐색합니다.');
-      showToast('📍 경로 이탈 — 재탐색 중...', true, 99999);
-      routeTo(S.destName);
+    if (!S.all.length) {
+      $('#summary').textContent = '아직 전시 데이터가 없어요';
+      $('#list').innerHTML = `<div class="empty"><h2>전시 데이터를 준비 중이에요</h2>
+        서울 열린데이터광장 인증키를 GitHub 저장소 Secret <code>SEOUL_API_KEY</code>에 등록하면<br>
+        매일 새벽 최신 전시 정보가 자동으로 채워집니다.</div>`;
       return;
     }
-  } else {
-    S.offRouteSince = null;
+    const gus = [...new Set(S.all.map(e => e.gu).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ko'));
+    $('#gu').insertAdjacentHTML('beforeend', gus.map(g => `<option>${esc(g)}</option>`).join(''));
+    apply();
+    if (matchMedia('(min-width: 900px)').matches) ensureMap();
   }
-
-  if (minDist < 0.8 && closestIdx !== S.currentIdx) {
-    S.currentIdx = closestIdx;
-    renderRouteList();
-    updateTimetableForCurrentPosition();
-  }
-
-  if (S.alertedSet.has(S.currentIdx)) return;
-  const cur = S.flatStations[S.currentIdx];
-
-  // 환승 당역
-  if (cur.isTransfer) {
-    S.alertedSet.add(S.currentIdx);
-    const msg = `${cur.name}역입니다. 환승하세요.`;
-    speak(msg);
-    triggerAlert(`🔄 ${msg}`);
-    return;
-  }
-
-  // 하차 당역
-  if (cur.isFinal) {
-    S.alertedSet.add(S.currentIdx);
-    const msg = `${cur.name}역입니다. 내리세요.`;
-    speak(msg);
-    triggerAlert(`🚉 ${msg}`);
-    return;
-  }
-
-  // 환승/하차 N정거장 전
-  const nextIdx = S.flatStations.findIndex((st, i) => i > S.currentIdx && (st.isTransfer || st.isFinal));
-  if (nextIdx === -1) return;
-  const left = nextIdx - S.currentIdx;
-  if (left !== 1 && left !== 2) return;
-
-  S.alertedSet.add(S.currentIdx);
-  const target = S.flatStations[nextIdx];
-  const type = target.isTransfer ? '환승' : '하차';
-  const msg = left === 1
-    ? `다음 역 [${target.name}] ${type}역입니다.`
-    : `2정거장 후 [${target.name}] ${type}역입니다.`;
-  speak(msg);
-  triggerAlert(`⚠️ ${msg}`);
-}
-
-function triggerAlert(msg) {
-  showToast(msg, false, 6000);
-  if ('vibrate' in navigator) navigator.vibrate([400, 150, 400]);
-  if (Notification.permission === 'granted') new Notification(t('alertTitle'), { body: msg });
-}
-
-function requestNotifPerm() {
-  if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
-}
-
-// ── 시간표 ───────────────────────────────────────────
-const SEOUL_RT_KEY = '6457544f497a656c38355746706d63';
-let S_rtCache = null;
-let S_rtLastFetch = 0;
-
-// 실시간 실패 시 폴백용 배차 간격(분): [러시아워, 일반, 심야]
-const LINE_INTERVAL = {
-  1: [4, 7, 12], 2: [2, 4, 8], 3: [4, 6, 12], 4: [4, 6, 12],
-  5: [5, 7, 12], 6: [5, 7, 15], 7: [5, 7, 15], 8: [5, 8, 20], 9: [5, 8, 20],
-  21: [5, 8, 20], 22: [5, 8, 20],
-  101: [8, 12, 20], 104: [15, 20, 40], 107: [6, 10, 20],
-  108: [8, 12, 30], 109: [8, 12, 25], 110: [8, 12, 25], 112: [12, 20, 40],
-};
-const RUSH = [[7*60,9*60],[18*60,20*60]];
-
-function getInterval(lineNum) {
-  const now = new Date();
-  const mins = now.getHours()*60 + now.getMinutes();
-  const isRush = RUSH.some(([s, e]) => mins >= s && mins <= e);
-  const isLate = now.getHours() >= 23 || now.getHours() < 6;
-  const ivs = LINE_INTERVAL[lineNum] || [5, 8, 15];
-  return isLate ? ivs[2] : isRush ? ivs[0] : ivs[1];
-}
-
-async function fetchRealtimeArrival(stationName) {
-  try {
-    const url = `https://swopenAPI.seoul.go.kr/api/subway/${SEOUL_RT_KEY}/json/realtimeStationArrival/0/30/${encodeURIComponent(stationName)}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    if (data.realtimeArrivalList && data.realtimeArrivalList.length > 0) return data.realtimeArrivalList;
-    return null;
-  } catch(e) { return null; }
-}
-
-async function refreshRealtimeTimetable(stationName, lineNum) {
-  const now = Date.now();
-  if (now - S_rtLastFetch > 30000) {
-    S_rtLastFetch = now;
-    S_rtCache = await fetchRealtimeArrival(stationName);
-  }
-  renderTimetable(lineNum, S.ttDirection, S_rtCache);
-}
-
-// 현재 위치 기준으로 시간표 대상 역 결정
-// - 출발역/환승역: 해당 역 시간표 (탑승 대기)
-// - 이동 중: 다음 환승역 또는 도착역 시간표 (연결 열차 확인)
-function updateTimetableForCurrentPosition() {
-  if (!S.flatStations.length) return;
-  const cur = S.flatStations[S.currentIdx];
-
-  // 출발역이거나 환승·도착역이면 현재 역 시간표
-  if (S.currentIdx === 0 || cur.isTransfer || cur.isFinal) {
-    let dir = cur.direction;
-    if (cur.isTransfer && S.currentIdx + 1 < S.flatStations.length)
-      dir = S.flatStations[S.currentIdx + 1].direction;
-    showTimetable(cur.name, dir || '', false);
-    return;
-  }
-
-  // 이동 중: 다음 환승역 또는 도착역의 시간표
-  for (let i = S.currentIdx + 1; i < S.flatStations.length; i++) {
-    const st = S.flatStations[i];
-    if (st.isTransfer || st.isFinal) {
-      let dir = st.direction;
-      if (st.isTransfer && i + 1 < S.flatStations.length)
-        dir = S.flatStations[i + 1].direction;
-      showTimetable(st.name, dir || '', st.isTransfer);
-      return;
-    }
-  }
-  showTimetable(cur.name, cur.direction || '', false);
-}
-
-function showTimetable(stationName, direction, isUpcoming) {
-  S.ttStation = stationName;
-  S.ttDirection = direction || '';
-  const suffix = LANG_CODE === 'ko' ? '역' : LANG_CODE === 'ja' ? '駅' : '';
-  const label = isUpcoming ? '환승 예정 → ' : '';
-  document.getElementById('ttStation').textContent = label + stationName + suffix;
-
-  let lineNum = 2;
-  if (S.flatStations.length) {
-    const st = S.flatStations.find(s => s.name === stationName);
-    if (st) {
-      const match = st.lineName.match(/(\d+)/);
-      if (match) lineNum = parseInt(match[1]);
-    }
-  }
-
-  S_rtCache = null;
-  S_rtLastFetch = 0;
-  refreshRealtimeTimetable(stationName, lineNum);
-}
-
-function renderTimetable(lineNum, direction, rtList) {
-  const scroll = document.getElementById('ttScroll');
-
-  if (rtList && rtList.length > 0) {
-    scroll.innerHTML = rtList.slice(0, 6).map((item, i) => {
-      const secs = parseInt(item.barvlDt) || 0;
-      const mins = Math.floor(secs / 60);
-      const msg = item.arvlMsg2 || (mins < 1 ? t('soon') : t('minsLater', mins));
-      const dest = item.arvlMsg3 || '';
-      const lineName = item.subwayNm || '';
-      const updn = item.updnLine || '';
-      return `
-        <div class="tt-card${i === 0 ? ' next' : ''}">
-          <div class="tt-dir">${lineName} ${updn}</div>
-          <div class="tt-depart" style="font-size:13px;letter-spacing:0;line-height:1.3">${dest}</div>
-          <div class="tt-remaining">${msg}</div>
-        </div>`;
-    }).join('');
-  } else {
-    // 폴백: 배차 간격 기반 추정
-    const interval = getInterval(lineNum);
-    const now = new Date();
-    const elapsed = (now.getHours()*60 + now.getMinutes()) % interval + now.getSeconds()/60;
-    const nextMins = interval - (elapsed % interval);
-    const dirLabel = direction || t('dirDefault');
-    scroll.innerHTML = Array.from({length: 6}, (_, i) => {
-      const offset = nextMins + i * interval;
-      const depTime = new Date(now.getTime() + offset * 60000);
-      const time = depTime.getHours().toString().padStart(2,'0') + ':' + depTime.getMinutes().toString().padStart(2,'0');
-      const remaining = Math.round(offset);
-      return `
-        <div class="tt-card${i === 0 ? ' next' : ''}">
-          <div class="tt-dir">${dirLabel}</div>
-          <div class="tt-depart">${time}</div>
-          <div class="tt-remaining">${remaining < 1 ? t('soon') : t('minsLater', remaining)}</div>
-        </div>`;
-    }).join('');
-  }
-}
-
-// 시계 업데이트
-function startClock() {
-  function tick() {
-    const now = new Date();
-    document.getElementById('ttClock').textContent =
-      now.getHours().toString().padStart(2,'0') + ':' +
-      now.getMinutes().toString().padStart(2,'0') + ':' +
-      now.getSeconds().toString().padStart(2,'0');
-    if (S.ttStation) {
-      const lineNum = getCurrentLineNum();
-      if (Date.now() - S_rtLastFetch > 30000) {
-        refreshRealtimeTimetable(S.ttStation, lineNum);
-      } else {
-        renderTimetable(lineNum, S.ttDirection || '', S_rtCache);
-      }
-    }
-  }
-  tick();
-  setInterval(tick, 1000);
-}
-
-function getCurrentLineNum() {
-  if (S.flatStations.length && S.flatStations[S.currentIdx]) {
-    const m = S.flatStations[S.currentIdx].lineName.match(/(\d+)/);
-    if (m) return parseInt(m[1]);
-  }
-  return 2;
-}
-
-// ── 유틸 ─────────────────────────────────────────────
-function calcDist(lat1, lng1, lat2, lng2) {
-  const R=6371, d2r=Math.PI/180;
-  const dLat=(lat2-lat1)*d2r, dLng=(lng2-lng1)*d2r;
-  const a=Math.sin(dLat/2)**2+Math.cos(lat1*d2r)*Math.cos(lat2*d2r)*Math.sin(dLng/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
-
-function lineColor(code) {
-  return ({
-    1:'#0052A4', 2:'#009246', 3:'#EF7C1C', 4:'#00A5DE', 5:'#996CAC',
-    6:'#CD7C2F', 7:'#747F00', 8:'#E6186C', 9:'#BDB092',
-    21:'#7CA8D5', 22:'#F5A200',
-    101:'#0065B3', 104:'#77C4A3', 107:'#0C8E72',
-    108:'#F5A200', 109:'#D4003B', 110:'#B0CE4E', 112:'#8FC31F',
-  })[code] || '#4B5563';
-}
-
-function setLocBadge(msg) { document.getElementById('locBadge').textContent = msg; }
-
-let _tt;
-function showToast(msg, info=false, ms=3000) {
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.className='toast'+(info?' info':'')+' show';
-  clearTimeout(_tt); if(ms<90000) _tt=setTimeout(()=>el.classList.remove('show'),ms);
-}
-function hideToast(){document.getElementById('toast').classList.remove('show');clearTimeout(_tt);}
-
-let routeOpen=true;
-function toggleRoute(){
-  routeOpen=!routeOpen;
-  document.getElementById('routeList').style.display=routeOpen?'':'none';
-  document.getElementById('routeToggleBtn').textContent=routeOpen?'▼':'▲';
-}
-</script>
-
-<!-- 카카오 맵 SDK: 로드 실패 시 자동으로 Leaflet 사용 -->
-<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=5f52a6cdf28d24897956e5bb497aac7b&libraries=services&autoload=false"
-  onload="window.onKakaoLoad()" onerror="window.onKakaoError()"></script>
+  load();
+  </script>
 </body>
 </html>
