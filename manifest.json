@@ -1,14 +1,14 @@
 {
-  "name": "지하철 길안내",
-  "short_name": "지하철",
-  "description": "실시간 지하철 경로 안내",
-  "start_url": "/",
+  "name": "서울 전시 지도",
+  "short_name": "서울전시",
+  "description": "서울시 문화행사 공공데이터로 찾는 지금 갈 수 있는 미술 전시",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#1D4ED8",
-  "theme_color": "#1D4ED8",
+  "background_color": "#F6F3EE",
+  "theme_color": "#F6F3EE",
   "orientation": "portrait",
   "icons": [
-    { "src": "https://cdn.jsdelivr.net/npm/twemoji@14/assets/72x72/1f687.png", "sizes": "72x72", "type": "image/png" },
-    { "src": "https://cdn.jsdelivr.net/npm/twemoji@14/assets/72x72/1f687.png", "sizes": "192x192", "type": "image/png" }
+    { "src": "https://cdn.jsdelivr.net/npm/twemoji@14.0.2/assets/72x72/1f5bc.png", "sizes": "72x72", "type": "image/png" },
+    { "src": "https://cdn.jsdelivr.net/npm/twemoji@14.0.2/assets/72x72/1f5bc.png", "sizes": "192x192", "type": "image/png" }
   ]
 }
