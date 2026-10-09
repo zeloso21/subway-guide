@@ -190,8 +190,8 @@
       <button class="chip" id="sema">시립미술관</button>
       <select class="chip" id="gu"><option value="">모든 자치구</option></select>
       <select class="chip" id="sort">
-        <option value="end">마감 임박순</option>
         <option value="start">최근 시작순</option>
+        <option value="end">마감 임박순</option>
         <option value="dist">가까운순</option>
       </select>
     </div>
@@ -216,7 +216,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script>
   const $ = s => document.querySelector(s);
-  const S = { all: [], view: [], status: 'now', free: false, sema: false, gu: '', sort: 'end', q: '', me: null, shown: 30, map: null, layer: null, markers: new Map(), selected: null };
+  const S = { all: [], view: [], status: 'now', free: false, sema: false, gu: '', sort: 'start', q: '', me: null, shown: 30, map: null, layer: null, markers: new Map(), selected: null };
 
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
