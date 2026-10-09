@@ -128,6 +128,14 @@
     }
     :root[data-theme="dark"] .route-map .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(.85) contrast(.85); }
     .route-foot { margin-top: 8px; font-size: 12px; color: var(--ink-3); }
+    .opts { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; scrollbar-width: none; }
+    .opts button { flex-shrink: 0; height: 30px; padding: 0 12px; border-radius: 15px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; cursor: pointer; }
+    .opts button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .steps { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+    .steps li { display: flex; gap: 10px; align-items: flex-start; line-height: 1.45; color: var(--ink); }
+    .steps .dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+    .steps .dot.walk { background: none; border: 2px dashed var(--ink-3); }
+    .steps small { color: var(--ink-3); }
     .route-foot a { color: var(--ink-2); }
     .pin { width: 20px; height: 20px; border-radius: 50%; background: var(--accent); border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
     .pick { display: none; }
@@ -371,11 +379,27 @@
   }
 
   // 길찾기: 상세 안에 작은 지도를 띄워 내 위치·전시장·직선거리·예상 도보 시간을 보여준다
+  // 대중교통 경로: ODsay (예전 지하철 길안내에서 쓰던 웹 키, 이 사이트 도메인에 등록됨)
+  const ODSAY_KEY = 'OLKXZpgL39Z/FRXbnoLDyQ';
+  const SUBWAY_COLOR = { 1: '#0052A4', 2: '#009246', 3: '#EF7C1C', 4: '#00A5DE', 5: '#996CAC', 6: '#CD7C2F', 7: '#747F00', 8: '#E6186C', 9: '#BDB092',
+    21: '#7CA8D5', 22: '#F5A200', 101: '#0065B3', 104: '#77C4A3', 107: '#0C8E72', 108: '#F5A200', 109: '#D4003B', 110: '#B0CE4E', 112: '#8FC31F' };
+  const segColor = sp => sp.trafficType === 1 ? (SUBWAY_COLOR[sp.lane?.[0]?.subwayCode] || '#4B5563') : '#2563EB';
+
+  async function fetchTransit(me, e) {
+    try {
+      const d = await fetch(`https://api.odsay.com/v1/api/searchPubTransPathT?SX=${me.lng}&SY=${me.lat}&EX=${e.lng}&EY=${e.lat}&OPT=0&apiKey=${encodeURIComponent(ODSAY_KEY)}`).then(r => r.json());
+      return d.result?.path || [];
+    } catch {
+      return [];
+    }
+  }
+
+  // 길찾기: 상세 안에 작은 지도를 띄워 대중교통 경로를 보여준다. 가깝거나 경로가 없으면 직선거리·도보 시간.
   async function showRoute(e) {
     if (e.lat == null) return;
     const box = $('#routeBox');
     const kakao = `https://map.kakao.com/link/to/${encodeURIComponent(e.place || e.title)},${e.lat},${e.lng}`;
-    const foot = `<p class="route-foot">대중교통 경로는 <a href="${esc(kakao)}" target="_blank" rel="noopener">카카오맵에서 보기</a></p>`;
+    const foot = `<p class="route-foot">경로 정보: ODsay · <a href="${esc(kakao)}" target="_blank" rel="noopener">카카오맵에서 보기</a></p>`;
     box.hidden = false;
     box.innerHTML = '내 위치를 확인하는 중…';
     box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -383,25 +407,86 @@
     try { me = await getPosition(); } catch (err) { box.innerHTML = esc(err.message) + foot; return; }
     if (S.selected !== e) return; // 위치를 기다리는 사이 다른 전시를 고른 경우
     const km = distKm(me, e);
+    // ODsay는 700m 이내 경로를 주지 않는다
+    let paths = [];
+    if (km > 0.7) {
+      box.innerHTML = '대중교통 경로를 찾는 중…';
+      paths = await fetchTransit(me, e);
+      if (S.selected !== e) return;
+    }
+    if (paths.length) renderTransit(e, me, paths, 0, foot);
+    else renderWalk(e, me, km, foot);
+  }
+
+  function renderWalk(e, me, km, foot) {
     // 실제 길은 직선보다 길어서 1.3배로 보정하고, 시속 4.5km로 걷는다고 계산
     const min = Math.max(1, Math.round(km * 1.3 / 4.5 * 60));
     const walk = min < 60 ? `도보 약 ${min}분` : `도보 약 ${Math.floor(min / 60)}시간 ${min % 60}분`;
-    box.innerHTML = `<p class="route-sum"><b>${fmtDist(km)}</b> · ${walk}</p>
-      <p>점선은 직선 방향이에요.${km > 2 ? ' 거리가 멀어서 대중교통을 추천해요.' : ''}</p>
+    $('#routeBox').innerHTML = `<p class="route-sum"><b>${fmtDist(km)}</b> · ${walk}</p>
+      <p>${km > 0.7 ? '대중교통 경로를 찾지 못했어요. ' : ''}점선은 직선 방향이에요.</p>
       <div class="route-map" id="routeMap"></div>${foot}`;
-    if (!window.L) return;
+    const map = routeMap();
+    if (!map) return;
+    const a = [me.lat, me.lng], b = [e.lat, e.lng];
+    L.polyline([a, b], { color: '#6B7280', weight: 4, dashArray: '2 8', lineCap: 'round' }).addTo(map);
+    endpoints(map, a, b, e);
+    map.fitBounds([a, b], { padding: [28, 28], maxZoom: 16, animate: false });
+  }
+
+  function renderTransit(e, me, paths, i, foot) {
+    const p = paths[i], info = p.info;
+    const transfers = Math.max(0, (info.busTransitCount || 0) + (info.subwayTransitCount || 0) - 1);
+    const steps = p.subPath.filter(sp => sp.trafficType !== 3 || sp.sectionTime > 0).map(sp => {
+      if (sp.trafficType === 3) return `<li><span class="dot walk"></span><div>도보 ${sp.sectionTime}분 <small>${sp.distance}m</small></div></li>`;
+      const name = sp.trafficType === 1 ? sp.lane?.[0]?.name : `${(sp.lane || []).map(l => l.busNo).join(', ')}번 버스`;
+      return `<li><span class="dot" style="background:${segColor(sp)}"></span><div><b>${esc(name)}</b> ${esc(sp.startName)} → ${esc(sp.endName)}<br><small>${sp.stationCount}정거장 · ${sp.sectionTime}분</small></div></li>`;
+    }).join('');
+    const opts = paths.slice(0, 4).map((q, j) =>
+      `<button data-opt="${j}" class="${j === i ? 'on' : ''}">${['', '지하철', '버스', '지하철+버스'][q.pathType] || '경로'} ${q.info.totalTime}분</button>`).join('');
+    const box = $('#routeBox');
+    box.innerHTML = `${paths.length > 1 ? `<div class="opts">${opts}</div>` : ''}
+      <p class="route-sum"><b>${info.totalTime}분</b> · ${info.payment.toLocaleString()}원 · 환승 ${transfers}회</p>
+      <ol class="steps">${steps}</ol>
+      <div class="route-map" id="routeMap"></div>${foot}`;
+    box.querySelectorAll('[data-opt]').forEach(b => b.onclick = () => renderTransit(e, me, paths, +b.dataset.opt, foot));
+    const map = routeMap();
+    if (!map) return;
+    const dash = (a, b) => L.polyline([a, b], { color: '#6B7280', weight: 4, dashArray: '2 8', lineCap: 'round' }).addTo(map);
+    const a = [me.lat, me.lng], b = [e.lat, e.lng];
+    const all = [a, b];
+    let cur = a;
+    for (const sp of p.subPath) {
+      if (sp.trafficType === 3) continue;
+      let pts = (sp.passStopList?.stations || []).map(st => [+st.y, +st.x]);
+      if (pts.length < 2) pts = [[+sp.startY, +sp.startX], [+sp.endY, +sp.endX]];
+      dash(cur, pts[0]);
+      L.polyline(pts, { color: '#fff', weight: 8, opacity: .9 }).addTo(map);
+      L.polyline(pts, { color: segColor(sp), weight: 5 }).addTo(map);
+      for (const [pt, name] of [[pts[0], sp.startName], [pts[pts.length - 1], sp.endName]]) {
+        L.circleMarker(pt, { radius: 5, color: segColor(sp), weight: 3, fillColor: '#fff', fillOpacity: 1 }).bindTooltip(name).addTo(map);
+      }
+      all.push(...pts);
+      cur = pts[pts.length - 1];
+    }
+    dash(cur, b);
+    endpoints(map, a, b, e);
+    map.fitBounds(all, { padding: [24, 24], maxZoom: 16, animate: false });
+  }
+
+  function routeMap() {
     S.routeMap?.remove();
-    const map = S.routeMap = L.map('routeMap', { zoomControl: false, attributionControl: true });
+    S.routeMap = null;
+    if (!window.L) return null;
+    const map = S.routeMap = L.map('routeMap', { zoomControl: false });
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
-    const a = [me.lat, me.lng], b = [e.lat, e.lng];
-    L.polyline([a, b], { color: '#6B7280', weight: 4, dashArray: '2 8', lineCap: 'round' }).addTo(map);
+    return map;
+  }
+  function endpoints(map, a, b, e) {
     L.circleMarker(a, { radius: 8, color: '#fff', weight: 3, fillColor: '#2563EB', fillOpacity: 1 }).bindTooltip('내 위치').addTo(map);
     L.marker(b, { icon: L.divIcon({ className: '', html: '<div class="pin"></div>', iconSize: [20, 20] }) }).bindTooltip(e.place || e.title).addTo(map);
-    map.fitBounds([a, b], { padding: [28, 28], maxZoom: 16, animate: false });
-    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   // 데이터 로드
