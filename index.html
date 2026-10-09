@@ -148,6 +148,12 @@
     .web-hint { font-size: 12px; color: var(--ink-3); padding: 6px 14px; border-bottom: 1px solid var(--line); }
     #webPanel iframe { flex: 1; width: 100%; border: 0; background: #fff; }
     body.web-open .viewtoggle { display: none; }
+    #routePanel { inset: 10px 10px auto 10px; border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+    .panel-body { padding: 12px 14px; font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+    .route-sum { font-size: 15px; color: var(--ink); }
+    .route-sum b { font-size: 20px; }
+    .panel-foot { margin-top: 6px; font-size: 12px; color: var(--ink-3); }
+    .panel-foot a { color: var(--ink-2); }
 
     /* 넓은 화면: 목록 + 지도 나란히 */
     @media (min-width: 900px) {
@@ -155,6 +161,7 @@
       header, .controls { padding-left: 24px; padding-right: 24px; }
       #list { flex: 0 0 440px; display: block !important; padding-bottom: 24px; border-right: 1px solid var(--line); }
       #mapWrap { display: block !important; }
+      #routePanel { left: 10px; right: auto; width: 360px; }
       .viewtoggle { display: none; }
       .sheet { left: auto; right: 24px; bottom: 24px; top: 24px; width: 440px; max-height: none; border-radius: 20px; transform: translateX(120%); }
       body.sheet-open .sheet { transform: none; }
@@ -197,6 +204,7 @@
     <div id="list" aria-live="polite"></div>
     <div id="mapWrap">
       <div id="map"></div>
+      <section class="panel" id="routePanel" aria-label="길찾기"></section>
       <section class="panel" id="webPanel" aria-label="전시 홈페이지"></section>
     </div>
   </main>
@@ -354,14 +362,13 @@
     if (S.me) {
       L.circleMarker([S.me.lat, S.me.lng], { radius: 7, color: '#fff', weight: 2, fillColor: '#2563EB', fillOpacity: 1 }).addTo(S.layer);
     }
-    if (pts.length && !S.selected) S.map.fitBounds(pts, { padding: [30, 30], maxZoom: 15 });
+    if (pts.length && !S.selected) S.map.fitBounds(pts, { padding: [30, 30], maxZoom: 15, animate: false });
   }
 
   // 상세
   function openDetail(e) {
     S.selected = e;
     const link = safeUrl(e.link);
-    const dir = e.lat != null ? `https://map.kakao.com/link/to/${encodeURIComponent(e.place || e.title)},${e.lat},${e.lng}` : '';
     const rows = [
       ['기간', period(e)],
       ['장소', [e.place, e.gu].filter(Boolean).join(' · ')],
@@ -381,13 +388,14 @@
         <dl class="rows">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
         ${e.desc ? `<p class="desc">${esc(e.desc.slice(0, 600))}${e.desc.length > 600 ? '…' : ''}</p>` : ''}
         <div class="actions">
-          <a class="btn primary" href="${esc(dir)}" target="_blank" rel="noopener" aria-disabled="${!dir}">길찾기</a>
+          <button class="btn primary" id="goRoute" aria-disabled="${e.lat == null}">길찾기</button>
           <button class="btn" id="goWeb" aria-disabled="${!link}">전시 홈페이지</button>
         </div>
         <p class="source">출처: 서울 열린데이터광장 · ${e.source === 'sema' ? '서울시립미술관 전시 정보' : e.source === 'both' ? '서울시 문화행사 정보, 서울시립미술관 전시 정보' : '서울시 문화행사 정보'}. 방문 전 운영 시간과 휴관일을 꼭 확인하세요.</p>
       </div>`;
     $('#close').onclick = closeDetail;
     $('#goWeb').onclick = () => showWeb(e);
+    $('#goRoute').onclick = () => showRoute(e);
     document.body.classList.add('sheet-open');
     $('#sheet').scrollTop = 0;
     document.querySelectorAll('.card.sel').forEach(c => c.classList.remove('sel'));
@@ -421,20 +429,79 @@
   $('#q').oninput = ev => { clearTimeout(qTimer); qTimer = setTimeout(() => { S.q = ev.target.value; apply(); }, 150); };
   $('#near').onclick = locate;
 
-  function locate() {
-    if (!navigator.geolocation) { alert('이 브라우저는 위치 정보를 지원하지 않아요.'); return; }
+  function getPosition() {
+    return new Promise((ok, fail) => {
+      if (!navigator.geolocation) return fail(new Error('이 브라우저는 위치 정보를 지원하지 않아요.'));
+      navigator.geolocation.getCurrentPosition(
+        p => { S.me = { lat: p.coords.latitude, lng: p.coords.longitude }; ok(S.me); },
+        () => fail(new Error('위치 권한이 필요해요. 브라우저 설정에서 위치 접근을 허용해 주세요.')),
+        { enableHighAccuracy: true, timeout: 10000 });
+    });
+  }
+
+  async function locate() {
     $('#near').textContent = '📍 위치 확인 중…';
-    navigator.geolocation.getCurrentPosition(p => {
-      S.me = { lat: p.coords.latitude, lng: p.coords.longitude };
+    try {
+      await getPosition();
       S.sort = 'dist'; $('#sort').value = 'dist';
-      $('#near').textContent = '📍 내 주변'; $('#near').classList.add('on');
+      $('#near').classList.add('on');
       apply();
       if (S.map) S.map.setView([S.me.lat, S.me.lng], 14);
-    }, () => {
-      $('#near').textContent = '📍 내 주변';
+    } catch (err) {
       $('#sort').value = S.sort;
-      alert('위치 권한이 필요해요. 브라우저 설정에서 위치 접근을 허용해 주세요.');
-    }, { enableHighAccuracy: true, timeout: 10000 });
+      alert(err.message);
+    }
+    $('#near').textContent = '📍 내 주변';
+  }
+
+  // 길찾기: 내 위치와 전시장을 지도에 함께 띄우고 거리·예상 도보 시간을 보여준다
+  async function showRoute(e) {
+    if (e.lat == null) return;
+    closeDetail();
+    closeWeb();
+    setView('map');
+    ensureMap();
+    if (!S.map) return;
+    const kakao = `https://map.kakao.com/link/to/${encodeURIComponent(e.place || e.title)},${e.lat},${e.lng}`;
+    const panel = body => {
+      const p = $('#routePanel');
+      p.innerHTML = `
+        <div class="panel-head">
+          <div class="panel-title">${esc(e.place || e.title)}까지</div>
+          <button class="panel-btn" data-info>전시 정보</button>
+          <button class="panel-x" data-close aria-label="닫기">✕</button>
+        </div>
+        <div class="panel-body">${body}
+          <p class="panel-foot">대중교통 경로는 <a href="${esc(kakao)}" target="_blank" rel="noopener">카카오맵에서 보기</a></p>
+        </div>`;
+      p.classList.add('on');
+      p.querySelector('[data-close]').onclick = closeRoute;
+      p.querySelector('[data-info]').onclick = () => openDetail(e);
+    };
+    panel('<p>내 위치를 확인하는 중…</p>');
+    let me;
+    try { me = await getPosition(); } catch (err) { panel(`<p>${esc(err.message)}</p>`); return; }
+    if (!S.routeLayer) S.routeLayer = L.layerGroup().addTo(S.map);
+    S.routeLayer.clearLayers();
+    const a = [me.lat, me.lng], b = [e.lat, e.lng];
+    L.polyline([a, b], { color: '#6B7280', weight: 4, dashArray: '2 8', lineCap: 'round' }).addTo(S.routeLayer);
+    L.circleMarker(a, { radius: 8, color: '#fff', weight: 3, fillColor: '#2563EB', fillOpacity: 1 }).bindTooltip('내 위치').addTo(S.routeLayer);
+    L.marker(b, { icon: L.divIcon({ className: '', html: '<div class="pin" style="width:20px;height:20px;border-width:3px"></div>', iconSize: [20, 20] }) })
+      .bindTooltip(e.place || e.title).addTo(S.routeLayer);
+    const km = distKm(me, e);
+    // 실제 길은 직선보다 길어서 1.3배로 보정하고, 시속 4.5km로 걷는다고 계산
+    const min = Math.max(1, Math.round(km * 1.3 / 4.5 * 60));
+    const walk = min < 60 ? `도보 약 ${min}분` : `도보 약 ${Math.floor(min / 60)}시간 ${min % 60}분`;
+    panel(`<p class="route-sum"><b>${fmtDist(km)}</b> · ${walk}</p><p>점선은 직선 방향이에요.${km > 2 ? ' 거리가 멀어서 대중교통을 추천해요.' : ''}</p>`);
+    S.map.invalidateSize(); // 목록 화면에서 막 넘어온 경우 지도 크기를 다시 잡는다
+    const wide = matchMedia('(min-width: 900px)').matches;
+    const top = $('#routePanel').offsetHeight;
+    S.map.fitBounds([a, b], { paddingTopLeft: [wide ? 390 : 30, wide ? 40 : top + 30], paddingBottomRight: [30, wide ? 40 : 90], maxZoom: 16, animate: false });
+  }
+  function closeRoute() {
+    $('#routePanel').classList.remove('on');
+    $('#routePanel').innerHTML = '';
+    S.routeLayer?.clearLayers();
   }
 
   // 전시 홈페이지를 지도 자리에 띄운다
@@ -442,6 +509,7 @@
     const url = safeUrl(e.link);
     if (!url) return;
     closeDetail();
+    closeRoute();
     setView('map');
     const p = $('#webPanel');
     p.innerHTML = `
