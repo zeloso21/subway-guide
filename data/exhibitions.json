@@ -1,7 +1,7 @@
 {
- "updatedAt": "2026-10-09T09:30:09.169Z",
- "source": "서울 열린데이터광장 · 서울시 문화행사 정보",
- "count": 95,
+ "updatedAt": "2026-10-09T09:33:56.052Z",
+ "source": "서울 열린데이터광장 · 서울시 문화행사 정보, 서울시립미술관 전시 정보",
+ "count": 101,
  "items": [
   {
    "title": "[운현궁] 2026 기획전시 [소호랑의 한국호랑이, 사나움과 귀여움 사이_소호랑의 개인전]",
@@ -19,7 +19,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=0d979fa2d91f42c5b9ec128f69cd9046&thumb=Y",
    "link": "https://www.unhyeongung.or.kr/sub/prpgram/exhibition_list.php?abmode=view&no=2001&group=basic&code=B35",
    "lat": 37.57607864675475,
-   "lng": 126.98708335796199
+   "lng": 126.98708335796199,
+   "source": "cultural"
   },
   {
    "title": "[서초문화재단] 서리풀청년아트갤러리 전시 [Fictionally Alibi]",
@@ -37,7 +38,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=484092618bf745f0b55c6877b525be52&thumb=Y",
    "link": "https://www.instagram.com/p/Dc7ZGyyz2zd/",
    "lat": 37.481137954971,
-   "lng": 127.013504028268
+   "lng": 127.013504028268,
+   "source": "cultural"
   },
   {
    "title": "[서울공예박물관] 공예동행@쇼윈도 #5. [사라진 뒤에도 이어지는 길 The Path that Remains]",
@@ -55,7 +57,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=0c9a2011c3db46088552114ffdca059c&thumb=Y",
    "link": "https://craftmuseum.seoul.go.kr/exhibit/plan/view/193",
    "lat": 37.5766481740232,
-   "lng": 126.983533363501
+   "lng": 126.983533363501,
+   "source": "cultural"
   },
   {
    "title": "[서울시립 서서울미술관] 플레이 라운지 《어쩌면 우리에게 더 멋진 일이 있을지도 몰라》",
@@ -68,12 +71,13 @@
    "fee": "",
    "free": true,
    "target": "누구나",
-   "artist": "",
-   "desc": "",
+   "artist": "이우성",
+   "desc": "서울시립 서서울미술관 플레이 라운지는 작품과 함께 자유롭게 머물며, 각자의 방식으로 미술관의 시간을 경험할 수 있는 열린 공간이다. 이번 플레이 라운지에서 소개하는 이우성의 <어쩌면 우리에게 더 멋진 일이 있을지도 몰라>(2021)는 끊임없이 밀려왔다 사라지는 파도의 모습을 1,969장의 그림으로 옮긴 애니메이션 영상이다. 서로 다른 순간을 담은 그림들은 연속된 장면 속에서 움직임을 이루고, 흩어진 순간들은 서로를 지나며 비로소 파도의 흐름으로 이어진다. 각각의 장면은 앞선 순간의 흔적을 품은 채 연이어 일렁이고, 그렇게 수많은 순간이 모여 은은한 물결을 이룬다. 파도는 한순간도 같은 모습에 머물지 않는다. 작가는 유동하는 바다의 순간을 한 장씩 그림으로 붙잡고, 연속된 이미지로 이어 정지된 회화에 움직임과 시간을 더했다. 여기에 서로 다른 길이로 흐르는 피아노 선율이 더해지면서 영상과 음악은 매번 다른 순간에 겹치고 비껴가며 새로운 관계를 맺는다. 멈추지 않는 파도처럼 삶은 예기치 않은 변화 속에서 모습을 달리하며 흘러간다. <어쩌면 우리에게 더 멋진 일이 있을지도 몰라>는 작품의 제목이자 이번 플레이 라운지의 이름이 되어, 작품이 품고 있는 가능성의 감각을 공간 전체로 확장한다. 작품의 제목처럼, 지금과는 다른 찰나가 우리 앞에 찾아올 수 있다는 작은 가능성은 그렇게 익숙한 풍경을 다시 바라보는 데서 시작되는지도 모른다.",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=ae4ffc240ff947a89858dd3b4ed8bfc3&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1576627",
    "lat": 37.4580752536422,
-   "lng": 126.894935931812
+   "lng": 126.894935931812,
+   "source": "both"
   },
   {
    "title": "[서울공예박물관] 제2회 서울시 유리지공예상 기념전",
@@ -91,7 +95,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=4e7bc51c5f5d4e79ada8514eaaf90bf7&thumb=Y",
    "link": "https://craftmuseum.seoul.go.kr/exhibit/plan/view/192",
    "lat": 37.5766481740232,
-   "lng": 126.983533363501
+   "lng": 126.983533363501,
+   "source": "cultural"
   },
   {
    "title": "[서울아트책보고] 큐레이션 서가 4기 [지구와 나누는 대화]",
@@ -109,7 +114,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=b4950995fcbb44909bea2e8d7e9e74be&thumb=Y",
    "link": "https://artbookbogo.kr/seoul/menu/10045/program/30009/cultureDetail.do?currentPageNo=1&cultureIdx=25342&cultureTypeCdArr=EXHB&searchCultureTypeCd=&searchOperStatusCd=VALID",
    "lat": 37.4982125677913,
-   "lng": 126.867088741096
+   "lng": 126.867088741096,
+   "source": "cultural"
   },
   {
    "title": "[청계천박물관] 청계천의 별이 된 노무라 모토유키",
@@ -127,7 +133,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=b6decf917c7b4178936795499bec6516&thumb=Y",
    "link": "https://museum.seoul.go.kr/cgcm/board/NR_boardView.do?bbsCd=1002&seq=20260529170246055",
    "lat": 37.5712661734969,
-   "lng": 127.03504316401
+   "lng": 127.03504316401,
+   "source": "cultural"
   },
   {
    "title": "[중구문화재단] 내셔널지오그래픽 특별기획 : OCEAN 가장 거대한 기록",
@@ -145,7 +152,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=03d8ae598cbe4c548e6f0947c3e5ded6&thumb=Y",
    "link": "https://www.caci.or.kr/product/ko/performance/2529",
    "lat": 37.5659409687669,
-   "lng": 127.014790889728
+   "lng": 127.014790889728,
+   "source": "cultural"
   },
   {
    "title": "[국립중앙박물관] 이슬람 미술, 찬란한 빛의 여정",
@@ -163,7 +171,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=69db1f87ea6447c6a1fe901e146ce2e1&thumb=Y",
    "link": "https://www.museum.go.kr/MUSEUM/contents/M0201010000.do",
    "lat": 37.52385582212769,
-   "lng": 126.98020301648833
+   "lng": 126.98020301648833,
+   "source": "cultural"
   },
   {
    "title": "[서울시립미술관] 아마도, 모두 우리 [Perhaps, All of Us] 캐나다 전시",
@@ -181,7 +190,27 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=effeb5f645694892afae167c4567bbad&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1570835",
    "lat": null,
-   "lng": null
+   "lng": null,
+   "source": "cultural"
+  },
+  {
+   "title": "2026 투어링 케이-아츠 《아마도, 모두 우리》",
+   "category": "전시/미술",
+   "gu": "중구",
+   "place": "기타",
+   "org": "서울시립미술관",
+   "start": "2026-08-25",
+   "end": "2026-10-14",
+   "fee": "",
+   "free": true,
+   "target": "",
+   "artist": "갈라포라스-김, 김아영, 박재훈, 박찬경, 박혜수, 신미정, 신지선, 이은우, 이지양, 임영주, 정연두, 탁영준, 피정원",
+   "desc": "《아마도, 모두 우리》는 서로 다른 삶의 조건과 경험이 교차하는 오늘의 세계를 배경으로, 우리가 어떻게 관계 맺고 함께 존재하는지를 되묻는 전시입니다. 서울에서 기획되고 워싱턴 D.C.와 오타와를 순회하며 선보이는 이번 전시는 각국의 수도라는 공통된 장소성에 주목하고, 이를 바탕으로 공공성·역사성·다양성이라는 세 가지 축을 도출합니다. 정치와 행정의 중심이자 다양한 문화가 교차하는 이 도시들은 공동의 기억과 정체성이 축적되는 동시에 끊임없이 경계가 설정되고 재편되는 공간입니다.\n공공성을 다루는 <1부: 우리가 모르는 우리>는 우리가 서로를 인식하고 관계 맺는 방식, 즉 ‘우리’와 ‘타자’가 구분되고, 배제와 환대가 교차하는 미묘한 지점을 들여다봅니다. <2부: 이탈된 시간>은 잊혀지거나 침묵하고 있는 시간들을 호출해, 지금의 현재가 어떠한 축적과 누락 위에 형성되었는지 살펴봅니다. 이를 통해 현재를 새롭게 인식하고, 다가올 미래를 역사적 맥락에서 바라보고자 합니다. <3부: 아마도, 모두 우리>는 공공성, 역사성의 층위 위에서 발생하는 낯섦과 차이를 마주하며, 서로가 가진 다양성이 공존으로 이어질 수 있는 가능성을 모색합니다.\n이번 전시는 한국 동시대 미술을 통해 개인의 경험과 사회적 맥락이 교차하는 지점을 비추며, 우리가 당연하게 받아들여온 규범과 경계를 다시 바라보게 합니다. 작품들이 다루는 이야기는 특정 지역에 국한된 정서에 머무르지 않고, 동시대를 살아가는 우리 모두가 직면한 상황과 맞닿아 있습니다. 서로의 삶과 시간을 가늠하려는 시도 속에서 우리는 타인의 경험에 공감하고, 그 공감이 연대로 확장되는 과정을 함께하며, 어쩌면 그 축적된 감각 위에서 비로소 ‘우리’라는 이름에 조금 더 가까워질 수 있을 것입니다.",
+   "image": "https://sema.seoul.go.kr/common/imageView?FILE_PATH=%2Fex%2FEXI01%2F2026%2F&FILE_NM=20260803174746_91a98a2009f44c10a5e5c462821ea0fc_081b25121da54e97bb858065121f4570",
+   "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1570835",
+   "lat": 37.5641060692766,
+   "lng": 126.973699316136,
+   "source": "sema"
   },
   {
    "title": "[송파 청년아티스트센터] 3기 릴레이 개인전 [주워진 시간] - 허유",
@@ -199,7 +228,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=fa68791116084a4ebddf1feb3fbb9d90&thumb=Y",
    "link": "https://www.instagram.com/p/DdnAGcAP6PO/",
    "lat": 37.5340686405498,
-   "lng": 127.115954729217
+   "lng": 127.115954729217,
+   "source": "cultural"
   },
   {
    "title": "이웅철 개인전 [안전거리]",
@@ -217,7 +247,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=86341227a9b64885bd0e57d56a182b36&thumb=Y",
    "link": "https://archivist.kr/exi?m=gov&i=1791238237",
    "lat": 37.5415864542653,
-   "lng": 126.99301974133
+   "lng": 126.99301974133,
+   "source": "cultural"
   },
   {
    "title": "제15회 두산연강예술상 수상자 정여름 개인전 [복수]",
@@ -235,7 +266,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=5dda1f8ef8654e54b87a44f6bba738f9&thumb=Y",
    "link": "https://www.doosangallery.com/kr/exhibitions/detail/238",
    "lat": 37.5718123278145,
-   "lng": 127.00100010537
+   "lng": 127.00100010537,
+   "source": "cultural"
   },
   {
    "title": "[서울디자인재단] 2026 DDP디자인페어",
@@ -253,7 +285,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=44ce3398bc82408f9ce1ab98167f64bf&thumb=Y",
    "link": "https://ddp.or.kr/?menuno=241&siteno=1&boardno=16&act=view&bbsno=781",
    "lat": 37.56735731522952,
-   "lng": 127.00977973484339
+   "lng": 127.00977973484339,
+   "source": "cultural"
   },
   {
    "title": "[문화실험공간 호수] 2026 더 임팩트 청년예술인 공모전시 [THE OTHERS]",
@@ -271,7 +304,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=92f3c716efdc4b7d9f9a3125d215507c&thumb=Y",
    "link": "https://blog.naver.com/exp_space_hosu/224430157183",
    "lat": 37.5103180005696,
-   "lng": 127.101092270844
+   "lng": 127.101092270844,
+   "source": "cultural"
   },
   {
    "title": "[한성백제박물관] 땅속서울 : Underground Seoul 2000 - 백제 토기",
@@ -289,7 +323,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=149f799af0ea4ff0ba884f493fc48af6&thumb=Y",
    "link": "https://baekjemuseum.seoul.go.kr/module/index.jsp?boardid=a&code=DP&mmode=content&mpid=SBM0203000000&pid=23568",
    "lat": 37.51543881335773,
-   "lng": 127.12088940368128
+   "lng": 127.12088940368128,
+   "source": "cultural"
   },
   {
    "title": "[서울시립 사진미술관] 마틴 파 : We Are Martin Parr",
@@ -302,12 +337,13 @@
    "fee": "",
    "free": true,
    "target": "누구나",
-   "artist": "",
-   "desc": "",
+   "artist": "마틴 파",
+   "desc": "오늘날 우리가 광고 이미지나 SNS, 관광 스냅사진에서 매일 마주하는 강렬한 색채와 밀착된 시선은 더 이상 낯설지 않습니다. 세계적인 사진가 마틴 파(1952&ndash;2025)는 바로 이러한 동시대 시각문화의 감각을 수십 년간 집요하게 포착해 왔습니다. 그가 특유의 유머와 관찰력으로 남긴 사진들은 우리의 삶과 문화를 읽어내는 하나의 거대한 풍경이 되어 우리 곁에 숨 쉬고 있습니다. 이러한 작가의 발자취를 기리는 《마틴 파: We Are Martin Parr》는 작가 사후 아시아에서 처음 열리는 대규모 회고전입니다. 이번 전시에서는 초기 작업부터 말년에 이르는 14개 시리즈와 500여 점의 작품을 선보이며, 그가 출판한 총 90권의 사진집을 함께 소개합니다. 특히 1990년대 후반부터 2000년대 초반까지 한국을 방문하며 촬영한 남한과 북한 관련 작업 역시 이번 자리에서 함께 만나볼 수 있습니다.\n세계적인 사진가 그룹 매그넘 포토스(Magnum Photos)*의 작가로 활동한 마틴 파는 지난 수십 년간 현대 사회의 일상과 시각문화를 가장 집요하게 관찰해 온 사진가입니다. 그는 여가와 소비가 이루어지는 전 세계의 관광지와 스포츠 경기장, 패스트푸드점과 활기 넘치는 거리에서 사람들이 이미지를 통해 스스로를 드러내는 방식을 꾸준히 기록해 왔습니다. 특히 1980년대 이후 확장된 소비문화와 대중관광의 풍경은 그의 작업을 이루는 중요한 배경이 되었습니다. 그의 사진을 단순히 소비사회를 비판하거나 풍자하는 이미지로만 이해하기에는 충분하지 않습니다. 그의 시선은 대상과 거리를 두기보다 오히려 그 세계 가까이로 들어갑니다. 과장된 색채와 밀도 높은 화면, 무심히 지나칠 법한 순간들에 머무는 작가의 시선은 익숙한 일상을 낯설게 바라보게 만듭니다. 이 친근한 세계 속 인물들은 특별한 사건의 주인공이 아닙니다. 선글라스를 끼고 휴가를 즐기는 사람들, 마트의 쇼핑객, 혹은 음식을 먹거나 사진을 찍는 우리 주변의 평범한 이웃들입니다. 마틴 파는 이렇듯 대수롭지 않은 장면 안에서 오늘날 우리가 지닌 욕망과 취향, 소비와 행동 방식을 예리하게 포착해 냅니다. 이미지를 통해 스스로를 꾸미고 기록하며 기억하는 삶의 풍경이 특유의 유머러스한 관찰을 통해 비로소 선명하게 드러나는 것입니다.\n오늘날처럼 인공지능이 매끄럽고 균질한 이미지를 빠르게 생산해내는 시대에 그의 사진은 오히려 사진이라는 매체의 물질성과 현장성을 다시 떠올리게 합니다. 그는 정제된 아름다움보다 우연한 순간과 넘쳐나는 일상의 풍경, 어딘가 어색하고 불완전한 장면들에 주목합니다. 그렇기에 그의 사진은 특정 시대를 기록하는 데 머물지 않고, 동시대 시각문화 속에서 우리가 무엇을 보고 어떻게 바라보는지를 다시 질문하게 만듭니다. 이번 전시는 마틴 파가 오랜 세월 고수해 온 ‘솔직하게 정면으로 마주하는 보기의 방식’을 따라가 보고자 합니다. 그의 사진을 특정한 메시지에 가두기보다, 대상과 깊이 동화되어 유쾌하게 번져 나가는 시선 그 자체에 주목합니다. 지나치게 가까운 거리에서 포착된 인물들과 강렬한 색채로 가득한 사물들은 오늘날 우리의 모습과 고스란히 겹쳐집니다. 소비하고 즐기며, 이미지를 통해 끊임없이 자신을 드러내는 존재로서의 우리 말입니다. 그리고 묻습니다. 우리는 그들을 바라보고 있는 것일까요. 아니면 이미 그 장면 안에 함께 서 있는 것일까요.\n*매그넘 포토스(Magnum Photos)는 1947년 설립된 국제 사진가 그룹이자 사진 에이전시로, 현대 다큐멘터리 사진의 흐름을 이끌어온 대표적인 사진가 집단입니다.",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=1dde0d7d300d465f9e977d4aaf2fe0a2&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1553791",
    "lat": 37.6555150225578,
-   "lng": 127.048947814686
+   "lng": 127.048947814686,
+   "source": "both"
   },
   {
    "title": "전시 [접촉화면]",
@@ -325,7 +361,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=0bab327894d54ec183839206bb3be282&thumb=Y",
    "link": "https://archivist.kr/exi?m=gov&i=1790806191",
    "lat": 37.5664621449086,
-   "lng": 126.989854099281
+   "lng": 126.989854099281,
+   "source": "cultural"
   },
   {
    "title": "최은지 개인전 [지도에 없는 장소에 그림자를 붙이고 있었다]",
@@ -343,7 +380,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=a0d2055378964674b0b3a013be2fc7b7&thumb=Y",
    "link": "https://archivist.kr/exi?m=gov&i=1791086082",
    "lat": 37.5510827221899,
-   "lng": 126.976845515427
+   "lng": 126.976845515427,
+   "source": "cultural"
   },
   {
    "title": "[성동문화재단] 제5회 신진 청년작가 공모전 선정작 릴레이 전시 [사, 방. 탁, 자.]",
@@ -361,7 +399,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=0c853bf77a6844a2a12a6df0ebcbeb22&thumb=Y",
    "link": "https://www.sdfac.or.kr/kor/sdfac/performance/plan_view.do?p_idx=1661",
    "lat": 37.5614417528647,
-   "lng": 127.038394194396
+   "lng": 127.038394194396,
+   "source": "cultural"
   },
   {
    "title": "이하린 개인전 [Wash Me (and I shall be whiter than snow)]",
@@ -379,7 +418,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=605b22054df1496294de4f846b4b48d0&thumb=Y",
    "link": "https://www.instagram.com/p/Dd0KQZ6GGPP/?img_index=1",
    "lat": 37.5484160348044,
-   "lng": 127.043570930669
+   "lng": 127.043570930669,
+   "source": "cultural"
   },
   {
    "title": "정미옥 초대전 [In-Between]",
@@ -397,7 +437,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=3d76ac8e3111418eac08c3b0f3bd5b50&thumb=Y",
    "link": "https://www.galleryjone.com/208",
    "lat": 37.5825613346848,
-   "lng": 126.980738496133
+   "lng": 126.980738496133,
+   "source": "cultural"
   },
   {
    "title": "[서울시립 북서울미술관] 2026 타이틀 매치 《오인환 vs. 장서영: 휴먼 에러》",
@@ -410,12 +451,13 @@
    "fee": "",
    "free": true,
    "target": "누구나",
-   "artist": "",
-   "desc": "",
+   "artist": "오인환, 장서영",
+   "desc": "서울시립 북서울미술관은 2026년 13회 타이틀 매치에 오인환과 장서영 작가를 초청한다. 두 작가의 작업은 주제와 형식 면에서 달라 보이지만, 인간의 존재 조건과 속성을 깊이 탐구한다는 공통점을 가진다. 2026 타이틀 매치 《오인환 vs. 장서영: 휴먼 에러》는 최첨단 기술이 인간의 창작을 대체할 수 있다는 믿음이 팽배해진 시대에 도리어 인간만이 할 수 있는 창작의 본질을 탐구한다.\n전시 제목 ‘휴먼 에러’는 이에 관한 잠정적인 답변이다. ‘인간의 신체적, 정신적 불완전함 때문에 발생하는 오류 혹은 실수’를 뜻하는 용어인 휴먼 에러는 주로 산업현장에서 사고 원인을 판별할 때 사용된다. 이러한 표현은 인간을 시스템의 일부로 간주하고 기계와 같이 오류가 없는 완전무결함을 지향해야 한다는 심리를 반영한다. 이러한 논리는 사회 시스템에서도 동일하게 적용된다. 주류 사회는 자신이 설정한 규범과 기준에 부합하지 않는 존재를 비정상으로 규정하고 배제하거나 교정하려 했으며, 그 과정에서 다양한 소수자들이 억압되어 왔다. 그러나 창작자로서 인간은, 마땅히 그러해야 한다고 요청되는 것들에 끊임없이 질문을 던지고 정상과 비정상의 경계를 흔들며 일탈을 감행해 왔다. 에러의 라틴어 어원이 ‘제 위치를 벗어나 헤매는 물리적 행위’를 뜻하듯, 전시는 정해진 시스템을 거부하고 의도적으로 에러를 일으키는 존재로서의 예술가에 주목하고 시스템에 순응하기보다 교란하고 벗어나려는 두 작가의 실천을 살펴본다.\n오인환은 고착된 사회 시스템에 의도적으로 오류를 일으키는 능동적인 존재로서 인간에 주목한다. 이번 전시에서는 ‘하나가 아닌 우리, 하나가 아닌 나’를 주제로 참여형 작업부터 설치, 영상, 사진 등 다양한 작업을 선보인다. 작가는 사회적 관습이나 통념에 의문을 제기하고 하나로 귀결되지 않고 변화하는 정체성을 가시화하면서 한국 사회의 집단주의에 균열을 내고자 한다. 장서영은 신체 내부에서 예기치 않게 발생하는 오류를 겪어나가는 불완전한 존재로서 인간에 주목한다. 전시를 아우르는 주제는 ‘실리콘 바니타스’로, 반도체의 주요한 재료를 뜻하는 실리콘(규소)과 삶의 덧없음에 관한 예술 형식인 ‘바니타스’를 결합한 것이다. 작가는 인간의 통제를 벗어나 한계를 모르고 발전하는 기술과 노화하고 병들고 결국 죽음에 이르는 인간 신체를 대비시키는 영상 및 조각 설치 작업을 선보인다.\n두 작가는 세계를 완벽하게 통제하는 주체가 아니라 기술과 환경, 타인과의 관계 속에서 끊임없이 영향을 주고받으며 변화하는 존재로 인간을 바라본다. 그들에게 오류는 극복되어야 할 결함이 아니라 인간 존재를 규정하는 근본적인 조건이자 창작의 원천이다. 전시는 최첨단 기술이 인간의 능력을 대체하고 확장하는 시대에, 인간을 인간답게 만드는 조건이 무엇인지 다시금 생각해 보기를 제안한다.\n1부 오인환\n하나가 아닌 우리, 하나가 아닌 나\n오인환은 사회와 제도라는 거시적인 차원과 개인의 삶이라는 미시적인 차원이 시·공간의 맥락과 관계 속에서 어떻게 교섭하고 변화하는지 추적해 왔다. 이를 통해 정체성이 고정되지 않고 계속해서 형성되고 변화하는지 추적해 왔다. 이를 통해 정체성이 고정되지 않고 계속해서 형성되고 변화하는 과정에 있음을 보여준다. 1부 제목은 ‘하나가 아닌 우리, 하나가 아닌 나’로, 동명의 작품명을 전시 전체 주제로 삼는다. 작가는 ‘우리는 하나다’를 외치는 세계에 저항하며 집단의 구성원도 저마다 다양한 개성을 갖고 있으며, 나라는 개인조차도 하나로 규정될 수 없다고 본다.\n이번 전시에서 오인환은 경직된 사회 시스템에 의도적으로 오류를 발생시키는 능동적인 존재로서 인간에 주목한다. 작가에게 정체성은 내밀한 사적 경험을 고백하기 위한 소재가 아니라, 사회·문화적으로 구축된 규범과 권력 구조를 드러내기 위한 비판적 장치다. 주변화된 것들을 가시화하고 너무도 당연해 보였던 현상을 다르게 봄으로써 정상성과 보편성의 질서를 교란하고, 그 안에 내재한 차이와 정체성의 다양성을 드러낸다.\n작가는 자신의 작업을 종종 하나의 ‘프로젝트’로 간주하는데, 오랜 시간 구상과 준비를 거쳐 프로젝트가 실행되며 단발적인 결과물로 종결되지 않는다. 정체성이 하나의 본질로 환원될 수 없는 것처럼, 작업 또한 단일한 형태로 수렴되지 않는다. 작업의 또 다른 특징은 타인을 호출하고 관계를 형성함으로써 작업에 예측 불가능한 변수를 둔다는 점이다. 작가는 만남과 참여를 위한 조건을 마련하지만 그 결과를 통제하려 하지 않는다. 응답과 침묵, 참여와 거절, 우연한 만남과 기약 없는 기다림 모두 작업의 일부분으로, 작업은 참여자의 선택과 우연한 상황, 시간의 흐름에 따라 끊임없이 변화한다.\n오인환은 사회 시스템 바깥으로 완전히 이탈하기보다 그 내부에서 규범을 비틀고 다르게 반복한다. 누구도 사회를 벗어나 존재할 수 없고 사회적 존재 구조 내에 있어야만 우리는 자신이 누구인지를 인식할 수 있기 때문이다. 그 실천은 규범을 단순히 따르거나 거부하는 양자택일이 아니라, 반복의 방식을 변주함으로써 질서에 균열을 내는 것에 가깝다. 작가가 수행하거나 요청하는 행동들은 일상생활에서 익숙한, 어쩌면 사소해 보이는 것들이다. 그러나 당연하게 여겨졌던 규범을 낯설게 만들고, 그 행동을 다른 방식으로 수행하도록 함으로써 그것이 자연스럽거나 보편적인 것이 아니라 사회적으로 구성된 것임을 드러낸다. 하나의 행동은 미약할지 모르나 지속적이고 반복적으로 실행된다면 지형 자체를 재배치하고 새로운 가능성을 출현시키는 결정적인 계기가 될 것이다.\n2부 장서영\n실리콘 바니타스\n장서영은 인체를 작동시키는 반복된 시간, 물질적 신체의 유한한 시간, 그리고 사회 시스템이 요구하는 규칙적이고 선형적인 시간에 얽매인 인간 존재에 관심을 가져왔다. 초기 작업에서 작가는 이러한 시간성을 영상 매체의 다양한 속성과 연결해 탐구했다. 2010년대 중반부터 작가의 관심은 신체와 기술문명의 관계로 더욱 확장된다. 자본주의와 신자유주의, 기술만능주의가 요구하는 완전성과 거기서 탈락할 수밖에 없는 연약하고 취약한 신체를 가진 인간 존재를 대비시킨다. 작가는 그리스 신화부터 과학기술 기사, 숏폼 플랫폼에 이르기까지 서로 다른 시대와 매체로부터 영감을 받으며, 끝을 모르는 인간의 욕망과 언젠가는 끝을 맞이할 신체 사이에 존재하는 위화감을 드러낸다.\n이번 전시의 주제는 ‘실리콘 바니타스(Silicon Vanitas)’로, 작가는 인류의 오래된 미술사적 주제인 바니타스를 동시대 기술환경 속에서 새롭게 해석한다. 실리콘(규소)은 반도체의 핵심 재료로 컴퓨터, 스마트폰, 인공지능 등 디지털 기술 전반을 가능하게 하는 물질이자 현대 기술문명의 기반을 상징한다. 반면 바니타스는 삶의 덧없음과 죽음의 불가피성을 상기시키며 유한성을 성찰하게 하는 예술 형식이다. 작가는 영속한 삶을 향한 인류의 무분별한 발전에 제동을 거는 인간 신체를 대비시키면서 인간의 조건을 다시 묻는다.\n이번 전시에서 작가는 신체 내부에서부터 예기치 않게 우연히 발생하는 오류를 겪어나가는 불완전한 존재로서 인간 신체에 주목한다. 기억의 휘발이나 체력의 소진과 같이 일상 생활 속에서 겪는 사소한 일부터 악성 신생물이나 유전 질환과 같은 심각한 질환에 이르기까지 인간의 의지로 통제할 수 없는 신체의 사건들을 작업의 모티프로 삼는다. 장서영은 질병과 노화, 죽음과 같은 무거운 주제를 다루면서도 특유의 언어유희와 유머를 통해 인간 존재의 취약성을 낯설고도 유쾌하게 바라보게 만든다. 한편 장서영의 조각 설치 작업은 전시와 영상 작업의 개념을 물질적으로 구현하며 전시장이라는 물리적 공간을 점유한다. 시간 기반의 영상과 공간 기반의 조각을 결합함으로써, 관객은 작품을 시각적일 뿐만 아니라 촉각적인 방식으로, 2차원에서 3차원으로 경험을 확장한다.\n장서영의 작업은 개별 작품이 독립적으로 존재하기보다 반복적으로 등장하는 모티프와 개념을 통해 서로 유기적으로 연결된다. 이미지와 개념들은 작품마다 다른 방식으로 변주되며 하나의 거대한 네트워크를 형성한다. 관객은 서킷이나 컨베이어 벨트를 연상시키는 미로 같은 전시공간을 이동하며, 흩어져 있는 단서들을 연결해 나가는 과정 속에서 장서영이 구축한 세계의 지도를 더듬어 따라가게 된다.",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=ddd0a99f208a46c19f18368275621888&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1563285",
    "lat": 37.6406604547872,
-   "lng": 127.066865579183
+   "lng": 127.066865579183,
+   "source": "both"
   },
   {
    "title": "[더 갤러리 호수] 호수동물아트전",
@@ -433,7 +475,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=6bba787e075e46ada1ecd708b8289f36&thumb=Y",
    "link": "https://archivist.kr/exi?m=gov&i=1786525248",
    "lat": 37.512296516856,
-   "lng": 127.107617545434
+   "lng": 127.107617545434,
+   "source": "cultural"
   },
   {
    "title": "[서울역사박물관] 여민공수與民共守 [백성과 함께 지킨다]",
@@ -451,7 +494,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=504caf944a314f089d9de743e41f3aed&thumb=Y",
    "link": "https://museum.seoul.go.kr/www/board/NR_boardView.do?sortName=&q_listType=THUMBNAIL&searchVal=&bbsCd=1002&endDt=&searchKey=TITLE___1002&sso=ok&regPwd=N&museumCd=&pageType=&sortOrder=&q_exhSttus=next&startDt=&currentPage=&seq=20260615104640628&ctgCd=&showSummaryYn=N",
    "lat": 37.570507525011855,
-   "lng": 126.97052372473162
+   "lng": 126.97052372473162,
+   "source": "cultural"
   },
   {
    "title": "[세종문화회관] 2026 상상톡톡미술관 기획전시 [빠씨를 찾아서]",
@@ -469,7 +513,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=bf0370292aa74772a8e9a413a3196fbf&thumb=Y",
    "link": "https://www.sejongpac.or.kr/dfac/dfacPerformance/dfacPerformance/performTicket.do?performIdx=37358&menuNo=1200015",
    "lat": 37.62254520644527,
-   "lng": 127.04139068396867
+   "lng": 127.04139068396867,
+   "source": "cultural"
   },
   {
    "title": "[서울역사박물관] 2026년 작은전시 [박물관 보물찾기: 휴대용 앙부일구]",
@@ -487,7 +532,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=895231ca993d4b14a93da6489e94aa88&thumb=Y",
    "link": "https://museum.seoul.go.kr/www/board/NR_boardView.do?bbsCd=1014&seq=20260708150831818&sso=ok",
    "lat": 37.570507525011855,
-   "lng": 126.97052372473162
+   "lng": 126.97052372473162,
+   "source": "cultural"
   },
   {
    "title": "[서울시립미술관 서소문본관] 2026년 한국 근대 거장전 《유영국: 산은 내 안에 있다》",
@@ -500,12 +546,13 @@
    "fee": "",
    "free": true,
    "target": "누구나",
-   "artist": "",
-   "desc": "",
+   "artist": "유영국",
+   "desc": "서울시립미술관은 한국 추상 미술의 선구자 유영국(1916&ndash;2002) 탄생 110주년을 기념하여 유영국미술문화재단과 조선일보사와 함께 역대 최대 규모의 회고전 《유영국: 산은 내 안에 있다》를 개최한다. 미공개작을 포함한 회화, 부조, 사진, 드로잉 작품 및 아카이브 170여 점을 통해 그의 예술을 총체적으로 조망한다. 특히 이번 전시는 서울시립미술관이 새롭게 선보이는 ‘한국 근대 거장전’ 시리즈의 첫 프로젝트로, 이를 통해 한국 근대 미술이 이룩한 성취를 오늘의 시점으로 새롭게 연결하고자 한다. 그 첫 번째 작가로 유영국은 일제 강점기와 한국 전쟁, 민주화와 경제의 압축 성장 같은 한국 근현대사를 관통하면서도 추상 미술이라는 당대의 아방가르드 예술을 삶과 작품으로 올곧이 실천했던 작가이다.\n이번 전시는 1935년 도쿄 문화학원에서 시작된 추상 미술에 대한 실험부터 생애 후반 심상 추상에 이르기까지 60여 년의 유영국 화업을 총체적으로 조명한다. 관람객이 유영국이 선택했던 결단과 몰입, 숭고와 무한의 리듬을 보다 흥미롭게 만날 수 있도록 전통적인 회고전의 방식을 탈피한다. 대신 유영국에게 중요했던 1964년을 기점으로 시간을 역행했다가, 또 순행하는 독특한 시간 여행을 제안한다. 이를 통해 점, 선, 면과 색이라는 회화의 기본 요소로 ‘산’을 추상화했던 유영국의 예술 세계를 보다 입체적으로 볼 수 있을 것이다. 그의 작품에 반복적으로 등장하는 산은 고향 울진의 실제 풍경이자 기억의 총체이며, 동시에 선과 색의 균형으로 이루어진 내면의 구조였다. 산은 그에게 외부의 재현 대상을 넘어 마음속에 존재하는 조형적 본질이다.\n유영국 작품이 단지 근대 거장의 미술사적 성취에 머무르지 않고 지금, 여기를 살아가는 우리에게 깊은 울림으로 다가오는 이유는 그의 작품을 통해 한 시대를 만나게 하기 때문이다. 동시에, 그가 구축한 아름다움의 질서는 여전히 시각적 경이로움으로 우리를 이끈다. 디지털과 AI 기술이 창작의 개념을 흔드는 오늘, 유영국의 회화는 창작이란 무엇인가라는 근본적인 질문으로 우리를 호출한다. 특히 유영국 후기 작업이 함축한 무한 너머의 시선은, 회화라는 고유한 매체가 지닌 숭고의 가능성을 보여 준다. 그가 발견한 자신만의 크고 깊은 산처럼 유영국의 작품은 단단한 생명력으로 오늘도 자신의 산을 찾아가는 우리에게 말을 건넨다.\n*음성 안내 : 현장 유료 오디오 가이드 대여(내레이터 국문 손열음, 영문 피터 빈트) / 전시 종료 후 홈페이지 공개 예정",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=1d442b535cae430d8bce0aa89bc234ba&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1529410",
    "lat": 37.5641060692766,
-   "lng": 126.973699316136
+   "lng": 126.973699316136,
+   "source": "both"
   },
   {
    "title": "[구립증산도서관] 책 따라 걷는 도서관 - 10월 원화 전시 [대단한 참외씨]",
@@ -523,7 +570,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=4541266b437040c99b26d9e399159f9b&thumb=Y",
    "link": "https://www.eplib.or.kr/jslib/menu/10457/program/30028/eventLectureDetail.do?currentPageNo=1&lectureIdx=229506",
    "lat": 37.5828094398328,
-   "lng": 126.907671330325
+   "lng": 126.907671330325,
+   "source": "cultural"
   },
   {
    "title": "땅땅땅-잇있잊 TTang! TTang! TTang! Placed",
@@ -541,7 +589,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=7f0bd748a6f0411c8b15f49a10532bee&thumb=Y",
    "link": "https://archivist.kr/exi?m=gov&i=1789439531",
    "lat": 37.579117894432,
-   "lng": 126.973630299897
+   "lng": 126.973630299897,
+   "source": "cultural"
   },
   {
    "title": "[갤러리 508] Japanese Pop Trio II",
@@ -559,7 +608,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=2ef0a9c342c147e99fa5a30d710d0cb0&thumb=Y",
    "link": "https://archivist.kr/exi?m=gov&i=1788095782",
    "lat": 37.5249920319161,
-   "lng": 127.044705546448
+   "lng": 127.044705546448,
+   "source": "cultural"
   },
   {
    "title": "[서울공예박물관] 시간이 쌓이는 집",
@@ -577,7 +627,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=cd9c22ed10934ac5a2079d6255642e7d&thumb=Y",
    "link": "https://craftmuseum.seoul.go.kr/exhibit/plan/view/195",
    "lat": 37.5766481740232,
-   "lng": 126.983533363501
+   "lng": 126.983533363501,
+   "source": "cultural"
   },
   {
    "title": "[서울디자인재단] DDP 협력전시 SPECTRUM (스펙트럼)",
@@ -595,7 +646,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=3dc45d645c25434686cfb1cb0e12649e&thumb=Y",
    "link": "https://ddp.or.kr/index.html?menuno=230&siteno=2&bbsno=613&boardno=15&bbstopno=613&act=view&subno=",
    "lat": 37.56735731522952,
-   "lng": 127.00977973484339
+   "lng": 127.00977973484339,
+   "source": "cultural"
   },
   {
    "title": "[구립증산도서관] 10월 미니멀 북큐레이션 [달마다, 나를 아끼는 습관] 책과 가까워지는 시간",
@@ -613,7 +665,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=6f7d1d95a80444cca5ce728a9726fc4d&thumb=Y",
    "link": "https://www.eplib.or.kr/jslib/menu/10457/program/30028/eventLectureDetail.do?currentPageNo=1&lectureIdx=230163",
    "lat": 37.5828094398328,
-   "lng": 126.907671330325
+   "lng": 126.907671330325,
+   "source": "cultural"
   },
   {
    "title": "예고를 빛낸 사람 수상작가전: 첫 장면 Award-Winning Alumni Exhibition: The First Scene",
@@ -631,7 +684,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=f056eb6cc40d4e5594b181eb65cc5297&thumb=Y",
    "link": "https://doam.me/Exhibition_Information/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=173878058&t=board",
    "lat": 37.6057079931502,
-   "lng": 126.967906461707
+   "lng": 126.967906461707,
+   "source": "cultural"
   },
   {
    "title": "[서울역사박물관] XR 전시 [걷는 순간 역사가 펼쳐집니다]",
@@ -649,7 +703,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=fc53b2df94144d3987ca412f5d23839a&thumb=Y",
    "link": "https://www.facebook.com/photo?fbid=1435935265234347&set=pcb.1435935325234341",
    "lat": 37.570507525011855,
-   "lng": 126.97052372473162
+   "lng": 126.97052372473162,
+   "source": "cultural"
   },
   {
    "title": "[송파 청년아티스트센터] 3기 릴레이 개인전 [교차점]",
@@ -667,7 +722,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=59b38b0849614c78a65e330cf6993c4f&thumb=Y",
    "link": "https://www.instagram.com/p/DXvsd-xDyH1/",
    "lat": 37.5340686405498,
-   "lng": 127.115954729217
+   "lng": 127.115954729217,
+   "source": "cultural"
   },
   {
    "title": "[서울상상나라] 놀이의 가능성: 보다",
@@ -685,7 +741,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=33e106ada63a4554889b2194d3b76aa7&thumb=Y",
    "link": "https://www.seoulchildrensmuseum.org/display/displayExhibition27.do",
    "lat": 37.55055,
-   "lng": 127.077569
+   "lng": 127.077569,
+   "source": "cultural"
   },
   {
    "title": "고민정 개인전 [존재하는 점]",
@@ -703,7 +760,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=df109594091c4a80a8ab711e5450ce4c&thumb=Y",
    "link": "https://artcenter-lim.imweb.me/programs/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=174845144&t=board",
    "lat": 37.5790919031737,
-   "lng": 126.982040842138
+   "lng": 126.982040842138,
+   "source": "cultural"
   },
   {
    "title": "문화역서울284 기획전시 [돌봄의 디자인]",
@@ -721,7 +779,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=8c66108a88de46648d47a49b77a6e9d9&thumb=Y",
    "link": "https://www.seoul284.org/program/view/category/319/state/5/menu/328?thisPage=1&idx=377&searchField=all&searchText=",
    "lat": 37.5560581817344,
-   "lng": 126.972115894161
+   "lng": 126.972115894161,
+   "source": "cultural"
   },
   {
    "title": "[종로문화재단] 2026 무계원 기획전시 한국의 미(美) 17 《금별, 우주를 만나다》",
@@ -739,7 +798,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=bdd63518ce2944219dc54727173df4ea&thumb=Y",
    "link": "https://www.jfac.or.kr/site/main/program/perf_exhi_list_view?pgIdx=2809",
    "lat": 37.5918679,
-   "lng": 126.9634368
+   "lng": 126.9634368,
+   "source": "cultural"
   },
   {
    "title": "박성민 [형태를 지나 결에 머물다]",
@@ -757,7 +817,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=aaaa57b5490d415a93830ddd9fef8865&thumb=Y",
    "link": "https://rhogallery.com/ko/park-sungmin/",
    "lat": 37.5748603162364,
-   "lng": 126.984085733694
+   "lng": 126.984085733694,
+   "source": "cultural"
   },
   {
    "title": "TASTE OF GREEN(테이스트 오브 그린) 展",
@@ -775,7 +836,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=180d3c8c592144d19aabadb5acf794f3&thumb=Y",
    "link": "https://www.artday.co.kr/exhibition/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=174150103&t=board",
    "lat": 37.5467149767878,
-   "lng": 126.978905928626
+   "lng": 126.978905928626,
+   "source": "cultural"
   },
   {
    "title": "[소슬금 갤러리] 이한 개인전 《CONATIUM ― 나로서, 계속》",
@@ -793,7 +855,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=199a22b3df904f96a192634ce3f4bafa&thumb=Y",
    "link": "https://blog.naver.com/sosulguem_official/224427581100",
    "lat": 37.5463950137629,
-   "lng": 126.98462160059339
+   "lng": 126.98462160059339,
+   "source": "cultural"
   },
   {
    "title": "[서울시립 서서울미술관] 미디어 작가전 《김희천: 두더지들》",
@@ -806,12 +869,13 @@
    "fee": "",
    "free": true,
    "target": "누구나",
-   "artist": "",
-   "desc": "",
+   "artist": "김희천",
+   "desc": "서울시립 서서울미술관 미디어 작가전 《김희천: 두더지들》\n서울시립 서서울미술관 미디어 작가전은 급격하게 변화하는 사회에 대한 예술적 관점을 제시해 온 한국 동시대 주요 미디어 작가를 집중 조명하는 서서울미술관의 기획 전시입니다. 미디어 작가전은 작가의 작업 세계를 다각도로 해석하며, 새로운 작품의 제작을 지원하고, 예술적 지식과 형태를 만들어가고자 합니다.\n서서울미술관에서 처음 열리는 미디어 작가전은 동시대 기술환경과 시각문화에 대한 비평적인 관점을 제시해 온 김희천 작가를 초청하였습니다. 현대 사회에서 물리적 시스템은 데이터화 되어 디지털 환경과 연결되면서 서로를 끊임없이 갱신하고 세계를 재구성하고 있습니다. 작가는 가상이 현실의 한 층위로 작동하고, 기술이 비가시화된 세계에서 ‘나’라는 존재를 어떻게 지각할 수 있는가를 질문해 왔습니다. 영상, 게임, 건축, 영화, 문학 등 여러 분야의 언어와 기술을 교차하며 만들어온 작가의 고유한 작업은, 동시대를 살아가는 우리에게 자신을 성찰하고 세계를 인식하고 감각하기 위한 비평적이고 미학적인 관점을 제공합니다.\n작가의 첫 비디오 작업 〈바벨〉(2015)에서 서술된 “세계는 스크린이 되었다.”1 라는 문장은 작가가 세계를 바라보는 관점을 표현하고 있습니다. 작가는 카메라로 포착한 이미지를 바탕으로 움직이는 세계에서 스크린은 더 이상 현실을 복제하는 매체가 아닌 현실을 생산하고 세계를 구성하는 환경이 되었고, 〈메셔〉(2018)에서는 미래에는 “스크린이 비추고 포착한 세계만이 우리가 인식할 수 있는 유일한 세계” 2 일 것이라고 말합니다. 〈썰매〉(2016), 〈홈〉(2017), 〈메셔〉(2018), 〈탱크〉(2019) 등을 경유하면서, 작가는 미디어를 통해 매개된 세계와 문화적 풍경을 그리는 한편, 실재와 가상, 데이터와 네트워크, 내재화된 스크린, 세계의 해상도, 의식과 경험 등의 문제를 다차원적인 시간과 공간을 교차하며 심도깊게 다루어왔습니다. 작가는 이러한 기술환경이 갖는 여러 주제를 작업 안에서 단순히 재현하는 형식을 벗어나, 시각적 매체의 구조 안에서 이미지와 서사를 생산하는 기술로 사용하고, 우리와 우리가 사는 세계를 매개하기 위한 과정으로 설계하기도 합니다.\n이번 전시는 2023년 이후 작가의 근작들을 집중해서 소개하면서, 서서울미술관이 제작 지원하여 만든 게임과 영상, 그리고 사진 작업을 처음 공개합니다. “정신적 시리즈” 3 인 〈커터3〉(2023)와 〈더블포져〉(2023)는 게임 엔진 유니티(Unity)로 제작된 자동 재생 게임 작업입니다. 두 작품은 화면을 녹화해서 영상으로 재생하는 것이 아닌, 입력값을 통해 실시간으로 렌더링 되는 ‘게임’으로서 자동 플레이됩니다. 작가는 게임 엔진을 새로운 무빙 이미지 제작 도구로 사용할 수 있는지를 실험하면서, 게임의 시공간적 조건과 내러티브를 이용해 정보화된 세계에서 변화하는 시간성을 다루었습니다.\n신작 〈레몬〉(2026)은 〈커터3〉와 〈더블포져〉에서 이스터 에그 4 로 등장했던 두더지가 두 작품 사이를, 땅굴을 파며 몰래 오가고 있었다는 상상에서 시작되었습니다. 〈레몬〉은 두더지 '버터'를 주인공으로 한 가상의 비디오 게임 ‘버터3’의 플레이를 따라 전개됩니다. 작품에서 ‘두더지’는 서로 다른 게임 세계를 오가는 이중첩자의 속성을 지니고 있으며, 기술에 포획된 환경에서 벗어나고자 하는 염원을 상징하는 동시에, 기술에 의해 단일하게 고정된 자아를 흔드는 존재입니다.\n스마트폰의 등장과 함께 개인화된 알고리듬은 주체가 무엇을 보고 반응하는지를 포착하고, 시스템은 다시 기술이 매개하는 인터페이스를 통해 주체가 무엇을 보고 반응하는지에 개입합니다. 성능의 고도화로 기술이 비가시화된 세계에서 주체는 인터페이스를 인식하지 못하고, 시스템과 주체의 거리는 사라져 기술이 매개한 세계와 자신이 경험한 세계를 더 이상 구분하지 못하게 됩니다. 이제 시스템은 스크린의 층위에서 주체를 포착하고 모델링하고 예측하며, 주체는 이러한 인공의 시스템에 의한 경험에 둘러싸이면서 모델링 된 결과를 반복적으로 내재화하게 됩니다.5 이러한 배경에서 제작된 신작 〈말린〉(2026)은 생성형 인공 지능(AI)으로 만든 다채널 영상으로, 작품은 우리를 둘러싼 근미래의 이미지 생태계가 세계에 가져올 변화와 이에 따른 인간의 인식과 시점의 변화를 다루고 있습니다.\n이번에 처음 공개되는 사진 작업인 〈.dng〉(2026)는 작가가 휴대전화로 촬영한 5,841장의 사진 중에서 이번 전시를 위해 선별한 100여 점의 사진으로 구성됩니다. 전시된 사진은 일정한 주제로 고정되지 않으며, 시간의 흐름과 우연적이고 불연속적인 경험을 담고 있습니다. ‘작가의 눈’으로 기록된 사진은 개인적 서사를 통해 현재를 살아가는 나와 외부 세계와의 관계를 일정한 프레임 안에서 포착합니다.\n이번 전시는 동시대 기술 환경과 미디어의 영향으로 변화하는 사회와 문화에 대한 성찰과 함께, 존재와 지각, 시간과 공간, 기술과 인간에 관해 깊이 사유할 수 있는 기회를 마련해줄 것입니다. 미술관이라는 인공적인 환경과 작품의 디지털적 상상력이 결합한 공간에서, 관람객들이 지표면을 잠시 이탈해 실재와 가상이 교차하는 감각적인 여정을 경험할 수 있도록 구성됩니다.\n이성민 (서울시립미술관 학예연구사)\n1 김희천 작가의 ‘메모(2025.10)’에서 발췌.\n2 김희천 작가의 ‘메모(2025.10)’에서 〈메셔〉의 세계관에 관해 서술한 글에서 발췌.\n3 “전작의 배경이나 세계관과 직접적으로 이어지지 않지만, 전작의 요소를 그대로 공유하는 방식의 후속작을 ‘정신적 후속작(spiritual successor)’이라 부른다. 〈커터3〉는 후에 만들어진 〈더블포져〉의 정신적 후속작인 관계로, 이 둘을 임의로 ‘정신적 시리즈’라 명했다.” 김희천 작가의 메모 ‘두더지 01과 두더지 02’(2026.2)를 참조.\n4 이스터 에그(Easter egg)는 개발자들이 프로그램 속에 숨겨놓은 메시지나 기능으로 게임의 조작 방법이나 스토리 진행에 영향을 미치지 않는다.\n5 김희천 작가의 ‘말린_선행메모(2026.5)’를 참조",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=8f9d4ee329554763b4b0ed830c6fdb30&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1565012",
    "lat": 37.4580752536422,
-   "lng": 126.894935931812
+   "lng": 126.894935931812,
+   "source": "both"
   },
   {
    "title": "[서울역사박물관] 서울도시계획 대관람",
@@ -829,7 +893,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=cc449667a3c447f68835d21a4e8c2356&thumb=Y",
    "link": "https://museum.seoul.go.kr/www/board/NR_boardView.do?bbsCd=1002&q_exhSttus=next&seq=20260723145427523&sso=ok",
    "lat": 37.570507525011855,
-   "lng": 126.97052372473162
+   "lng": 126.97052372473162,
+   "source": "cultural"
   },
   {
    "title": "전시 [느슨한 0 to the ZERO]",
@@ -847,7 +912,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=26a457b806fd4f42bd20931822054f77&thumb=Y",
    "link": "https://www.gallerythec.com/index#CURRENT-EXHIBITION",
    "lat": 37.543149846744,
-   "lng": 126.958603008297
+   "lng": 126.958603008297,
+   "source": "cultural"
   },
   {
    "title": "[서울상상나라] 통-하다",
@@ -865,7 +931,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=43c7d50c4bcf488982db4ed5e5d6a2a9&thumb=Y",
    "link": "https://www.seoulchildrensmuseum.org/display/displayExhibition26.do",
    "lat": 37.55055,
-   "lng": 127.077569
+   "lng": 127.077569,
+   "source": "cultural"
   },
   {
    "title": "[문화살롱 5120] 망각 기관―셰헤라자데 장치",
@@ -883,7 +950,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=c1a37898ba5749148f4e69d3f9b726c3&thumb=Y",
    "link": "https://www.instagram.com/p/DdBajeUIB3N/?img_index=1",
    "lat": 37.628392704654,
-   "lng": 127.075703075721
+   "lng": 127.075703075721,
+   "source": "cultural"
   },
   {
    "title": "[문화공간이육사] 2026 기획전시 [육사답사]",
@@ -901,7 +969,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=4385c07b44de409e84f8a4947392c41d&thumb=Y",
    "link": "https://www.sb.go.kr/literature/culture/bbs/bbsMsgDetail.do?msg_seq=24&bcd=special",
    "lat": 37.5981380921564,
-   "lng": 127.032601556099
+   "lng": 127.032601556099,
+   "source": "cultural"
   },
   {
    "title": "[서울시립 남서울미술관] 2026년 한국 대표 조각가전 《조숙진: 지나가는 자리》",
@@ -914,12 +983,13 @@
    "fee": "",
    "free": true,
    "target": "누구나",
-   "artist": "",
-   "desc": "",
+   "artist": "조숙진",
+   "desc": "“자신이 지향하는 삶의 태도는 작품의 근본이다.” 작가노트, 1986.\n《조숙진: 지나가는 자리》는 남서울미술관 ‘한국 대표 조각가’ 시리즈의 두번째 전시로, 지난 40여 년간 뉴욕을 중심으로 회화와 조각, 설치, 사진, 퍼포먼스, 공공 프로젝트, 건축에 이르기까지 다양한 형식으로 작업해 온 조숙진의 작업 태도와 존재에 대한 성찰을 조망합니다. 1960년 전라남도 광주에서 태어나 1982년 홍익대학교 미술대학원에 진학한 조숙진은 규정된 매체 문법에서 벗어나 1980년대 초부터 합판, 장판, 보드지 등 비전형적인 재료를 적극적으로 실험하며 작업을 시작했습니다. 1983년 《제10회 앙데팡당》을 시작으로 1985년 관훈미술관에서의 첫 개인전 《저 너머》, 《프론티어제전》, 1986년 《제11회 에콜 드 서울》 등에 참여하며 동시대 한국 미술의 현장과 긴밀히 호흡한 작가는, 1988년 뉴욕 이주 후 아시아계 작가라는 범주를 넘어 뉴욕 미술계의 비평적·제도적 인정을 받으며 국제적인 성취를 이어왔습니다.\n전시의 제목인 ‘지나가는 자리’는 조숙진의 작업 세계를 관통하는 존재론적 통찰을 함축합니다. 우리 모두는 선형적 시간 속에서 결국 지나가는 존재이지만, 작가에게 지나감은 단순한 소멸이나 상실을 뜻하지 않습니다. 조숙진은 버려진 나무와 사물을 그저 재료로 다루는 대신, 인간보다 오랜 시간을 지나오며 고유한 기억을 품은 존재로서 받아들이고, 예술을 통해 그 안에 내재한 생명의 가능성을 발견해 왔습니다. 만물을 동등한 위치에서 바라보며 그 관계에 대해 겸손한 질문을 던지는 그의 태도는, 무언가를 견고하게 구축하고 정박하려는 인간 중심적 욕망과는 거리가 멉니다. 작가의 사유에 깊은 자양분이 된 『도덕경』, 『채근담』, 『선문답』, 『성경』의 세계관은 특정한 교리나 사상으로 수렴되기보다, 자신을 비우고 낮추며 세계를 더 넓은 관계 안에서 바라보는 태도로서 그의 작업 안에 스며 있습니다. 이러한 사유는 그동안 세상을 이분법적으로 나누어 왔던 대립항 사이의 경계를 허뭅니다. 그의 작업에서 반복적으로 마주하게 되는 주제인 인간과 자연, 존재와 비존재, 물질과 그 너머의 세계, 삶과 죽음, 개인과 공동체 등은 분리된 것이 아니라 서로 기대고 이어지는 하나의 관계망 안에 있으며, 조숙진에게 있어 이 모든 것은 또 다른 시작이자 순환적 질서 속에 있습니다.\n이번 전시는 프롤로그와 에필로그 그리고 세 개의 파트로 구성됩니다. 전시는 프롤로그 ‘목격자’를 시작으로 파트 1 ‘존재와 비존재’, 파트 2 ‘공간 사이’, 파트 3 ‘만물의 이치’를 거쳐 에필로그 ‘하나를 이루는 세계’로 이어지며, 야외 정원과 전시장 전반에 걸쳐 작가의 40여 년에 걸친 여정을 주제별로 조망합니다. 그동안 조숙진의 작업이 특정 시기나 일부 작업군을 중심으로 소개되어 왔다면, 이번 전시는 작가의 주요 작품과 신작, 미공개 드로잉 및 아카이브를 포함한 100여점의 작품을 통해, 초기 작업부터 최근 프로젝트에 이르기까지 일관되게 이어져 온 그의 예술적 실천을 조망합니다.\n이를 통해 작업 초기 한국에서 시작된 재료적 실험과 공간에 대한 감각, 존재를 둘러싼 사유가 뉴욕 이주 이후에도 단절되지 않은 채 버려진 사물과 장소, 공동체를 향한 관심으로 확장되어 왔음을 확인할 수 있을 것입니다. 그런 점에서 이번 전시는 조숙진이 지나온 자리를 따라가며, 매체와 지리적 경계를 넘나들며 삶의 태도를 예술로 실천해온 그의 일관된 궤적을 한국 현대미술의 맥락과 확장된 국제적 지평에서 새롭게 바라보는 계기가 될 것입니다.",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=aed5b82f656b4da18eed358532b288ae&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1556711",
    "lat": 37.4760535374985,
-   "lng": 126.979465861688
+   "lng": 126.979465861688,
+   "source": "both"
   },
   {
    "title": "[서초문화재단] 2026 공공미술 전시 [Wonder Street]",
@@ -937,7 +1007,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=498dce7623c14d5a8d800371cee2c248&thumb=Y",
    "link": "https://www.seochocf.or.kr/site/main/seocho/show/view?show_idx=970",
    "lat": 37.5077735030051,
-   "lng": 126.995904034712
+   "lng": 126.995904034712,
+   "source": "cultural"
   },
   {
    "title": "[서울상상나라] 2F 기획전시 [사랑하는 모양이야]",
@@ -955,7 +1026,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=49257064be8745158d56780a881325da&thumb=Y",
    "link": "https://www.seoulchildrensmuseum.org/display/displayExhibition25.do",
    "lat": 37.55055,
-   "lng": 127.077569
+   "lng": 127.077569,
+   "source": "cultural"
   },
   {
    "title": "공공미술 시민아이디어 구현 서울대공원 <솜사탕코끼리> 시민개방",
@@ -973,7 +1045,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=fd73b5bd4d6c47f793b5099f52b71a71&thumb=Y",
    "link": "https://culture.seoul.go.kr/culture/culture/cultureEvent/view.do?cultcode=136671&menuNo=200009",
    "lat": 37.4364305503019,
-   "lng": 127.014098361931
+   "lng": 127.014098361931,
+   "source": "cultural"
   },
   {
    "title": "서울대학교 개교 80주년 기념전 [새로운 미래]",
@@ -991,7 +1064,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=d5873e77820d4f22a72af2841c8a8823&thumb=Y",
    "link": "https://www.snumoa.org/exhibitions_view.php?exh_id=196",
    "lat": 37.46654273388439,
-   "lng": 126.94968625158943
+   "lng": 126.94968625158943,
+   "source": "cultural"
   },
   {
    "title": "[서울대학교 미술관] 일상의 이미지, 어떻게 말을 거는가",
@@ -1009,7 +1083,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=5d9d35d7029945eb9a1a17e648c78cd3&thumb=Y",
    "link": "https://www.snumoa.org/exhibitions_view.php?exh_id=195",
    "lat": 37.46654273388439,
-   "lng": 126.94968625158943
+   "lng": 126.94968625158943,
+   "source": "cultural"
   },
   {
    "title": "[서울시립미술관 서소문본관] 가나아트컬렉션 《기술의 저변: 경계에 선 장면들》",
@@ -1022,12 +1097,13 @@
    "fee": "",
    "free": true,
    "target": "누구나",
-   "artist": "",
-   "desc": "",
+   "artist": "김세진, 김용태, 김인순, 김정헌, 박불똥, 박은태, 박흥순, 신제남, 신학철, 안보선, 오경환, 이명복, 이상국, 이원철, 이종구, 이흥덕, 정복수, 황재형",
+   "desc": "서울시립미술관은 가나아트컬렉션 기획상설전 《기술의 저변: 경계에 선 장면들》을 개최합니다.\n이번 전시는 2001년 가나아트 이호재 대표로부터 기증받은 작품과 더불어, 그동안 서울시립미술관이 수집해 온 소장작품을 함께 구성하여 선보입니다.\n가나아트컬렉션 《기술의 저변: 경계에 선 장면들》은 1970~90년대 급격한 산업화와 도시화, 그리고 매체 환경의 변화 속에서 형성된 한국 사회의 풍경을 조명하는 전시입니다. 기술과 산업의 발전은 물질의 생산 방식의 전환을 넘어 개인과 공동체의 모습, 그리고 현실을 인식하고 감각하는 방식까지 변화시켰습니다. 자본주의적 경제개발과 기술 발전이 결합하면서 한국 사회는 눈부신 성장을 이루었으나, 그 이면에는 또 다른 사회적 균열과 풍경이 존재하였습니다. 본 전시는 이러한 급속한 사회 변화의 장면들에 주목하며, 예술이 사회문화적 격변 속에서 현실과 삶의 감각을 어떻게 포착하고 형상화해 왔는지를 살펴보고자 합니다.\n1970~90년대는 농촌에서 유입된 인구로 도시가 팽창하고, 산업 자본과 대중매체가 결합하면서 사회가 새로운 체계로 빠르게 재편된 시기입니다. 이 시기 기술은 단순한 도구를 넘어 사람들의 일상과 경험을 변화시키는 조건으로 작용하였습니다. 현실주의 작가들은 단순한 재현을 넘어, 표면 아래 내재한 구조적 긴장과 균열을 드러내고자 하였습니다. 이들은 재조직된 일상의 풍경과 시대의 정서를 시각 언어로 번역하며 또 하나의 감각적 리얼리티를 구축하였습니다. 이들에게 창작은 마주한 현실에 대해 ‘무엇을 어떻게 바라볼 것인가’를 묻는 비평적 실천이었습니다. 농촌과 도시의 재편, 노동 환경의 변화, 소비문화와 대중매체의 확산 등 새로운 물적 토대 위에서 형성된 시각문화는 현실 감각을 드러내는 중요한 이미지 형식으로 나타납니다. 기술을 둘러싼 다양한 시선을 조명하는 본 전시는 세 개의 섹션으로 구성됩니다.\n섹션 1. 흔들리는 불빛 사이로\n급격한 산업화와 도시화가 진행되던 전환기의 사회적 균열을 포착합니다. 농촌에서 도시로의 이동과 개발 중심의 성장 논리는 삶의 방식과 공동체의 근간을 흔들었으며, 빠르게 형성된 새로운 터전은 삶의 기반을 충분히 보호하지 못했습니다. 산업화의 빛 뒤에 드리운 그림자는 변화의 경계에 놓인 시대의 현실을 보여줍니다.\n섹션 2. 새로운 질서의 심연\n기술과 자본의 결합 속에서 새롭게 형성된 사회 구조의 관계를 조망합니다. 산업화로 성장한 도시문화와 매체 환경은 물질적 번영과 함께 사회 질서와 가치 체계를 재구성하였습니다. 화려한 현실의 이면에는 소비주의와 대중매체가 만들어낸 욕망과 경쟁, 그리고 권력과 자본의 논리가 교차하며 보이지 않는 긴장을 형성합니다.\n섹션 3. 찬란한 공허\n거대 시스템의 표면 아래에 축적된 개인의 피로와 공허를 조명합니다. 효율과 발전의 논리가 지배하는 사회 속에서 개인은 점차 고립되고, 노동은 소외됩니다. 기술문명이 만들어낸 밝은 빛은 오히려 인간 실존에 대한 근원적인 질문을 다시 환기시킵니다.\n본 전시는 과거의 기술적 풍경을 되짚어봄으로써, 오늘날 우리가 마주한 기술문명의 경계를 성찰하고 미래를 보다 폭넓게 바라보는 계기가 되고자 합니다.",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=a4d0b10a374d4e7fb8f255560c9ef279&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1509709",
    "lat": 37.5641060692766,
-   "lng": 126.973699316136
+   "lng": 126.973699316136,
+   "source": "both"
   },
   {
    "title": "2026 코리아나미술관 소장품 기획전 [산수/풍경]",
@@ -1045,7 +1121,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=e1f37efb66644a52b0497f15e1058e92&thumb=Y",
    "link": "https://www.spacec.co.kr/gallery/gallery2",
    "lat": 37.5240691643,
-   "lng": 127.032811048
+   "lng": 127.032811048,
+   "source": "cultural"
   },
   {
    "title": "[갤러리 그라프] 잠시, 다른 것이 되는 (Becoming Otherwise) 이진희, 무아리, 풀림",
@@ -1063,7 +1140,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=bb8f2e8d55af4dd59366566f8a5f2811&thumb=Y",
    "link": "https://ggrappe.com/exhibitions/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=174912615&t=board",
    "lat": 37.5234788204389,
-   "lng": 127.046743383017
+   "lng": 127.046743383017,
+   "source": "cultural"
   },
   {
    "title": "파인캐릭터 2026 (FineCharacter 2026)",
@@ -1081,7 +1159,27 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=f941d1c83dad4804b0f02fc3817af386&thumb=Y",
    "link": "https://finecharacter.kr/",
    "lat": 37.56735731522952,
-   "lng": 127.00977973484339
+   "lng": 127.00977973484339,
+   "source": "cultural"
+  },
+  {
+   "title": "자치구 협력전시 《SeMA Collection: 시선의 결》",
+   "category": "전시/미술",
+   "gu": "중구",
+   "place": "기타",
+   "org": "서울시립미술관",
+   "start": "2026-10-15",
+   "end": "2026-11-29",
+   "fee": "",
+   "free": true,
+   "target": "",
+   "artist": "김창열, 강석호, 고산금, 공성환, 구성연, 권영우, 김강용, 김영성, 노상균, 박서보, 박성민, 박숙희, 송현숙, 유주희, 이교준, 정정엽, 차계남, 하이경",
+   "desc": "《시선의 결》은 김창열, 박서보를 비롯해 한국현대미술부터 동시대미술까지 서로 다른 세대의 작가 18인의 작품 20여 점을 선보입니다.\n서로 다른 시대와 방식으로 형성된 작품의 '결'을 따라가며, 재료와 흔적, 시간의 층위가 하나의 이미지를 이루는 과정을 조명하고, 이를 통해 작품을 바라보는 시선을 확장하고자 합니다.\n이번 전시는 노원문화재단과 서울시립미술관이 협력하여 개최되었습니다. 서울시립미술관 자치구 협력전시는 2013년부터 이어져 온 미술 소통 프로젝트의 일환으로, 미술관 소장품을 매개로 시민들이 일상 가까이에서 다양한 작품을 만나고 예술을 경험할 수 있도록 마련되었습니다.",
+   "image": "https://sema.seoul.go.kr/common/imageView?FILE_PATH=%2Fex%2FEXI01%2F2026%2F&FILE_NM=20261002144819_6948c9b3c0094fbaa987cc7c16525d0e_11782333568144f1a4ef7f5c0f054ba8",
+   "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1593888",
+   "lat": 37.5641060692766,
+   "lng": 126.973699316136,
+   "source": "sema"
   },
   {
    "title": "2026 아뜰리에 광화 세 번째 전시 [물드는 빛]",
@@ -1099,7 +1197,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=d5124a7282a248e2a849ca3f0a5943f8&thumb=Y",
    "link": "https://www.instagram.com/p/Dch53fkgeBD/",
    "lat": 37.57260128068914,
-   "lng": 126.97577534746529
+   "lng": 126.97577534746529,
+   "source": "cultural"
   },
   {
    "title": "[이한열기념관] 6월 민주항쟁 39주년 기념 하반기 특별 전시 《이런 양심수》",
@@ -1117,7 +1216,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=685642824c9e4951a4e2cacea373200b&thumb=Y",
    "link": "https://www.leememorial.or.kr/?tpf=memorial/plan_view&board_code=18&code=7178",
    "lat": 37.5550435661865,
-   "lng": 126.933865358054
+   "lng": 126.933865358054,
+   "source": "cultural"
   },
   {
    "title": "[서울로봇인공지능과학관] 미디어파사드전시 [서울라임:로봇시티]",
@@ -1135,7 +1235,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=d69b5c0f64c949c3a57da6461d4a81fc&thumb=Y",
    "link": "https://science.seoul.go.kr/RAIM/bbsctt/view.do?bbscttSn=2608280001&key=2304100032",
    "lat": 37.6555838047766,
-   "lng": 127.049506212905
+   "lng": 127.049506212905,
+   "source": "cultural"
   },
   {
    "title": "[종로문화재단] 2026 박노수미술관 작가 협업전시 [향, 산수를 물들이다]",
@@ -1153,7 +1254,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=5f03761607dd4fe69af0fc1fa4ed6490&thumb=Y",
    "link": "https://www.jfac.or.kr/site/main/program/perf_exhi_list_view?pgIdx=2702",
    "lat": 37.5813191962491,
-   "lng": 126.966818545949
+   "lng": 126.966818545949,
+   "source": "cultural"
   },
   {
    "title": "[종로문화재단] 박노수미술관 개관12주년 기념전시 [산수·격물]",
@@ -1171,7 +1273,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=b3d1bbb9284b4b97bda71e967e5bb5a9&thumb=Y",
    "link": "https://www.jfac.or.kr/site/main/program/perf_exhi_list_view?pgIdx=2519",
    "lat": 37.5813191962491,
-   "lng": 126.966818545949
+   "lng": 126.966818545949,
+   "source": "cultural"
   },
   {
    "title": "[서울아트책보고] 열람실 수장고 큐레이션 [하나의 이야기, 천의 얼굴 One Story, a Thousand Faces]",
@@ -1189,7 +1292,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=de1beb15863b41c28c834cca3292bc15&thumb=Y",
    "link": "https://artbookbogo.kr/seoul/menu/10045/program/30009/cultureDetail.do?currentPageNo=1&cultureIdx=26940",
    "lat": 37.4982125677913,
-   "lng": 126.867088741096
+   "lng": 126.867088741096,
+   "source": "cultural"
   },
   {
    "title": "2026 가을 기획전 [아름다운 기증, 소중한 모음Ⅴ]",
@@ -1207,7 +1311,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=96cc3bb9c83d4c9d8cf39c7bc493030c&thumb=Y",
    "link": "https://kwmuseum.org/144",
    "lat": 37.48783935741881,
-   "lng": 127.06604493487576
+   "lng": 127.06604493487576,
+   "source": "cultural"
   },
   {
    "title": "[서울아트책보고] 민음사 편집자가 추천하는 우리 회사 숨은 명작 30",
@@ -1225,7 +1330,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=393877ef53864ef2ad7d2266685d5b0b&thumb=Y",
    "link": "https://artbookbogo.kr/seoul/menu/10024/program/30009/cultureDetail.do?currentPageNo=2&cultureIdx=26785&searchCultureTypeCd=ALL&searchOperStatusCd=ALL",
    "lat": 37.4982125677913,
-   "lng": 126.867088741096
+   "lng": 126.867088741096,
+   "source": "cultural"
   },
   {
    "title": "[서울로봇인공지능과학관] 연장 운영 안내",
@@ -1243,7 +1349,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=d21cac153c15493cb42c13f03bcae1b2&thumb=Y",
    "link": "https://science.seoul.go.kr/RAIM/bbsctt/view.do?menuTy=&bbscttSn=2608300002&sc_bbsctt_field_sn=0009&sc_bbsctt_adit_iem_cn=&key=2304100032&sc_custom1=&pageIndex=1&orderBy=bbscttOrdr+desc&sc=&sw=",
    "lat": 37.6555838047766,
-   "lng": 127.049506212905
+   "lng": 127.049506212905,
+   "source": "cultural"
   },
   {
    "title": "[숙명여자대학교 정영양자수박물관] 이음-확장",
@@ -1261,7 +1368,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=52e233b5ee53432ba09471c9763c93ef&thumb=Y",
    "link": "https://home.sookmyung.ac.kr/chungyoungyang/6797/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGY2h1bmd5b3VuZ3lhbmclMkY4NjQlMkYyMTYxOTAlMkZhcnRjbFZpZXcuZG8lM0ZwYWdlJTNEMSUyNnNyY2hDb2x1bW4lM0QlMjZzcmNoV3JkJTNEJTI2YmJzQ2xTZXElM0QlMjZiYnNPcGVuV3JkU2VxJTNEJTI2cmdzQmduZGVTdHIlM0QlMjZyZ3NFbmRkZVN0ciUzRCUyNmlzVmlld01pbmUlM0RmYWxzZSUyNnBhc3N3b3JkJTNEJTI2",
    "lat": 37.5438324857962,
-   "lng": 126.965458400837
+   "lng": 126.965458400837,
+   "source": "cultural"
   },
   {
    "title": "[마포구립서강도서관] 4분기/어린이갤러리 [단어수집가]",
@@ -1279,7 +1387,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=4812e8fcf8f64cbe8765b4d2fe8ebf3c&thumb=Y",
    "link": "https://mplib.mapo.go.kr/sglib/PGM3028/eventDetail.do?eventSn=13448",
    "lat": 37.5477347268018,
-   "lng": 126.932061794829
+   "lng": 126.932061794829,
+   "source": "cultural"
   },
   {
    "title": "팔색찬란 - K로 가득한 지역",
@@ -1297,7 +1406,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=ed98d4bdc198459f97fac9b0b43477ea&thumb=Y",
    "link": "https://cwdsarangchae.kr/ko/board/specialexhibition/current/detail.kto?searchNo=3598",
    "lat": 37.582544875368,
-   "lng": 126.973059283309
+   "lng": 126.973059283309,
+   "source": "cultural"
   },
   {
    "title": "[서울문화재단] 2026 신당창작아케이드 [어쩌다 마주친 공예 in 노들섬]",
@@ -1315,7 +1425,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=a8c296336d0f4398b55de07ad93424af&thumb=Y",
    "link": "https://www.sfac.or.kr/artspace/artspace/sindang_notice.do?bcIdx=137937",
    "lat": 37.5176638307111,
-   "lng": 126.958036465507
+   "lng": 126.958036465507,
+   "source": "cultural"
   },
   {
    "title": "[DDP] Dream in Light",
@@ -1333,7 +1444,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=bfa59aa56eed4af8b441d88bad873037&thumb=Y",
    "link": "https://ddp.or.kr/index.html?menuno=239&siteno=2&bbsno=721&boardno=16&bbstopno=721&act=view&subno=",
    "lat": 37.56735731522952,
-   "lng": 127.00977973484339
+   "lng": 127.00977973484339,
+   "source": "cultural"
   },
   {
    "title": "[서울디자인재단] 2025 [Now for Zero-Waste Vol.2 : 새로제로] 展",
@@ -1351,7 +1463,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=6d22a5166ca244068a398ed32972e504&thumb=Y",
    "link": "https://www.seoulup.or.kr/display/detail.do?type=Project_Past&BBS_ID=7697",
    "lat": 37.5586850612677,
-   "lng": 127.057851176035
+   "lng": 127.057851176035,
+   "source": "cultural"
   },
   {
    "title": "[송파문화재단] 온라인 전시 [사적 게임 아카이브]",
@@ -1369,7 +1482,27 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=2991cf043a7f4a15b09f17a89ebff055&thumb=Y",
    "link": "https://www.songpafac.or.kr/notice_view.do?brd_seq=1318&curPage=&searchtype=&keyword=",
    "lat": 37.5023578475607,
-   "lng": 127.093490160793
+   "lng": 127.093490160793,
+   "source": "cultural"
+  },
+  {
+   "title": "SeMA 공용공간 프로젝트 《영원히 교차하는 춤》",
+   "category": "전시/미술",
+   "gu": "중구",
+   "place": "서울시립미술관 서소문본관",
+   "org": "서울시립미술관",
+   "start": "2025-08-13",
+   "end": "2026-12-31",
+   "fee": "",
+   "free": true,
+   "target": "",
+   "artist": "에르네스토 네토",
+   "desc": "서울시립미술관은 2025년 공용공간 프로젝트의 일환으로 동시대 조각의 지평을 넓혀 온 세계적인 예술가 에르네스토 네토를 초청합니다.\n그의 신작〈바 카 바, 영원히 교차하는 춤〉은 서소문 본관 로비와 열린 공간을 가로지르는 대형 설치작업으로,\n나무줄기와 밤을 연상시키는 갈색과 꽃과 낮을 상징하는 분홍색의 산업용 면직물을 크로셰 기법으로 엮은 구조물에 국내산 구아바 잎과 차나무 잎을 채워 완성되었습니다.\n서울시립미술관의 커미션으로 완성된 이 작품은 직선 위주의 공간에 이질적이면서도 신선한 생명력을 불어넣으며, 중심과 끝, 안과 밖이 지속적으로 전환되는 순환과 균형의 시공간성을 구현합니다.\n작품 제목 속 ‘바 카 바’는 단어의 시작과 끝이 같은 의성어로, 안과 밖을 넘나드는 리듬과 순환, 생명력의 흐름을 상징합니다.\n이는 인체와 공간, 감각과 사유, 개인과 타자, 자연과 문명 등 네토가 꾸준히 탐구해 온 다양한 요소들이 교차하고 관계 맺는 상태를 함축합니다.\n감각과 참여, 주체적 경험을 중시했던 브라질 네오 콘크리트 운동의 정신은 네토의 작업 안에서 오늘날 도시 공간 속에 새롭게 구현되며, 예술의 새로운 가능성으로 이어지고 있습니다.\n서울시립미술관은 2020년부터 공용공간을 실험의 장으로 넓혀 오며 예술이 일상 속으로 스며드는 방식을 모색해 왔습니다.\nSeMA 공용공간 프로젝트 《영원히 교차하는 춤》이 도시의 삶과 미술관이 만나, 일상 속에서 감각을 일깨우는 예술의 가능성을 보여주는 장이 되기를 바랍니다.\n여러분의 참여로 이 공간은 비로소 완성됩니다. 작품과 함께한 소중한 경험을 #세마네토 #netoinseoul 해시태그와 함께 나눠 주세요.",
+   "image": "https://sema.seoul.go.kr/common/imageView?FILE_PATH=%2Fex%2FEXI01%2F2025%2F&FILE_NM=20250827101939_69f500bd5c08449aa3bb3a52953eb93c_92f783ffb3154da689c7826432655c76",
+   "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1431437",
+   "lat": 37.5641060692766,
+   "lng": 126.973699316136,
+   "source": "sema"
   },
   {
    "title": "[소마미술관] 기념에서 풍경으로",
@@ -1387,7 +1520,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=80b85ce1013346b48856c5550086748c&thumb=Y",
    "link": "https://soma.kspo.or.kr/dspy/display/239",
    "lat": 37.516920655117,
-   "lng": 127.118166964751
+   "lng": 127.118166964751,
+   "source": "cultural"
   },
   {
    "title": "[서울시립 미술아카이브] 소장자료 기획전 [오윤]",
@@ -1405,7 +1539,27 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=a829a1c2820447f5aaa9047dc613eeea&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1576838",
    "lat": 37.6078008399411,
-   "lng": 126.97190179486
+   "lng": 126.97190179486,
+   "source": "cultural"
+  },
+  {
+   "title": "《오윤》",
+   "category": "전시/미술",
+   "gu": "종로구",
+   "place": "서울시립 미술아카이브",
+   "org": "서울시립미술관",
+   "start": "2026-08-27",
+   "end": "2027-02-14",
+   "fee": "",
+   "free": true,
+   "target": "",
+   "artist": "오윤",
+   "desc": "《오윤》은 1980년대 민중미술을 대표하는 작가 오윤(1946&ndash;1986)의 작고 40주기를 맞아 마련한 전시로, 서울시립 미술아카이브가 수집한 오윤 컬렉션을 중심으로 그의 독창적인 작품 세계와 창작 과정을 재조명한다. 한국 근현대사의 격동과 전통문화·연희, 동학을 비롯한 전통사상, 민중시 등 당대 문학과의 관계 속에서 작품에 담긴 다층적인 서사를 읽어내는 한편, 판화 원판에 남은 판각의 흔적을 통해 오윤 판화의 조형성을 새롭게 조망한다. 이를 통해 민중의 삶을 보듬고 위로하며 미술의 역할을 고민한 오윤의 예술관을 되짚어 보고자 한다.\n오윤은 1946년 부산에서 태어나 서울대 조소과를 졸업했다. 대학 재학 중인 1969년 ‘현실동인’을 결성하며 일찍이 현실과 미술의 관계를 고민했고, 1970년대에는 전돌 작업과 더불어 민중의 삶을 바탕으로 한 목판화 중심의 독자적인 조형 언어를 구축했으며, 문학계·출판계와 교류하며 여러 출판물의 표지화와 삽화를 제작했다. 1979년 ‘현실과 발언’ 창립에 참여한 이후 현실을 비판적으로 바라보는 시각과 미술에 대한 생각을 작품과 글로 드러냈다. 1980년대 중반 민족의 한과 신명을 역동적으로 풀어내며 예술적 절정기를 맞이했으나, 1986년 그림마당 민에서 첫 개인전을 연 뒤 마흔의 젊은 나이로 세상을 떠났다.\n전시는 오윤이 남긴 아카이브를 따라 작품을 다시 바라보는 연대기적 흐름으로 구성되며, 그의 노트와 메모에서 발췌한 제목을 붙인 여섯 개의 장으로 이루어진다. ‘1. 개도치 오윤’에서는 대학 재학 시절의 작업 모색기를 다루고, ‘2. 땅에 넋이 있지라’는 한국 근현대사의 상처와 민중의 삶을 감싸안는 오윤의 민중미학을 살핀다. ‘3. 관자재보살행심반야바라밀다시’는 주변 이웃과 우리의 삶에 대해 기록하는 오윤의 수행적인 작업 태도를 조명하고, ‘4. 응당 무엇을 표현하는가’에서는 ‘현실과 발언’ 활동을 중심으로 그가 작품과 글을 통해 밝힌 미술을 향한 비판적 문제의식에 주목한다. ‘5. 나가 포함된 집단적 흥’은 신명으로 거듭난 작업의 절정기를 다루며, 마지막 장 ‘6. 나두야 간다’는 열다섯 살 오윤의 여행일지를 시작으로 그의 삶의 궤적과 창작의 여정을 되짚는다. 이번 전시를 통해 판화 원판과 습작, 드로잉, 노트, 창작 도구 등 그의 자료를 새롭게 정리해 공개함으로써, 오윤의 예술 세계를 입체적으로 살피고 향후 연구와 해석의 가능성을 넓히는 계기가 되기를 바란다.",
+   "image": "https://sema.seoul.go.kr/common/imageView?FILE_PATH=%2Fex%2FEXI01%2F2026%2F&FILE_NM=20260819194116_aceca01c23e24345b36b34ab2ba162e2_52f73e57368e4df7b151063e37c9aff0",
+   "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1576838",
+   "lat": 37.6078008399411,
+   "lng": 126.97190179486,
+   "source": "sema"
   },
   {
    "title": "[서울시립미술관 서소문본관] 린 허쉬만 리슨: 나의 [나]들",
@@ -1418,12 +1572,13 @@
    "fee": "",
    "free": true,
    "target": "누구나",
-   "artist": "",
-   "desc": "",
+   "artist": "린 허쉬만 리슨",
+   "desc": "서울시립미술관의 2026년 전시 의제인 ‘기술’에 응답하는 전시로, 미국의 원로 여성 미디어아티스트이자 영화감독인 린 허쉬만 리슨(1941~)의 60여 년 작업을 폭넓게 조망한다. 본 전시는 뉴 뮤지엄, 독일 ZKM 등에서 주요 개인전을 개최해 온 작가의 아시아 최초 미술관 개인전이다. 인간과 기술의 관계, 정체성, 감시 등을 탐구해 온 작품을 통해 인공지능과 디지털 기술이 인간의 정체성과 사회에 미친 영향을 조망하고, 인공지능 시대 인간과 기술의 공존을 둘러싼 질문과 인간의 정체성에 대한 사유를 제안한다.",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=8be072d96c9a429c80bc789679727b47&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1559068",
    "lat": 37.5641060692766,
-   "lng": 126.973699316136
+   "lng": 126.973699316136,
+   "source": "both"
   },
   {
    "title": "[서울디자인재단] 현대카드 컬처프로젝트 31 웨인 티보 전 [The Order of Things]",
@@ -1441,7 +1596,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=a9b98562f3fe451aa93842672b25f8e1&thumb=Y",
    "link": "https://ddp.or.kr/index.html?menuno=230&siteno=2&bbsno=610&boardno=15&bbstopno=610&act=view&subno=",
    "lat": 37.56735731522952,
-   "lng": 127.00977973484339
+   "lng": 127.00977973484339,
+   "source": "cultural"
   },
   {
    "title": "[서울공예박물관] 현대공예 기증특별전 [에퀴녹스 : 추분_춘분]",
@@ -1459,7 +1615,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=c2b1b7f717144ee7a5d287790d38e386&thumb=Y",
    "link": "https://craftmuseum.seoul.go.kr/exhibit/plan/view/194",
    "lat": 37.5766481740232,
-   "lng": 126.983533363501
+   "lng": 126.983533363501,
+   "source": "cultural"
   },
   {
    "title": "[서울역사박물관] 태화관_시간을 잇는 공간",
@@ -1477,7 +1634,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=ce0c0494297949a38bb5e2106bd16fbb&thumb=Y",
    "link": "https://museum.seoul.go.kr/www/board/NR_boardView.do?sortName=&q_listType=THUMBNAIL&searchVal=&bbsCd=1002&endDt=&searchKey=TITLE___1002&sso=ok&regPwd=N&museumCd=&pageType=&sortOrder=&q_exhSttus=next&startDt=&currentPage=&seq=20260623170800431&ctgCd=&showSummaryYn=N",
    "lat": 37.57189081127559,
-   "lng": 126.98338815886143
+   "lng": 126.98338815886143,
+   "source": "cultural"
   },
   {
    "title": "[은평역사한옥박물관] 전시 [한옥이 된 나무, 솔이]",
@@ -1495,7 +1653,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=bf46f3934f5d426f9b8211394d72fbfb&thumb=Y",
    "link": "https://museum.ep.go.kr/exhibit/special_scheduled.asp?page=v&seq=34",
    "lat": 37.6404009547,
-   "lng": 126.9380554763
+   "lng": 126.9380554763,
+   "source": "cultural"
   },
   {
    "title": "[서울시립 북서울미술관] 유휴공간 전시 《보편타당한 당신 - 심이다은》",
@@ -1508,12 +1667,13 @@
    "fee": "",
    "free": true,
    "target": "누구나",
-   "artist": "",
-   "desc": "",
+   "artist": "심이다은",
+   "desc": "소리의 역사는 언제나 경계를 허무는 과정이었다. 20세기 초 미래주의자들은 기계 문명의 굉음을 예술의 매체로 끌어들였고, 존 케이지(John Cage)는 침묵 속에서 오히려 세상의 모든 소리를 발견했다. 머레이 셰이퍼(R. Murray Schafer)는 한 발 더 나아가 도시의 소음부터 자연의 바람 소리까지, 우리를 둘러싼 모든 환경음을 ‘사운드스케이프’라는 하나의 거대한 음악으로 정립하기까지 했다. 이 흐름은 하나의 질문을 계속 밀어붙여 왔다. 과연 무엇이 들을 만한 소리인가. 오늘날 그 질문은 인간의 귀 너머로 향한다. 동물이 감지하는 주파수, 도심 속에서 조용히 지워져온 존재들의 흔적―이제 소리를 듣는 일은 인간 중심의 감각 바깥을 향한 생태적 실천이 되고 있다.\n심이다은(b.1995)은 이러한 흐름 속에서 닫힌 귀에 균열을 낸다. 작가는 2023년부터 〈보편타당한〉 시리즈를 통해 생태계를 둘러싼 조건과 환경에 관심을 가지며, 야생동물과 멸종위기종의 발자취를 따라 직접 현장을 걷고 소리를 채집해왔다. 걷기인지 퍼포먼스인지, 쉽게 이름 붙이기 어려운 이 활동에서 채집한 소리는 마이크, 스피커, 실시간 스트리밍 장치를 통해 전시 공간으로 흘러 들어온다. 관람객이 직접 구조물을 작동시키며 소리에 개입하는 순간, 듣는 행위는 수동적 감상에서 능동적 참여로 전환된다. 쉽게 지나쳤을 존재들의 소리를 몸으로 직접 감각하게 만드는 것, 이것이 작가의 방법론이다.\n전시 제목 ‘보편타당한’이라는 말은 어떤 상황에서도 똑같이 성립하는 조건을 뜻하지만, ‘당신’은 특정한 몸과 감각을 가진 단 하나의 존재를 가리킨다. 작가는 어울리지 않는 두 단어를 나란히 놓으며 되묻는다. 우리가 당연하게 여겨온 감각의 기준은 과연 누구를 위한 것인가?\n이번 전시는 상상의 존재인 ‘고양이 A씨’에 관한 이야기다. 도심 속 작은 존재 고양이 A씨는 오늘도 북서울미술관 일대를 배회한다. 작가는 미술관 일대에 실시간 오디오 스트리밍 장치를 설치하고, 그 소리를 라운지 3의 구조물로 흘려보낸다. 핸들을 돌리면 톱니바퀴와 광목천의 마찰음이 주변 장소의 실시간 환경음과 뒤섞이며, 익숙했던 일상의 소리가 서서히 낯선 소리로 뒤바뀐다. 당신의 움직임은 라운지 2의 원형 스크린으로 연결된다. 화면 속에서 당신의 동선이 고양이의 것과 포개지는 순간을 목격한 후, 관람객은 자신도 모르는 사이에 고양이 A씨가 노원구 일대에 남긴 이동 경로 위로 발을 얹게 된다. 화면 속에서 나의 동선이 고양이의 궤적과 포개지는 경이로운 목격의 순간을 지나면, 서랍들로 구성된 〈보편타당한 숲〉이 눈앞에 펼쳐진다. 서랍을 열면 그가 지나갔을 흙의 생생한 감촉, 그가 가장 사랑했던 새의 깃털, 물가를 구르던 작은 돌멩이들, 그리고 마침내 하나의 온전한 고양이의 삶이 당신을 맞이한다.\n소리는 결코 홀로 존재하는 법이 없다. 어딘가에 끊임없이 부딪히고 기어이 울려 퍼지는 동안, 소리는 내 안의 아늑한 벽을 허물어 타자를 향해 스스로를 열어젖히게 하는 다정한 사건이 된다. 핸들을 잡고 돌리는 순간, 우리는 이미 자신만의 안락한 방에서 걸어 나와 지워진 존재들의 낮고 외로운 주파수 속으로 스며들기 시작한다. 익숙한 소음의 층을 하나씩 들추어내며 감각의 촉을 기민하게 세우는 최후의 주체는 결국 지금 여기, 보편타당한 당신이다.",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=91e5b3cca3f5406cb7a8c0d441349b8f&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1549929",
    "lat": 37.6406604547872,
-   "lng": 127.066865579183
+   "lng": 127.066865579183,
+   "source": "both"
   },
   {
    "title": "[서울시] 공공미술 수변갤러리 프로젝트 [선유담담] 작품 전시 개장",
@@ -1531,7 +1691,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=27750b5ea7af45f6abc200129f050cbd&thumb=Y",
    "link": "https://news.seoul.go.kr/culture/archives/527746",
    "lat": 37.5423832345578,
-   "lng": 126.901819342041
+   "lng": 126.901819342041,
+   "source": "cultural"
   },
   {
    "title": "[서울식물원] 2026 서울식물원 기획전시 《다정한 균형: 서로를 비추는》",
@@ -1549,7 +1710,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=f58a4482c9fc4a3faa24ef90fd63dda0&thumb=Y",
    "link": "https://botanicpark.seoul.go.kr/front/board/newsView.do?sn=19181&searchCondition=&searchKeyword=&pageIndex=1",
    "lat": 37.569657094189104,
-   "lng": 126.83500723721524
+   "lng": 126.83500723721524,
+   "source": "cultural"
   },
   {
    "title": "[서울시립 북서울미술관] 권병준: 내 마음속에 너는",
@@ -1562,12 +1724,13 @@
    "fee": "",
    "free": true,
    "target": "누구나",
-   "artist": "",
-   "desc": "",
+   "artist": "권병준",
+   "desc": "서울시립 북서울미술관의 연례 전시 중 하나인 어린이+ 전시에서는 기술과 예술의 접점을 오랜 시간 탐구해 온 권병준 작가의 개인전을 선보입니다. 이번 전시는 권병준 작가의 작업 세계를 바탕으로 기술과 인간, 더 나아가 비인간과 인간이 맺는 공생의 방식에 주목하며, 다채로운 존재들이 함께 공존할 수 있는 또 하나의 가능성을 살펴봅니다. 그리고 이를 통해 새로운 포용과 공유의 감각을 제안하고, 연대와 공동체의 의미를 고찰하고자 합니다. 2026년 어린이+ 전시 《권병준: 내 마음속에 너는》은 ‘어린이를 안아주는 공간’이란 개념을 시각화한 신작을 중심으로 구성되며, 어린이의 시선에 맞춘 기획을 통해 누구나 쉽게 이해하고 즐길 수 있는 경험을 제공할 예정입니다.\n○ 전시실 6 일시 관람 제한 안내\n쾌적한 관람 환경 조성을 위해 2026년 10월 27일(화)부터 11월 5일(목)까지 전시실 6 정비를 진행합니다. 해당 기간에 전시실 6에 설치된 작품 〈자연과 신경망의 울림〉의 관람이 일시적으로 제한되니, 이용에 참고해 주시기 바랍니다.\n- 기간 : 2026. 10. 27.(화) ~ 11. 5.(목)\n- 관람 제한 작품 : 〈자연과 신경망의 울림〉\n※ 전시실 5 정상 운영\n○ 1,534번의 만남\n전시 기간 동안 로봇들은 총 1,534회의 공연을 선보입니다.\n아래 시간표를 참고하여 각기 다른 움직임과 소리가 만들어내는 협연을 만나보시기 바랍니다.\n요일\n시간\n화, 수, 목\n11:00, 13:00, 15:00, 17:00, 19:00\n금\n11:00, 13:00, 14:00, 15:00, 17:00, 19:00\n토, 일, 공휴일\n11:00, 13:00, 14:00, 15:00, 17:00\n* 회차당 소요 시간은 약 10분입니다.\n○ 쉬운 글 해설\n이번 전시에는 특별한 어린이 해설사가 함께했습니다.\n어린이 해설사가 전하는 쉬운 글 해설을 온라인 리플릿을 통해 만나보세요!\n링크 : https://www.iembraceyou.kids/",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=b719788b82ac44859e6fbcd9e8e58b89&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1538201",
    "lat": 37.6406604547872,
-   "lng": 127.066865579183
+   "lng": 127.066865579183,
+   "source": "both"
   },
   {
    "title": "[소마미술관] 국립현대미술관미술은행 소장품기획전 《군락: 여섯 개의 뜰》",
@@ -1585,7 +1748,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=5b75eb5a5d864fbeb0319b68bf2c9c20&thumb=Y",
    "link": "https://soma.kspo.or.kr/dspy/display/240",
    "lat": 37.516920655117,
-   "lng": 127.118166964751
+   "lng": 127.118166964751,
+   "source": "cultural"
   },
   {
    "title": "[서울우리소리박물관] 2026 서울우리소리박물관 기획전 [다시, 아리랑]",
@@ -1603,7 +1767,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=4277bcac1a50437682bd95e3987745ce&thumb=Y",
    "link": "https://museum.seoul.go.kr/sekm/front/display/specialView.do?currentPage=1&search_query=&e_id=131&e_cd=3&locale=KO",
    "lat": 37.577157928122,
-   "lng": 126.989622047178
+   "lng": 126.989622047178,
+   "source": "cultural"
   },
   {
    "title": "[서울시립 북서울미술관] 유휴공간 전시 [몸을 위한 간주곡 ― 소목장세미]",
@@ -1621,7 +1786,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=359ed2d7e71c43d9b9fe014008449cdd&thumb=Y",
    "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1512457",
    "lat": 37.6406604547872,
-   "lng": 127.066865579183
+   "lng": 127.066865579183,
+   "source": "cultural"
   },
   {
    "title": "[국립중앙박물관] 그리스가 로마에게, 로마가 그리스에게",
@@ -1639,7 +1805,27 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=1549c85e14ee4069bf4a2dd801fba801&thumb=Y",
    "link": "https://www.museum.go.kr/MUSEUM/contents/M0201090600.do?showHallId=756&showroomCode=DM0077",
    "lat": 37.52385582212769,
-   "lng": 126.98020301648833
+   "lng": 126.98020301648833,
+   "source": "cultural"
+  },
+  {
+   "title": "유휴공간 프로젝트 전시 《몸을 위한 간주곡 ― 소목장세미》",
+   "category": "전시/미술",
+   "gu": "강북구",
+   "place": "서울시립 북서울미술관",
+   "org": "서울시립미술관",
+   "start": "2026-04-02",
+   "end": "2027-05-30",
+   "fee": "",
+   "free": true,
+   "target": "",
+   "artist": "소목장세미",
+   "desc": "유휴공간 프로젝트 전시 《몸을 위한 간주곡 ― 소목장세미》\n2026.04.02.(목) - 2027.05.30.(일)\n2026.10.01 .(목) 10:00 ~ 11:30, 13:30 ~ 14:30, 15:00 ~ 16:00 에 연계 프로그램 〈이어지는 몸들〉이 전시실에서 진행됩니다.\n또한 2026.10.22.(목) 17:00 ~ 18:00 동안 행사가 진행될 예정입니다.\n프로그램 및 행사가 진행되는 동안에는 전시실의 출입 및 관람이 제한됩니다.\n관람에 참고 부탁드리며, 관람객 여러분들의 양해 부탁드립니다.\n미술관에서 우리의 몸은 어떻게 작동할까? 작품을 응시하며 전시장을 오가는 동안, 관람객의 몸은 집중과 긴장 속에서 움직인다. 그럼에도 관람에 대해 이야기할 때 몸은 좀처럼 등장하지 않는다. 간주곡은 본래 오페라나 연극에서 막과 막 사이에 연주되며, 분위기를 전환하고 다음 장면을 준비하는 음악이다. 전시는 간주곡처럼 관람의 여정 사이에 자리하여 지친 몸을 이완하고 감각을 환기하는 시간을 마련한다. 전시 감상은 시각을 넘어 청각·촉각·후각으로 확장되면서 미술관에서 소외되기 쉬운 감각들을 자연스럽게 일깨운다.\n소목장세미는 전통 소목장 기술을 현대적으로 재해석하며 다양한 영역에서 활동해 온 작가로, 일상과 신체, 공동체적 감각을 탐구해왔다. 이번 전시에서 작가는 목공 조각과 기하학적 문양에 평화, 공존과 같은 보편적 가치를 담아낸다. 또한 직접 몸을 움직이거나 함께 소리를 만들어가는 과정을 통해, 미술관의 적막을 깨고 타인과 연결되는 공동체적 경험을 제안한다.\n전시장에는 작품으로 조성된 ‘땅’을 중심으로 외부와 분리된 하나의 세계가 펼쳐진다. 이 세계 안에서 관람객이 신체에 귀를 기울이고, 잠시 호흡을 고르며 자신만의 간주곡을 연주하게 되기를 바란다.",
+   "image": "https://sema.seoul.go.kr/common/imageView?FILE_PATH=%2Fex%2FEXI01%2F2026%2F&FILE_NM=20260318100407_0aba294ce3aa411f9e27566c1a97ce80_0a02965984c14c1e99f7eb997904715e",
+   "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1512457",
+   "lat": 37.6202544613023,
+   "lng": 127.044324732036,
+   "source": "sema"
   },
   {
    "title": "[서울공예박물관] 공예협력전시 [안동별궁, 시간의 겹]",
@@ -1657,7 +1843,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=a1622fcb6e024123ac90f40cdc8e32fd&thumb=Y",
    "link": "https://craftmuseum.seoul.go.kr/exhibit/plan/view/184",
    "lat": 37.5766481740232,
-   "lng": 126.983533363501
+   "lng": 126.983533363501,
+   "source": "cultural"
   },
   {
    "title": "[서울상상나라] 그림책 작업실: 사소하고 특별한",
@@ -1675,7 +1862,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=d7fb4b799ec945e8a2f7009bc7da234b&thumb=Y",
    "link": "https://www.seoulchildrensmuseum.org/display/displayExhibition28.do",
    "lat": 37.55055,
-   "lng": 127.077569
+   "lng": 127.077569,
+   "source": "cultural"
   },
   {
    "title": "[서울기록원] 전시 [어느 도시의 탑승록]",
@@ -1693,7 +1881,27 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=38fa6564de964f6aaab79a82d0dfd0fc&thumb=Y",
    "link": "https://archives.seoul.go.kr/main",
    "lat": 37.6075510290657,
-   "lng": 126.93482332974094
+   "lng": 126.93482332974094,
+   "source": "cultural"
+  },
+  {
+   "title": "《메가트론 랩소디》",
+   "category": "전시/미술",
+   "gu": "종로구",
+   "place": "서울시립 백남준을 기억하는 집",
+   "org": "서울시립미술관",
+   "start": "2025-06-17",
+   "end": "2035-06-30",
+   "fee": "",
+   "free": true,
+   "target": "",
+   "artist": "김상돈, 노치욱, 이정성, 최욱, 황병기, 폴 개린, 프로토룸",
+   "desc": "2025년 6월 17일 개막하는 상설전 《메가트론 랩소디》는 백남준이 창신동에 살았던 유년부터 세계적인 명성을 획득한 말년까지 그의 여정과 후기 대표작 〈서울 랩소디〉에 관한 심도 있는 이해를 바탕으로 백남준의 동시대성을 살펴보는 전시다. 전시 제목은 서울시립미술관 본관 상설 설치작품 〈서울 랩소디〉와 해당 작업의 주요 형식인 ‘메가트론’에서 연유한다. ‘랩소디’는 고대 그리스의 서사시 혹은 모음집을 의미하는 용어였으나 18세기부터는 형식에 얽매임 없이 강렬하고 역동적인 감정을 전달하는 기악곡으로서 음악의 한 장르를 뜻하게 되었다. 〈서울 랩소디〉가 600년 넘게 한국의 수도로 이어져 내려온 서울의 역동성과 다층성을 자유롭게 풀어낸 작품이라면, 《메가트론 랩소디》는 백남준의 생애와 후기 작업, 동시대 작가의 작업을 자유롭게 오가며 백남준 예술 세계의 진폭을 확장하는 전시라고 할 수 있다.\n전시는 크게 ‘리믹스’, ‘메가트론’, ‘동기신호’ 세 파트로 이루어진다. 백남준이 작품을 제작할 때 기존 영상을 재편집하고 리믹스한 비디오 소스를 활용했듯이, ‘리믹스’에서는 작가에 관한 기존 정보를 재조합하고 편집하여 선보임으로써 백남준을 새롭게 읽는다. ‘메가트론’에서는 백남준 탄생 90주년 기념 국제심포지엄 《백남준, 메가트론, 그리고 서울 랩소디》(서울시립미술관, 2023)의 자료를 중심으로 ‘메가트론’ 개념과 〈서울 랩소디〉의 제작기 및 운영 구조를 밝힌다. 마지막으로 ‘동기신호’에서는 관객이 예술에 적극적으로 참여하기를 바랐던 백남준의 의지를 계승한 동시대 작가의 관객 참여형 작품을 감상할 수 있다. 격년으로 선보일 미디어 기반의 실험적인 작업을 통해 백남준의 동시대성과 미래를 가늠해 본다. ‘동기신호’의 첫 번째 참여작가는 프로토룸으로 작가가 고안한 프로덕트이자 악기인 〈SmallBig_S1〉을 작가 자신뿐만 아니라 관객도 직접 참여할 수 있도록 전시장에 펼쳐낸 신작 〈0.000001 기가바이트 매터 매터스〉(2025)를 선보인다. 전시 기간 중 토크, 워크숍, 퍼포먼스 등 동기신호 프로그램 운영을 통해 작업에 대한 더욱 확장된 이해를 돕는다.\n본 전시를 통해 〈서울 랩소디〉를 기술적 혁신의 측면에서 재인식하고, 백남준의 유년 시절과 후기 작업 세계, 나아가 백남준과 동시대 예술과의 관계를 유기적으로 연결해 볼 수 있을 것이다.",
+   "image": "https://sema.seoul.go.kr/common/imageView?FILE_PATH=%2Fex%2FEXI01%2F2025%2F&FILE_NM=20251001153707_c2175be706dd4d8fa95e24f6dc4c6e58_ad902b791c80437ea9ede840f5053248",
+   "link": "https://sema.seoul.go.kr/kr/whatson/exhibition/detail?exNo=1417927",
+   "lat": 37.5730656233283,
+   "lng": 127.013775536144,
+   "source": "sema"
   },
   {
    "title": "세계적인 AI 미디어 아티스트 [레픽 아나돌의 최초 상설전시]",
@@ -1711,7 +1919,8 @@
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=9e05a374258c4bc0b7fd10aacc12b8ed&thumb=Y",
    "link": "https://lifeplus.co.kr/brand/story",
    "lat": 37.5196641552816,
-   "lng": 126.939909338068
+   "lng": 126.939909338068,
+   "source": "cultural"
   }
  ]
 }
