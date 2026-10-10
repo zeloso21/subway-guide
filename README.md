@@ -22,3 +22,15 @@ GitHub Actions가 데이터를 받아 JSON 파일로 저장하고 웹은 그 파
 ```sh
 SEOUL_API_KEY=발급키 node scripts/fetch-exhibitions.mjs
 ```
+
+## 음악 차트 스토리 초안 만들기
+`scripts/music-chart-story.mjs`는 Apple Music(국가별 인기곡)과 Deezer(세계 인기곡, 신규 발매)에서 차트를 받아
+게시판에 올릴 마크다운 초안을 `posts/music/날짜.md`로 만듭니다. API 키는 필요 없습니다.
+
+```sh
+node scripts/music-chart-story.mjs                    # 한국·미국·일본, 각 10곡
+COUNTRIES=kr,us,gb LIMIT=20 node scripts/music-chart-story.mjs
+```
+- 여러 나라 차트에 동시에 오른 곡을 "세계적인 히트곡"으로 따로 모아 줍니다.
+- 지난번 실행 결과(`posts/music/latest.json`)와 비교해 순위 변동(▲▼ 🆕)을 표시합니다.
+- `✍️`로 표시된 자리에 직접 코멘트를 채워 넣은 뒤 게시하세요. 기사 복사나 앨범 커버 재업로드는 피하고 링크로 연결하세요.
