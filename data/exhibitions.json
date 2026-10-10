@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-10-10T00:04:09.966Z",
+ "updatedAt": "2026-10-10T23:35:59.162Z",
  "source": "서울 열린데이터광장 · 서울시 문화행사 정보, 서울시립미술관 전시 정보",
  "count": 101,
  "items": [
@@ -61,25 +61,6 @@
    "source": "cultural"
   },
   {
-   "title": "[서울공예박물관] 제2회 서울시 유리지공예상 기념전",
-   "category": "전시/미술",
-   "gu": "종로구",
-   "place": "서울공예박물관 전시1동 1층 로비",
-   "org": "서울공예박물관",
-   "start": "2026-09-01",
-   "end": "2026-10-11",
-   "fee": "무료",
-   "free": true,
-   "target": "누구나",
-   "artist": "",
-   "desc": "",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=4e7bc51c5f5d4e79ada8514eaaf90bf7&thumb=Y",
-   "link": "https://craftmuseum.seoul.go.kr/exhibit/plan/view/192",
-   "lat": 37.5766481740232,
-   "lng": 126.983533363501,
-   "source": "cultural"
-  },
-  {
    "title": "[서울시립 서서울미술관] 플레이 라운지 《어쩌면 우리에게 더 멋진 일이 있을지도 몰라》",
    "category": "전시/미술",
    "gu": "금천구",
@@ -97,6 +78,25 @@
    "lat": 37.4580752536422,
    "lng": 126.894935931812,
    "source": "both"
+  },
+  {
+   "title": "[서울공예박물관] 제2회 서울시 유리지공예상 기념전",
+   "category": "전시/미술",
+   "gu": "종로구",
+   "place": "서울공예박물관 전시1동 1층 로비",
+   "org": "서울공예박물관",
+   "start": "2026-09-01",
+   "end": "2026-10-11",
+   "fee": "무료",
+   "free": true,
+   "target": "누구나",
+   "artist": "",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=4e7bc51c5f5d4e79ada8514eaaf90bf7&thumb=Y",
+   "link": "https://craftmuseum.seoul.go.kr/exhibit/plan/view/192",
+   "lat": 37.5766481740232,
+   "lng": 126.983533363501,
+   "source": "cultural"
   },
   {
    "title": "[서울아트책보고] 큐레이션 서가 4기 [지구와 나누는 대화]",
