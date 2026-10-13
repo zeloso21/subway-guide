@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-10-13T02:03:03.077Z",
+ "updatedAt": "2026-10-13T23:45:01.977Z",
  "source": "서울 열린데이터광장 · 서울시 문화행사 정보, 서울시립미술관 전시 정보",
  "count": 96,
  "items": [
@@ -727,25 +727,6 @@
    "source": "cultural"
   },
   {
-   "title": "[소슬금 갤러리] 이한 개인전 《CONATIUM ― 나로서, 계속》",
-   "category": "전시/미술",
-   "gu": "용산구",
-   "place": "소슬금 갤러리 (서울시 용산구 신흥로20길 17 1층)",
-   "org": "기타",
-   "start": "2026-10-09",
-   "end": "2026-11-08",
-   "fee": "",
-   "free": true,
-   "target": "누구나 (무료)",
-   "artist": "",
-   "desc": "",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=199a22b3df904f96a192634ce3f4bafa&thumb=Y",
-   "link": "https://blog.naver.com/sosulguem_official/224427581100",
-   "lat": 37.5463950137629,
-   "lng": 126.98462160059339,
-   "source": "cultural"
-  },
-  {
    "title": "TASTE OF GREEN(테이스트 오브 그린) 展",
    "category": "전시/미술",
    "gu": "용산구",
@@ -762,6 +743,25 @@
    "link": "https://www.artday.co.kr/exhibition/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=174150103&t=board",
    "lat": 37.5467149767878,
    "lng": 126.978905928626,
+   "source": "cultural"
+  },
+  {
+   "title": "[소슬금 갤러리] 이한 개인전 《CONATIUM ― 나로서, 계속》",
+   "category": "전시/미술",
+   "gu": "용산구",
+   "place": "소슬금 갤러리 (서울시 용산구 신흥로20길 17 1층)",
+   "org": "기타",
+   "start": "2026-10-09",
+   "end": "2026-11-08",
+   "fee": "",
+   "free": true,
+   "target": "누구나 (무료)",
+   "artist": "",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=199a22b3df904f96a192634ce3f4bafa&thumb=Y",
+   "link": "https://blog.naver.com/sosulguem_official/224427581100",
+   "lat": 37.5463950137629,
+   "lng": 126.98462160059339,
    "source": "cultural"
   },
   {
