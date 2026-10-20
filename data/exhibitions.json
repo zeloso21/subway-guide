@@ -1,7 +1,7 @@
 {
- "updatedAt": "2026-10-19T23:45:13.067Z",
+ "updatedAt": "2026-10-20T23:12:45.655Z",
  "source": "서울 열린데이터광장 · 서울시 문화행사 정보, 서울시립미술관 전시 정보",
- "count": 106,
+ "count": 111,
  "items": [
   {
    "title": "전시 [접촉화면]",
@@ -115,6 +115,25 @@
    "link": "https://www.unhyeongung.or.kr/sub/prpgram/exhibition_list.php?abmode=view&no=2007&group=basic&code=B35",
    "lat": 37.57607864675475,
    "lng": 126.98708335796199,
+   "source": "cultural"
+  },
+  {
+   "title": "농담(濃淡): 논산의 이야기를 담다",
+   "category": "전시/미술",
+   "gu": "종로구",
+   "place": "CN갤러리",
+   "org": "기타",
+   "start": "2026-10-14",
+   "end": "2026-10-25",
+   "fee": "",
+   "free": true,
+   "target": "누구나",
+   "artist": "강수희, 강신영, 고미경, 김갑순, 김현숙, 신효남, 우현진, 전병운, 조선영, 최선명",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=bb741d84811c46e2bf09e0290f50efec&thumb=Y",
+   "link": "https://archivist.kr/exi?m=gov&i=1792105502",
+   "lat": 37.58003784134938,
+   "lng": 126.98194008394555,
    "source": "cultural"
   },
   {
@@ -1220,6 +1239,25 @@
    "source": "cultural"
   },
   {
+   "title": "디자인코리아 2026",
+   "category": "전시/미술",
+   "gu": "강남구",
+   "place": "코엑스 1층 B홀",
+   "org": "기타",
+   "start": "2026-11-25",
+   "end": "2026-11-29",
+   "fee": "티켓별 상이",
+   "free": false,
+   "target": "누구나",
+   "artist": "",
+   "desc": "디자인, 경계를 넘어서는 다양성 Code, Log, Typology, AX",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=746170ef40434dc4a14633f4ce9e7197&thumb=Y",
+   "link": "https://designkorea.kidp.or.kr/",
+   "lat": 37.5118239121138,
+   "lng": 127.059159043842,
+   "source": "cultural"
+  },
+  {
    "title": "서울시립미술관 & 노원문화재단 협력전시 《SeMA Collection: 시선의 결》",
    "category": "전시/미술",
    "gu": "노원구",
@@ -1316,6 +1354,25 @@
    "source": "cultural"
   },
   {
+   "title": "[서울아트책보고] 기획전시 《아트북그라피: 예술과 출판이 교차하는 지형》",
+   "category": "전시/미술",
+   "gu": "구로구",
+   "place": "서울아트책보고 갤러리",
+   "org": "서울아트책보고",
+   "start": "2026-10-07",
+   "end": "2026-12-06",
+   "fee": "",
+   "free": true,
+   "target": "누구나",
+   "artist": "",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=e8916a2b90d74f6dbb79ae3574b279a8&thumb=Y",
+   "link": "https://artbookbogo.kr/seoul/menu/10045/program/30009/cultureDetail.do?currentPageNo=1&cultureIdx=28135",
+   "lat": 37.4982125677913,
+   "lng": 126.867088741096,
+   "source": "cultural"
+  },
+  {
    "title": "[종로문화재단] 2026 박노수미술관 작가 협업전시 [향, 산수를 물들이다]",
    "category": "전시/미술",
    "gu": "종로구",
@@ -1351,6 +1408,25 @@
    "link": "https://www.jfac.or.kr/site/main/program/perf_exhi_list_view?pgIdx=2519",
    "lat": 37.5813191962491,
    "lng": 126.966818545949,
+   "source": "cultural"
+  },
+  {
+   "title": "[서울시] 서울시 공공미술 작품전시 《평화의 잔상》",
+   "category": "전시/미술",
+   "gu": "도봉구",
+   "place": "서울창포원 일대",
+   "org": "서울시청",
+   "start": "2026-10-24",
+   "end": "2026-12-13",
+   "fee": "무료",
+   "free": true,
+   "target": "누구나",
+   "artist": "",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=4288a41a51cd4153b5d35893ab719984&thumb=Y",
+   "link": "https://seoulismuseum.kr/",
+   "lat": 37.6895391740107,
+   "lng": 127.047162261964,
    "source": "cultural"
   },
   {
@@ -1979,6 +2055,25 @@
    "desc": "",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=38fa6564de964f6aaab79a82d0dfd0fc&thumb=Y",
    "link": "https://archives.seoul.go.kr/main",
+   "lat": 37.6075510290657,
+   "lng": 126.93482332974094,
+   "source": "cultural"
+  },
+  {
+   "title": "[서울기록원] 예술가들이 기록한 도시",
+   "category": "전시/미술",
+   "gu": "은평구",
+   "place": "서울기록원 2층 제2전시실",
+   "org": "서울기록원",
+   "start": "2026-10-20",
+   "end": "2029-08-31",
+   "fee": "",
+   "free": true,
+   "target": "누구나",
+   "artist": "",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=ca99afeb8a1e471abee1088b2583b9aa&thumb=Y",
+   "link": "https://archives.seoul.go.kr/exhibitions-programs/exhibitions/5980",
    "lat": 37.6075510290657,
    "lng": 126.93482332974094,
    "source": "cultural"
