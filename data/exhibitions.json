@@ -1,7 +1,7 @@
 {
- "updatedAt": "2026-10-21T23:23:58.959Z",
+ "updatedAt": "2026-10-22T23:25:34.250Z",
  "source": "서울 열린데이터광장 · 서울시 문화행사 정보, 서울시립미술관 전시 정보",
- "count": 111,
+ "count": 112,
  "items": [
   {
    "title": "포개진 지도 - 미시적이지만 거시적인 풍경",
@@ -77,6 +77,25 @@
    "link": "https://www.eplib.or.kr/jslib/menu/10457/program/30028/eventLectureDetail.do?currentPageNo=1&lectureIdx=229833",
    "lat": 37.5828094398328,
    "lng": 126.907671330325,
+   "source": "cultural"
+  },
+  {
+   "title": "2026 제5회 전국 승가원 [장애공감 어린이 그림공모전 수상작 전시] 나답게, 너답게, 우리답게!",
+   "category": "전시/미술",
+   "gu": "종로구",
+   "place": "한국장애인문화예술원 이음갤러리",
+   "org": "기타",
+   "start": "2026-10-23",
+   "end": "2026-10-25",
+   "fee": "",
+   "free": true,
+   "target": "누구나",
+   "artist": "",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=c978b819995644ac870c98f086db5107&thumb=Y",
+   "link": "https://sgwon.or.kr/introduce/04.php?admin_mode=read&no=181612",
+   "lat": 37.5811899477465,
+   "lng": 127.002398629301,
    "source": "cultural"
   },
   {
@@ -308,25 +327,6 @@
    "source": "both"
   },
   {
-   "title": "2026 아트한,우리展 [각자의 지금]",
-   "category": "전시/미술",
-   "gu": "강남구",
-   "place": "유나이티드 갤러리",
-   "org": "기타",
-   "start": "2026-10-21",
-   "end": "2026-10-26",
-   "fee": "무료",
-   "free": true,
-   "target": "누구나",
-   "artist": "",
-   "desc": "2026 아트한,우리展 : 아트한,우리展 〈각자의 지금〉은 장애예술작가들이 각자의 시선과 표현 방식으로 이어온 창작 활동과 그 현재를 소개하는 전시입니다",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=0d474cfb6f1341e09c8b866ef8bacb49&thumb=Y",
-   "link": "https://www.shc.or.kr/main/sub.html?Mode=view&boardID=www44&num=5429&page=&keyfield=&key=&bCate=",
-   "lat": 37.5035654348927,
-   "lng": 127.028039529728,
-   "source": "cultural"
-  },
-  {
    "title": "[미림아트갤러리] 소소화 제1회 회원전 [그려진 시간들]",
    "category": "전시/미술",
    "gu": "종로구",
@@ -343,6 +343,25 @@
    "link": "https://www.instagram.com/p/DeqH_ohvlqS/",
    "lat": 37.571852756212,
    "lng": 126.986681102308,
+   "source": "cultural"
+  },
+  {
+   "title": "2026 아트한,우리展 [각자의 지금]",
+   "category": "전시/미술",
+   "gu": "강남구",
+   "place": "유나이티드 갤러리",
+   "org": "기타",
+   "start": "2026-10-21",
+   "end": "2026-10-26",
+   "fee": "무료",
+   "free": true,
+   "target": "누구나",
+   "artist": "",
+   "desc": "2026 아트한,우리展 : 아트한,우리展 〈각자의 지금〉은 장애예술작가들이 각자의 시선과 표현 방식으로 이어온 창작 활동과 그 현재를 소개하는 전시입니다",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=0d474cfb6f1341e09c8b866ef8bacb49&thumb=Y",
+   "link": "https://www.shc.or.kr/main/sub.html?Mode=view&boardID=www44&num=5429&page=&keyfield=&key=&bCate=",
+   "lat": 37.5035654348927,
+   "lng": 127.028039529728,
    "source": "cultural"
   },
   {
@@ -645,8 +664,8 @@
    "desc": "",
    "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=f056eb6cc40d4e5594b181eb65cc5297&thumb=Y",
    "link": "https://doam.me/Exhibition_Information/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=173878058&t=board",
-   "lat": 37.6057079931502,
-   "lng": 126.967906461707,
+   "lat": 37.60603328383823,
+   "lng": 126.96904312496109,
    "source": "cultural"
   },
   {
@@ -1182,25 +1201,6 @@
    "source": "cultural"
   },
   {
-   "title": "[서울문화예술교육센터 양천] 개관 10주년 특별기획전 [끝없이, 물처럼Ever Flowing, as Water]",
-   "category": "전시/미술",
-   "gu": "양천구",
-   "place": "서울문화예술교육센터 양천 지하 1층 전시공간 · 야외수조",
-   "org": "서울문화재단",
-   "start": "2026-10-15",
-   "end": "2026-11-28",
-   "fee": "무료",
-   "free": true,
-   "target": "누구나",
-   "artist": "송석우(사진), 송주형(미디어), 전혜주(미디어·설치)",
-   "desc": "서울문화예술교육센터 양천의 지난 10년과 공간에 쌓인 시간과 기억을 사진·미디어·설치 작품으로 풀어낸 전시.",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=b1ee5a884bfd4236a11d95261ddd61db&thumb=Y",
-   "link": "https://www.sfac.or.kr/artspace/artspace/arteducation_notice.do?cbIdx=983&bcIdx=138828&type=",
-   "lat": 37.5282197824835,
-   "lng": 126.832145349117,
-   "source": "cultural"
-  },
-  {
    "title": "[갤러리 그라프] 잠시, 다른 것이 되는 (Becoming Otherwise) 이진희, 무아리, 풀림",
    "category": "전시/미술",
    "gu": "강남구",
@@ -1217,6 +1217,25 @@
    "link": "https://ggrappe.com/exhibitions/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=174912615&t=board",
    "lat": 37.5234788204389,
    "lng": 127.046743383017,
+   "source": "cultural"
+  },
+  {
+   "title": "[서울문화예술교육센터 양천] 개관 10주년 특별기획전 [끝없이, 물처럼Ever Flowing, as Water]",
+   "category": "전시/미술",
+   "gu": "양천구",
+   "place": "서울문화예술교육센터 양천 지하 1층 전시공간 · 야외수조",
+   "org": "서울문화재단",
+   "start": "2026-10-15",
+   "end": "2026-11-28",
+   "fee": "무료",
+   "free": true,
+   "target": "누구나",
+   "artist": "송석우(사진), 송주형(미디어), 전혜주(미디어·설치)",
+   "desc": "서울문화예술교육센터 양천의 지난 10년과 공간에 쌓인 시간과 기억을 사진·미디어·설치 작품으로 풀어낸 전시.",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=b1ee5a884bfd4236a11d95261ddd61db&thumb=Y",
+   "link": "https://www.sfac.or.kr/artspace/artspace/arteducation_notice.do?cbIdx=983&bcIdx=138828&type=",
+   "lat": 37.5282197824835,
+   "lng": 126.832145349117,
    "source": "cultural"
   },
   {
