@@ -1,27 +1,8 @@
 {
- "updatedAt": "2026-10-29T23:57:57.893Z",
+ "updatedAt": "2026-10-30T23:51:13.776Z",
  "source": "서울 열린데이터광장 · 서울시 문화행사 정보, 서울시립미술관 전시 정보",
- "count": 99,
+ "count": 97,
  "items": [
-  {
-   "title": "한솔비 [식빵 자세]",
-   "category": "전시/미술",
-   "gu": "종로구",
-   "place": "갤러리메일란",
-   "org": "기타",
-   "start": "2026-10-01",
-   "end": "2026-10-30",
-   "fee": "0원",
-   "free": true,
-   "target": "누구나",
-   "artist": "",
-   "desc": "",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=1e6615d4412f4d6aa821da32fc62e2bb&thumb=Y",
-   "link": "https://archivist.kr/exi?m=gov&i=1791410498",
-   "lat": 37.5977661011895,
-   "lng": 126.962346971703,
-   "source": "cultural"
-  },
   {
    "title": "전시 [IMPRINTS OF TIME]",
    "category": "전시/미술",
@@ -803,25 +784,6 @@
    "source": "both"
   },
   {
-   "title": "DK x SDF 국제 컨퍼런스",
-   "category": "전시/미술",
-   "gu": "강남구",
-   "place": "코엑스 401호 컨퍼런스룸",
-   "org": "기타",
-   "start": "2026-11-26",
-   "end": "2026-11-26",
-   "fee": "정가 220,000원, 얼리버드 170,000원(10월 한 달간), 단체 170,000원",
-   "free": false,
-   "target": "누구나",
-   "artist": "",
-   "desc": "한국디자인진흥원과 월간 이 공동 주관하는 국제 컨퍼런스가 를 주제로 11월 26일, 전시 기간 중 개최됩니다.",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=a857851cf140413a8c2ff47e256cd53c&thumb=Y",
-   "link": "https://designkorea.kidp.or.kr/conference",
-   "lat": 37.5118239121138,
-   "lng": 127.059159043842,
-   "source": "cultural"
-  },
-  {
    "title": "[은평문화재단] 2026 신진 청년작가 지원사업 [사이] 릴레이 개인전",
    "category": "전시/미술",
    "gu": "은평구",
@@ -879,25 +841,6 @@
    "source": "cultural"
   },
   {
-   "title": "[갤러리 그라프] 잠시, 다른 것이 되는 (Becoming Otherwise) 이진희, 무아리, 풀림",
-   "category": "전시/미술",
-   "gu": "강남구",
-   "place": "갤러리 그라프 전시실",
-   "org": "기타",
-   "start": "2026-10-15",
-   "end": "2026-11-28",
-   "fee": "",
-   "free": true,
-   "target": "누구나",
-   "artist": "",
-   "desc": "",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=bb8f2e8d55af4dd59366566f8a5f2811&thumb=Y",
-   "link": "https://ggrappe.com/exhibitions/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=174912615&t=board",
-   "lat": 37.5234788204389,
-   "lng": 127.046743383017,
-   "source": "cultural"
-  },
-  {
    "title": "[서울문화예술교육센터 양천] 개관 10주년 특별기획전 [끝없이, 물처럼Ever Flowing, as Water]",
    "category": "전시/미술",
    "gu": "양천구",
@@ -914,6 +857,25 @@
    "link": "https://www.sfac.or.kr/artspace/artspace/arteducation_notice.do?cbIdx=983&bcIdx=138828&type=",
    "lat": 37.5282197824835,
    "lng": 126.832145349117,
+   "source": "cultural"
+  },
+  {
+   "title": "[갤러리 그라프] 잠시, 다른 것이 되는 (Becoming Otherwise) 이진희, 무아리, 풀림",
+   "category": "전시/미술",
+   "gu": "강남구",
+   "place": "갤러리 그라프 전시실",
+   "org": "기타",
+   "start": "2026-10-15",
+   "end": "2026-11-28",
+   "fee": "",
+   "free": true,
+   "target": "누구나",
+   "artist": "",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=bb8f2e8d55af4dd59366566f8a5f2811&thumb=Y",
+   "link": "https://ggrappe.com/exhibitions/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=174912615&t=board",
+   "lat": 37.5234788204389,
+   "lng": 127.046743383017,
    "source": "cultural"
   },
   {
