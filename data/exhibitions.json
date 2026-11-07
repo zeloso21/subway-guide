@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-07T00:08:00.966Z",
+ "updatedAt": "2026-11-07T23:39:19.890Z",
  "source": "서울 열린데이터광장 · 서울시 문화행사 정보, 서울시립미술관 전시 정보",
  "count": 105,
  "items": [
@@ -329,25 +329,6 @@
    "source": "cultural"
   },
   {
-   "title": "박지혜 개인전 [그 날 이후 Since The Day]",
-   "category": "전시/미술",
-   "gu": "용산구",
-   "place": "상업화랑 용산",
-   "org": "기타",
-   "start": "2026-10-30",
-   "end": "2026-11-12",
-   "fee": "0원",
-   "free": true,
-   "target": "누구나",
-   "artist": "박지혜",
-   "desc": "",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=65f39e9cf8d54f28b44d32ef30ae6b56&thumb=Y",
-   "link": "https://archivist.kr/exi?m=gov&i=1793656391",
-   "lat": 37.542073059985,
-   "lng": 126.969207523303,
-   "source": "cultural"
-  },
-  {
    "title": "유별남 사진전 [兪  ;  그러하다]",
    "category": "전시/미술",
    "gu": "중구",
@@ -364,6 +345,25 @@
    "link": "https://blog.naver.com/gu5658/224450449586",
    "lat": 37.5623817630809,
    "lng": 126.991642957434,
+   "source": "cultural"
+  },
+  {
+   "title": "박지혜 개인전 [그 날 이후 Since The Day]",
+   "category": "전시/미술",
+   "gu": "용산구",
+   "place": "상업화랑 용산",
+   "org": "기타",
+   "start": "2026-10-30",
+   "end": "2026-11-12",
+   "fee": "0원",
+   "free": true,
+   "target": "누구나",
+   "artist": "박지혜",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=65f39e9cf8d54f28b44d32ef30ae6b56&thumb=Y",
+   "link": "https://archivist.kr/exi?m=gov&i=1793656391",
+   "lat": 37.542073059985,
+   "lng": 126.969207523303,
    "source": "cultural"
   },
   {
