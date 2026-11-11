@@ -1,27 +1,8 @@
 {
- "updatedAt": "2026-11-10T02:45:41.704Z",
+ "updatedAt": "2026-11-11T00:41:05.436Z",
  "source": "서울 열린데이터광장 · 서울시 문화행사 정보, 서울시립미술관 전시 정보",
  "count": 99,
  "items": [
-  {
-   "title": "전시 [느슨한 0 to the ZERO]",
-   "category": "전시/미술",
-   "gu": "용산구",
-   "place": "갤러리더씨 (서울 용산구 임정로 35 2층)",
-   "org": "기타",
-   "start": "2026-10-15",
-   "end": "2026-11-10",
-   "fee": "",
-   "free": true,
-   "target": "누구나",
-   "artist": "",
-   "desc": "",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=26a457b806fd4f42bd20931822054f77&thumb=Y",
-   "link": "https://www.gallerythec.com/index#CURRENT-EXHIBITION",
-   "lat": 37.543149846744,
-   "lng": 126.958603008297,
-   "source": "cultural"
-  },
   {
    "title": "[세종뮤지엄갤러리] 김대열 기획초대전 [무상지경 無象之境]",
    "category": "전시/미술",
@@ -80,25 +61,6 @@
    "source": "cultural"
   },
   {
-   "title": "박지혜 개인전 [그 날 이후 Since The Day]",
-   "category": "전시/미술",
-   "gu": "용산구",
-   "place": "상업화랑 용산",
-   "org": "기타",
-   "start": "2026-10-30",
-   "end": "2026-11-12",
-   "fee": "0원",
-   "free": true,
-   "target": "누구나",
-   "artist": "박지혜",
-   "desc": "",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=65f39e9cf8d54f28b44d32ef30ae6b56&thumb=Y",
-   "link": "https://archivist.kr/exi?m=gov&i=1793656391",
-   "lat": 37.542073059985,
-   "lng": 126.969207523303,
-   "source": "cultural"
-  },
-  {
    "title": "유별남 사진전 [兪  ;  그러하다]",
    "category": "전시/미술",
    "gu": "중구",
@@ -115,6 +77,25 @@
    "link": "https://blog.naver.com/gu5658/224450449586",
    "lat": 37.5623817630809,
    "lng": 126.991642957434,
+   "source": "cultural"
+  },
+  {
+   "title": "박지혜 개인전 [그 날 이후 Since The Day]",
+   "category": "전시/미술",
+   "gu": "용산구",
+   "place": "상업화랑 용산",
+   "org": "기타",
+   "start": "2026-10-30",
+   "end": "2026-11-12",
+   "fee": "0원",
+   "free": true,
+   "target": "누구나",
+   "artist": "박지혜",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=65f39e9cf8d54f28b44d32ef30ae6b56&thumb=Y",
+   "link": "https://archivist.kr/exi?m=gov&i=1793656391",
+   "lat": 37.542073059985,
+   "lng": 126.969207523303,
    "source": "cultural"
   },
   {
@@ -631,25 +612,6 @@
    "source": "cultural"
   },
   {
-   "title": "[서울문화예술교육센터 양천] 개관 10주년 특별기획전 [끝없이, 물처럼Ever Flowing, as Water]",
-   "category": "전시/미술",
-   "gu": "양천구",
-   "place": "서울문화예술교육센터 양천 지하 1층 전시공간 · 야외수조",
-   "org": "서울문화재단",
-   "start": "2026-10-15",
-   "end": "2026-11-28",
-   "fee": "무료",
-   "free": true,
-   "target": "누구나",
-   "artist": "송석우(사진), 송주형(미디어), 전혜주(미디어·설치)",
-   "desc": "서울문화예술교육센터 양천의 지난 10년과 공간에 쌓인 시간과 기억을 사진·미디어·설치 작품으로 풀어낸 전시.",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=b1ee5a884bfd4236a11d95261ddd61db&thumb=Y",
-   "link": "https://www.sfac.or.kr/artspace/artspace/arteducation_notice.do?cbIdx=983&bcIdx=138828&type=",
-   "lat": 37.5282197824835,
-   "lng": 126.832145349117,
-   "source": "cultural"
-  },
-  {
    "title": "[갤러리 그라프] 잠시, 다른 것이 되는 (Becoming Otherwise) 이진희, 무아리, 풀림",
    "category": "전시/미술",
    "gu": "강남구",
@@ -666,6 +628,25 @@
    "link": "https://ggrappe.com/exhibitions/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=174912615&t=board",
    "lat": 37.5234788204389,
    "lng": 127.046743383017,
+   "source": "cultural"
+  },
+  {
+   "title": "[서울문화예술교육센터 양천] 개관 10주년 특별기획전 [끝없이, 물처럼Ever Flowing, as Water]",
+   "category": "전시/미술",
+   "gu": "양천구",
+   "place": "서울문화예술교육센터 양천 지하 1층 전시공간 · 야외수조",
+   "org": "서울문화재단",
+   "start": "2026-10-15",
+   "end": "2026-11-28",
+   "fee": "무료",
+   "free": true,
+   "target": "누구나",
+   "artist": "송석우(사진), 송주형(미디어), 전혜주(미디어·설치)",
+   "desc": "서울문화예술교육센터 양천의 지난 10년과 공간에 쌓인 시간과 기억을 사진·미디어·설치 작품으로 풀어낸 전시.",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=b1ee5a884bfd4236a11d95261ddd61db&thumb=Y",
+   "link": "https://www.sfac.or.kr/artspace/artspace/arteducation_notice.do?cbIdx=983&bcIdx=138828&type=",
+   "lat": 37.5282197824835,
+   "lng": 126.832145349117,
    "source": "cultural"
   },
   {
@@ -1431,6 +1412,25 @@
    "lat": 37.5641060692766,
    "lng": 126.973699316136,
    "source": "sema"
+  },
+  {
+   "title": "[서울백제어린이박물관] 특별전시 [DIMA: 아기 매머드 디마와 함께하는 빙하기 탐험]",
+   "category": "전시/미술",
+   "gu": "송파구",
+   "place": "서울백제어린이박물관",
+   "org": "한성백제박물관",
+   "start": "2026-11-17",
+   "end": "2027-03-07",
+   "fee": "",
+   "free": true,
+   "target": "어린이를 동반한 전 연령",
+   "artist": "",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=cbd1a1ca16dc44509901f837bfd5d6af&thumb=Y",
+   "link": "https://baekjemuseum.seoul.go.kr/dreamvillage/board/notice/index.jsp?boardid=SDM0401000000&mmode=content&mpid=SDM0401000000&skin=notice&pid=23671&pg=1&cpage=1",
+   "lat": 37.523991,
+   "lng": 127.124412,
+   "source": "cultural"
   },
   {
    "title": "[서울공예박물관] 현대공예 기증특별전 [에퀴녹스 : 추분_춘분]",
