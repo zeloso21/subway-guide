@@ -1,7 +1,7 @@
 {
- "updatedAt": "2026-11-17T02:57:23.807Z",
+ "updatedAt": "2026-11-18T02:27:22.763Z",
  "source": "서울 열린데이터광장 · 서울시 문화행사 정보, 서울시립미술관 전시 정보",
- "count": 97,
+ "count": 103,
  "items": [
   {
    "title": "2026 디자인 기술협업 전주기 지원사업 성과공유회 언박싱데이",
@@ -62,6 +62,25 @@
    "source": "sema"
   },
   {
+   "title": "[운현궁] 2026 하우스뮤지엄 [월동의 규방-160년의 시간을 이은 위로] 홍준희 개인전",
+   "category": "전시/미술",
+   "gu": "종로구",
+   "place": "운현궁 노락당",
+   "org": "운현궁",
+   "start": "2026-11-18",
+   "end": "2026-11-22",
+   "fee": "",
+   "free": true,
+   "target": "누구나",
+   "artist": "",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=19e0c91c98dd4514ac047e60bed46995&thumb=Y",
+   "link": "https://www.unhyeongung.or.kr/sub/prpgram/exhibition_list.php?abmode=view&no=2024&group=basic&code=B35",
+   "lat": 37.57607864675475,
+   "lng": 126.98708335796199,
+   "source": "cultural"
+  },
+  {
    "title": "2026 제3회 아트노마드 아트페어(ARTNOMAD ARTFAIR)",
    "category": "전시/미술",
    "gu": "중구",
@@ -116,6 +135,25 @@
    "link": "https://www.facebook.com/mullaeartspace/reels/",
    "lat": 37.5132170259667,
    "lng": 126.900125854302,
+   "source": "cultural"
+  },
+  {
+   "title": "전만성 개인전 [정지와 흐름의 공존]",
+   "category": "전시/미술",
+   "gu": "종로구",
+   "place": "CN갤러리",
+   "org": "기타",
+   "start": "2026-11-11",
+   "end": "2026-11-22",
+   "fee": "",
+   "free": true,
+   "target": "누구나",
+   "artist": "전만성",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=a6756e9d83f94306b69d951b613e09f0&thumb=Y",
+   "link": "https://archivist.kr/exi?m=gov&i=1794436745",
+   "lat": 37.58003784134938,
+   "lng": 126.98194008394555,
    "source": "cultural"
   },
   {
@@ -230,6 +268,25 @@
    "link": "https://blog.naver.com/gu5658/224474277703",
    "lat": 37.5623817630809,
    "lng": 126.991642957434,
+   "source": "cultural"
+  },
+  {
+   "title": "남경진 개인전 [로터리 Rotary]",
+   "category": "전시/미술",
+   "gu": "영등포구",
+   "place": "Hall 1",
+   "org": "기타",
+   "start": "2026-11-10",
+   "end": "2026-11-23",
+   "fee": "",
+   "free": true,
+   "target": "누구나",
+   "artist": "남경진, 문현정, 이건정, 고정균, 김재훈, 오예지, 주현욱",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=54d5026ecc4d4635873acb7a18a3ce0b&thumb=Y",
+   "link": "https://archivist.kr/exi?m=gov&i=1794830018",
+   "lat": 37.5401643365587,
+   "lng": 126.894700351149,
    "source": "cultural"
   },
   {
@@ -385,6 +442,25 @@
    "source": "cultural"
   },
   {
+   "title": "Soft Body Hard Screen",
+   "category": "전시/미술",
+   "gu": "영등포구",
+   "place": "아케이드서울",
+   "org": "기타",
+   "start": "2026-11-07",
+   "end": "2026-11-28",
+   "fee": "",
+   "free": true,
+   "target": "누구나",
+   "artist": "정지혜, 장영해, 최인영, 컵케이크와치와와(유지영×조주현), 이채은, 이건정, 송정목, 오채현, 권동현, 서민우, 이준학",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=a275364f0b1348cdb1223553f72067e6&thumb=Y",
+   "link": "https://archivist.kr/exi?m=gov&i=1794641530",
+   "lat": 37.5155167575219,
+   "lng": 126.894539872062,
+   "source": "cultural"
+  },
+  {
    "title": "[용산문화재단] 협력전시 [Green Room 그린룸 by YEON YEOIN]",
    "category": "전시/미술",
    "gu": "용산구",
@@ -404,25 +480,6 @@
    "source": "cultural"
   },
   {
-   "title": "[갤러리 그라프] 잠시, 다른 것이 되는 (Becoming Otherwise) 이진희, 무아리, 풀림",
-   "category": "전시/미술",
-   "gu": "강남구",
-   "place": "갤러리 그라프 전시실",
-   "org": "기타",
-   "start": "2026-10-15",
-   "end": "2026-11-28",
-   "fee": "",
-   "free": true,
-   "target": "누구나",
-   "artist": "",
-   "desc": "",
-   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=bb8f2e8d55af4dd59366566f8a5f2811&thumb=Y",
-   "link": "https://ggrappe.com/exhibitions/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=174912615&t=board",
-   "lat": 37.5234788204389,
-   "lng": 127.046743383017,
-   "source": "cultural"
-  },
-  {
    "title": "[서울문화예술교육센터 양천] 개관 10주년 특별기획전 [끝없이, 물처럼Ever Flowing, as Water]",
    "category": "전시/미술",
    "gu": "양천구",
@@ -439,6 +496,25 @@
    "link": "https://www.sfac.or.kr/artspace/artspace/arteducation_notice.do?cbIdx=983&bcIdx=138828&type=",
    "lat": 37.5282197824835,
    "lng": 126.832145349117,
+   "source": "cultural"
+  },
+  {
+   "title": "[갤러리 그라프] 잠시, 다른 것이 되는 (Becoming Otherwise) 이진희, 무아리, 풀림",
+   "category": "전시/미술",
+   "gu": "강남구",
+   "place": "갤러리 그라프 전시실",
+   "org": "기타",
+   "start": "2026-10-15",
+   "end": "2026-11-28",
+   "fee": "",
+   "free": true,
+   "target": "누구나",
+   "artist": "",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=bb8f2e8d55af4dd59366566f8a5f2811&thumb=Y",
+   "link": "https://ggrappe.com/exhibitions/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=174912615&t=board",
+   "lat": 37.5234788204389,
+   "lng": 127.046743383017,
    "source": "cultural"
   },
   {
@@ -956,6 +1032,25 @@
    "source": "cultural"
   },
   {
+   "title": "Inward and Beyond (안으로 그리고 그 너머로) 변은아 개인전",
+   "category": "전시/미술",
+   "gu": "강남구",
+   "place": "북카페 레벤",
+   "org": "기타",
+   "start": "2026-12-07",
+   "end": "2026-12-27",
+   "fee": "무료",
+   "free": true,
+   "target": "누구나",
+   "artist": "",
+   "desc": "변은아 6번째 개인",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=f1e97e5aee504375bc796c50119c2f38&thumb=Y",
+   "link": "https://www.euna-byun.com/",
+   "lat": 37.5116017320307,
+   "lng": 127.023677618841,
+   "source": "cultural"
+  },
+  {
    "title": "[서울아트책보고] 민음사 편집자가 추천하는 우리 회사 숨은 명작 30",
    "category": "전시/미술",
    "gu": "구로구",
@@ -972,6 +1067,25 @@
    "link": "https://artbookbogo.kr/seoul/menu/10024/program/30009/cultureDetail.do?currentPageNo=2&cultureIdx=26785&searchCultureTypeCd=ALL&searchOperStatusCd=ALL",
    "lat": 37.4982125677913,
    "lng": 126.867088741096,
+   "source": "cultural"
+  },
+  {
+   "title": "기미르 개인전 [변온 비늘 근처] 한반도 토종&해양 파충류 세밀화",
+   "category": "전시/미술",
+   "gu": "종로구",
+   "place": "갤러리 딜라이트 1층",
+   "org": "기타",
+   "start": "2026-12-21",
+   "end": "2026-12-29",
+   "fee": "",
+   "free": true,
+   "target": "누구나",
+   "artist": "",
+   "desc": "",
+   "image": "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=add819e95c874a0ea517f2d016c61e49&thumb=Y",
+   "link": "https://m.blog.naver.com/mir_gallery/224448254555",
+   "lat": 37.5946214747676,
+   "lng": 126.964724177276,
    "source": "cultural"
   },
   {
